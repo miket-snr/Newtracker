@@ -1,27 +1,124 @@
+# Overview
+
+Application has numerous views and perspectives but the main objects are split into lists and data capture:
+
+# Lists
+Worklist - a list of all Open Project for current user or can filter by Region - Pmanager.
+Funding list - A list of the Orginal upload and the variations it has gone through.
+Error list - a list of Projects that are incomplete
+
+# Data Capture
+Absarequest - Edit each Object in detail
+            - Requirements, Location, Dates
+            - Comments
+            - Funding
+            - Progress
+
+
 # Newtracker
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.2.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+import { BrowserModule } from '@angular/platform-browser';
+import bootstrap from "bootstrap";
 
-## Code scaffolding
+# Entry Point 
+import { AppComponent } from './app.component';
+# Login
+import { LoginComponent } from './components/login/login.component';
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Other
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material-module';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from './_classes/dateset';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+# Middleware to put latest token on call
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+import { HomeComponent } from './components/home/home.component';
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+import { ProjectlistComponent } from './components/projectlist/projectlist.component';
+
+
+import { SearchpipePipe } from './_classes/searchpipe.pipe';
+
+
+import { AbsarequestComponent } from './components/absarequest/absarequest.component';
+
+
+import { RelinkComponent } from './components/relink/relink.component';
+
+
+import { GanttComponent } from './components/gantt/gantt.component';
+
+
+import { NgGanttEditorModule } from 'ng-gantt';
+
+
+import { CommentsComponent } from './components/comments/comments.component';
+
+
+import { MultiSitesComponent } from './components/multi-sites/multi-sites.component';
+
+
+import { WorklistComponent } from './components/worklist/worklist.component';
+
+
+import { FundciplineComponent } from './components/fundcipline/fundcipline.component';
+
+
+import { TransfersComponent } from './components/transfers/transfers.component';
+
+
+import { ReqapprovalComponent } from './components/reqapproval/reqapproval.component';
+
+
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    HomeComponent,
+    SearchpipePipe,
+    ProjectlistComponent,
+    AbsarequestComponent,
+    RelinkComponent,
+    GanttComponent,
+    CommentsComponent,
+    MultiSitesComponent,
+    WorklistComponent,
+    FundciplineComponent,
+    TransfersComponent,
+    ReqapprovalComponent,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot([]),
+    HttpClientModule,
+    NgGanttEditorModule,
+  ],
+  exports:[MaterialModule],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }, 
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },FormGroupDirective],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  entryComponents: [LoginComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

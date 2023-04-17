@@ -1,0 +1,43 @@
+.tableFixHead          { overflow: auto; height: 500px; width: 100vw; }
+.tableFixHead thead th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
+.tableFixHead tbody th { position: sticky; left: 0; }
+.smallinput {
+    font-size: 12px;
+    border:none;
+    width:100%;
+    
+}
+.alert1 {
+    color: rgb(251, 139, 59) ;
+}
+.normal {
+    color: black ;
+}
+td {
+    padding:2px;
+    border-bottom: 1px solid blue;
+}
+th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
+
+th small {
+    font-weight: 600;
+}
+.searchbox {
+    border-bottom: 1px solid black;
+    margin-top: 15px ;
+    z-index: 100 ;
+    background-color: aliceblue;
+  }
+  .mycontainer {
+    padding:7px;
+  }
+  .mycontainer {
+    padding: 20px;
+    height: 690px;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+    overflow-x: auto;
+    white-space: nowrap;
+  }

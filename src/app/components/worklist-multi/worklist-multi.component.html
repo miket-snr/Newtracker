@@ -1,0 +1,114 @@
+<div class="mycontainer">
+   
+
+    <!-- <div class="form-check">
+      <input class="form-check-input" type="checkbox" (change)="selectAll()" [checked]="selectedAll">
+      <label class="form-check-label">
+        Select All
+      </label>
+    </div>
+    <div class="form-check" *ngFor="let n of sections">
+      <input class="form-check-input" type="checkbox" value="{{n.name}}" [(ngModel)]="n.selected"
+        (change)="checkIfAllSelected()">
+      <label class="form-check-label">
+        {{n.name}}
+      </label>
+    </div>
+    <mat-divider></mat-divider> -->
+
+
+   <div class="col-1 text-right">Search</div>
+    <div class="col-2">
+        <input class="form-control" type="text" [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="col-2">
+
+        <button type="button" class="btn btn-sm btn-primary" [hidden]="changelist.length == 0">Update SAP</button>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <ng-container>
+            <table class="table table-striped ">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="background-color:azure;"><small>Oneview</small></th>
+                        <th class="text-left" style="width:275px;background-color:azure;"><small>Known As</small>
+                            <th class="text-center"><small>Cost ex Vat</small></th>
+                        <th class="text-center"><small>Forecast <br> Start</small></th>
+                        <th class="text-center"><small>Forecast <br>End</small></th>
+                        <th class="text-center"><small>Progress</small></th>
+                        <!-- <th class="text-left"><small>Register</small></th> -->
+                        <th class="text-center"><small>Risk</small></th>
+                        <th class="text-center"><small>Preparation</small></th>
+                        <th class="text-center"><small>On Site</small></th>
+                        <th class="text-center"><small>Proof of Completion</small></th>
+                        <th class="text-center"><small>Invoices Submitted</small></th>
+                        <th class="text-center"><small>Last Comment</small></th>
+                        <th class="text-center"><small>Comment</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of searchlistnew | searchpipe: [searchbox, 'tag']; let i = index;">
+
+                        <ng-container>
+                            <td > <small>{{item.ONEVIEW}}</small> </td>
+                            <td><small>{{item.KNOWNAS}}</small></td>
+
+                            <td><input type="number" class="smallinput" name="budgetamt{{i}}"
+                                    (change)="newValue($event,i, item)" [(ngModel)]="item.BUDGETAMT"></td>
+
+                            <td><input type="date" class="smallinput" name="forecastend{{i}}"
+                                    (change)="newValue($event,i, item)" [(ngModel)]="item.FORECAST_END">
+                            </td>
+
+                            <td style="background-color:rgb(104, 248, 46);"><small>{{item.PROGRESS}}</small></td>
+                                <td style="background-color:rgb(238, 248, 248);"><select class="smallinput"
+                                        name="scope{{i}}" (change)="newValue($event,i, item)"
+                                        [(ngModel)]="item.RATING" >
+                                        <option value=" ">All Ok</option>
+                                        <option value="L">Low</option>
+                                        <option value="M">Medium</option>
+                                        <option value="H">High</option>
+                                    </select></td>
+  
+
+                        
+                                <td style="background-color:rgb(238, 248, 248);"><select class="smallinput"
+                                        name="boq{{i}}" (change)="newValue($event,i, item)"
+                                        [(ngModel)]="item.BOQ" >
+                                        <option *ngFor="let perc of codes[5]" [value]="perc.code">{{ perc.text}}</option>
+                                    </select></td>
+                   
+
+                       
+                                <td style="background-color:rgb(238, 248, 248);"><select class="smallinput"
+                                        name="implementation{{i}}" (change)="newValue($event,i, item)"
+                                        [(ngModel)]="item.IMPLEMENTATION">
+                                        <option *ngFor="let perc of codes[6]" [value]="perc.code">{{ perc.text}}</option>
+                                    </select></td>
+                            
+                                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput"
+                                        name="clientapproval{{i}}" (change)="newValue($event,i, item)"
+                                        [(ngModel)]="item.CLIENTAPPROVAL">
+                                        <option *ngFor="let perc of codes[6]" [value]="perc.code">{{ perc.text}}</option>
+                                    </select></td>
+                                <td style="background-color:rgb(238, 248, 248);"><select class="smallinput"
+                                        name="invsubmitted{{i}}" (change)="newValue($event,i, item)"
+                                        [(ngModel)]="item.INVSUBMITTED">
+                                        <option *ngFor="let perc of codes[5]" [value]="perc.code">{{ perc.text }}</option>
+                                    </select></td>
+                                    <td><small>{{item.LAST_COMMENT}}</small></td> 
+                                    <td><button type="button" (click)="showComment(item)"></button></td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </div>
+</div>
+

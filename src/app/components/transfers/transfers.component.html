@@ -1,0 +1,268 @@
+<ng-container *ngIf="budgetview">
+
+<table class="table table-bordered" id="projlist">
+  <tr>
+          <th class="text-center"><small style="font-weight: bold;">Initiative</small>
+          </th>
+          <th class="text-center"><small style="font-weight: bold;">Execution</small></th>
+          <th class="text-center"><small style="font-weight: bold;">Group</small></th>
+
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">End of Life</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Region</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Province</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                  <small style="font-weight: bold;">Oneview</small>
+          </th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Known As</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Title</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Workstream</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Proposed Start</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Proposed End</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Cash Flow</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Opex Capex</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Cip Group</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Cip Code</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Cip Name</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Status</small></th>
+          <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                          style="font-weight: bold;">Value</small></th>
+          
+  </tr>
+
+  <tr >
+          <td ><small>{{budgetview.INITIATIVE}}</small></td>
+          <td ><small>{{budgetview.EXECUTIONYEAR}}</small>
+          </td>
+          <td ><small>{{budgetview.BUDGETGROUP}}</small>
+          </td>
+          <td style="background-color:rgb(114, 171, 251); ">
+                  <small>{{budgetview.ENDOFLIFE}}</small></td>
+
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.REGION}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.PROVINCE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.ONEVIEW}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.KNOWNAS}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.TITLE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.WORKSTREAM}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.PROPSTARTDATE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.PROPENDDATE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.CASHFLOWDATE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.OPEX_CAPEX}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.CIPGROUP}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.CIPCODE}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.CIPNAME}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.STATUS}}</small></td>
+          <td style="background-color:rgb(114, 171, 251);">
+                  <small>{{budgetview.BASE_VALUE}}</small></td>
+       
+  </tr>
+</table>
+
+</ng-container>
+<ng-container *ngIf="ciplineadjs.length > 0">
+
+</ng-container>
+  <table class="table">
+   <tr>
+    <th>Document </th>
+    <th>Entry Code </th>
+    <th>Partner Obj </th>
+    <th>Short Comment </th>
+    <th>Posting Date </th>
+    <th>Entry Date </th>
+    <th>Value </th>
+   </tr> 
+    <tr *ngFor="let added of ciplineadjs">
+      <td>{{added.DOCNO}} </td>
+      <td>{{added.ENTRYCODE}} </td>
+      <td>{{added.PROJLINK || added.PARTNER_ID}}</td>
+      <td>{{added.SHORTCOMMENT}} </td>
+      <td>{{added.POSTINGDATE}}</td>
+      <td>{{added.ENTRYDATE}}</td>
+      <td>{{added.VALUEOF}}</td>
+    </tr>
+
+  </table>
+    <div class="row">
+      <div class="col-6 offset-3">
+        <div class="card pl-4 pr-4 pt-4">
+         
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Program</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.program" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option *ngFor="let groupoption of apiserv.cipgroups" [value]="groupoption.code">
+                    {{groupoption.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Cip Line</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.cipcode" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option *ngFor="let groupline of apiserv.cipcodes" [value]="groupline.lineout">
+                    {{groupline.lineout }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Funding Line From</span>
+              </div>
+
+              <div class="col-6">
+                <input [(ngModel)]="docheader.impositionof" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control" />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Entry Code</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.entrycode" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option value="Savings">Under Spend</option>
+                  <option value="Cancelled">Cancel</option>
+                  <option value="Surrender">Surrender</option>
+                  <option value="ReAllocate">Re Allocate</option>
+                  <option value="Allocate">Allocate</option>
+                  <option value="Defer">Defer</option>
+                </select>
+              </div>
+            </div>
+            <ng-container *ngIf="true">
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Funding Line To</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.impositionto" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option value="1">To be added</option>
+                  <!-- <option *ngFor="let fundoption of apiserv.cipfundlines$ | async" [value]="fundoption.lineout">
+                        {{fundoption.lineout }}
+                      </option> -->
+                </select>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="true">
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Funding Line To</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.impositionto" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option value="1">To be added</option>
+                  <!-- <option *ngFor="let fundoption of apiserv.cipfundlines$ | async" [value]="fundoption.lineout">
+                        {{fundoption.lineout }}
+                      </option> -->
+                </select>
+              </div>
+            </div>
+          </ng-container>
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Amount</span>
+              </div>
+
+              <div class="col-6">
+                <input type="number" class="form-control" [(ngModel)]="docheader.valueof">
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <div>Posting Date</div>
+                <div><small>(Entry Date is today)</small></div>
+              </div>
+
+              <div class="col-6">
+                <input type="date" class="form-control" [(ngModel)]="docheader.postingdate">
+              </div>
+            </div>
+          
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Note</span>
+              </div>
+
+              <div class="col-6">
+                <textarea class="form-control" [(ngModel)]="docheader.comment"></textarea>
+              </div>
+            </div>
+      
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-4">Save</button>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-4">Reset</button>
+
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-around mt-3">
+      <button type="button" 
+      class="btn btn-sm btn-primary" >Update SAP</button>
+      <button type="button" 
+      class="btn btn-sm btn-danger" (click)="closejw('cipline')">Close</button>
+  <!-- <div *ngIf="funding"><span>Amount Claimed {{amountclaimed}}</span></div> -->
+  </div>
+
+
+ 
+
+
+<!-- <div class="row">
+  <div class="col-4 d-flex justify-content-around">
+    <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+  </div>
+  <div class="col-4 d-flex justify-content-around">
+    <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+  </div>
+  <div class="col-4 d-flex justify-content-around">
+    <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+  </div>
+</div> -->

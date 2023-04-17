@@ -1,0 +1,501 @@
+<div class="mycontainer">
+        <div class="row">
+                <div class="col-1">
+                        <div class="form-check">
+                                <input class="form-check-input" type="checkbox" (change)="selectAll()"
+                                        [checked]="selectedAll">
+                                <label class="form-check-label">
+                                        Select All
+                                </label>
+                        </div>
+                        <div class="form-check" *ngFor="let n of sections">
+                                <input class="form-check-input" type="checkbox" value="{{n.name}}"
+                                        [(ngModel)]="n.selected" (change)="checkIfAllSelected()">
+                                <label class="form-check-label">
+                                        {{n.name}}
+                                </label>
+                        </div>
+                        <mat-divider></mat-divider>
+
+                        <!-- <div class="searchbox">
+          <div class="card-header" (click)="openjw('region')">
+            Region
+          </div>
+          <div>{{pmForm.value.region}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('cipgroup')">
+            Cip Group
+          </div>
+          <div>{{pmForm.value.cipgroup}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('cipcode')">
+            Cip Lines
+          </div>
+          <div>{{pmForm.value.cipcode}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('status')">
+            Status
+          </div>
+          <div>{{pmForm.value.status}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('site')">
+            Site
+          </div>
+          <div>{{pmForm.value.site}}</div>
+        </div> -->
+                </div>
+                <div class="col-11">
+
+
+                        <form [formGroup]="pmForm">
+                                <div class="row  mb-2">
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Select Region </small>
+                                        </div>
+                                        <div class="col-2"> <select name="pm" class="form-control  form-control-sm "
+                                                        formControlName="region">
+                                                        <option *ngFor="let perc of apiserv.regions"
+                                                                [value]="perc.code"><small>{{ perc.text }}</small>
+                                                        </option>
+                                                </select>
+                                        </div>
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Project Manager</small>
+                                        </div>
+                                        <div class="col-2"><select name="pm" class="form-control  form-control-sm "
+                                                        formControlName="pm">
+                                                        <option *ngFor="let perc of pmlist"><small>{{ perc }}</small>
+                                                        </option>
+                                                </select>
+                                        </div>
+
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Free search</small>
+                                        </div>
+                                        <div class="col-2">
+                                                <input class="form-control  form-control-sm " type="text" id="searchbox"
+                                                        [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                        <div class="col-2 d-flex justify-content-around">
+                                                <button type="button" class="btn btn-sm btn-success"
+                                                        (click)="exportexcel()">Export to Excel</button>
+                                                        <button type="button" class="btn btn-sm btn-success"
+                                                        (click)="toggleunlinked()">{{btntitle}}</button>
+                                        </div>
+                                        <!-- <div class="col-3 text-center">
+
+            <b>Active Project List </b>
+          </div>
+          <div class="col-2"> -->
+                                        <!-- <label for="searchbox" style="margin-right:10px;">Type to filter the List </label>
+        <input class="inputfilter" type="text" id="searchbox" [(ngModel)]="searchbox"
+          [ngModelOptions]="{standalone: true}">-->
+                                        <!-- </div>
+          <div class="col-3 d-flex justify-content-around">
+            <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button> -->
+                                        <!-- <button type="button" class="btn btn-sm btn-primary mt-1" (click)="feedback()">Mass Feedback</button>
+          </div> -->
+                                </div>
+                        </form>
+
+                        <table class="table table-bordered" id="projlist">
+                                <tr>
+                                        <th class="text-center"><small style="font-weight: bold;">Absareqno</small></th>
+                                        <th class="text-center"><small style="font-weight: bold;">Project WBS</small>
+                                        </th>
+                                        <th class="text-center"><small style="font-weight: bold;">Title</small></th>
+                                        <ng-container *ngIf="sections[0].selected">
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Details</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Project Mngr</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Epriority</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center"
+                                                        (click)="openjw('region')">
+                                                        <small style="font-weight: bold;">Region</small>
+                                                </th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Provregion</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Oneview</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Buildingid</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Knownas</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Endoflife</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Propstartdate</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Propenddate</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Plannedquarter</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Appreqlink</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Status</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Sapuser</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Retrospective</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Varioussites</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Pmanager</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Planstatus</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Sitenotes</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Executionyear</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Ohsrisk</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Leased_Free</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Leaseend</small></th>
+                                                <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">PO
+                                                                Number</small></th>
+                                                <th class="text-center"><small
+                                                                style="font-weight: bold;">Createdby</small></th>
+                                                <th class="text-center"><small
+                                                                style="font-weight: bold;">Createdon</small></th>
+                                                <th class="text-center"><small
+                                                                style="font-weight: bold;">Loadtype</small></th>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[1].selected">
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Region</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval_Motivate</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval_Status</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval_Submitdate</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval_Date</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                                <small style="font-weight: bold;">PO Number</small></th>       
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approved_Amt</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval_Note</small></th>
+                                                <!-- <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Dates</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Appro_Request</small></th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Fundingsummary</small></th>
+
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval</small></th> -->
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[2].selected">
+                                                <th style="background-color:rgb(247, 247, 188);"
+                                                style="background-color:rgb(247, 247, 188);"
+                                                class="text-center"><small
+                                                        style="font-weight: bold;">Budget Group</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center"
+                                                        (click)="openjw('cipgroup')"><small
+                                                                style="font-weight: bold;">Cipgroup</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Cipname</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center"
+                                                        (click)="openjw('cipcode')"><small
+                                                                style="font-weight: bold;">Cipcode</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Workstream</small></th>
+                                               
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Estimatedbudget</small></th>
+                                                <!-- <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Quoteamt</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Baselinebudget</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Quotation</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Approvedamt</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Invoicedamt</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Authorizer</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Priority</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Discretionary</small></th> -->
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Capex_Opex</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Fundingyear</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Budgetdif</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Fund_Comment</small></th>
+                                                <th style="background-color:rgb(247, 247, 188);" class="text-center">
+                                                        <small style="font-weight: bold;">Funding_Sources</small></th>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[3].selected">
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Intro</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Cost&DD</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Approval</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">PO
+                                                                Date</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Lead
+                                                                Time</small></th>
+                                                <!-- <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Start
+                                                                on Site</small></th> -->
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">On Site</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">POC                                                                Date</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Billing</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">CashFlow Date</small></th>
+                                                <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                        <small style="font-weight: bold;">Databag</small></th>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[4].selected">
+                                                <th style="background-color:rgb(79, 151, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Last_Trackdate</small></th>
+                                                <!-- <th style="background-color:rgb(79, 151, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Forecast_Start</small></th>
+                                                <th style="background-color:rgb(79, 151, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Forecast_End</small></th> -->
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Intro</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Cost&DD</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Approval</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">PO
+                                                                        Date</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Lead
+                                                                        Time</small></th>
+                                                        <!-- <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Start
+                                                                        on Site</small></th> -->
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">On Site</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">POC
+                                                                        Date</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">Billing</small></th>
+                                                        <th style="background-color:rgb(192, 178, 183);" class="text-center">
+                                                                <small style="font-weight: bold;">CashFlow Date</small></th>
+                                                <th style="background-color:rgb(79, 151, 251);" class="text-center">
+                                                        <small style="font-weight: bold;">Last_Comment</small></th>
+                                        </ng-container>
+
+                                </tr>
+
+
+                                <tr *ngFor="let bigview of searchlistnew  | searchpipe: [searchbox, 'tag']">
+                                        <td (click)="onSelect(bigview)"><small>{{bigview.ABSAREQNO}}</small></td>
+                                        <td (click)="onSelect(bigview)"><small>{{bigview.PROJLINK}}</small></td>
+                                        <td (click)="onSelect(bigview)"><small>{{bigview.TITLE}}</small></td>
+                                        <ng-container *ngIf="sections[0].selected">
+                                                <td style="background-color:rgb(114, 171, 251); ">
+                                                        <small>{{bigview.DETAILS.substring(0,60)}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PMANAGER}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.EPRIORITY}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.REGION}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROVREGION}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.ONEVIEW}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.BUILDINGID}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.KNOWNAS}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.ENDOFLIFE}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROPSTARTDATE}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROPENDDATE}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PLANNEDQUARTER}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.APPREQLINK}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.STATUS}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.SAPUSER}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.RETROSPECTIVE}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.VARIOUSSITES}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PMANAGER}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PLANSTATUS}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.SITENOTES}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.EXECUTIONYEAR}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.OHSRISK}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.LEASED_FREE}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.LEASEEND}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PONUMBER}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.CREATEDBY}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.CREATEDON}}</small></td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.LOADTYPE}}</small></td>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[1].selected">
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.REGION}}</small></td>
+                                               <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL_MOTIVATE}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL_STATUS}}</small></td>
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL_SUBMITDATE}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL_DATE}}</small></td>
+                                                 <td style="background-color:rgb(114, 171, 251);">
+                                                                <small>{{bigview.PONUMBER}}</small></td>
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVED_AMT}}</small></td>
+
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL_NOTE}}</small></td>
+                                                <!-- <td style="background-color:rgb(188, 247, 190);"><small>space</small>
+                                                </td>
+                                                <td style="background-color:rgb(188, 247, 190);"><small>space</small>
+                                                </td>
+                                                <td style="background-color:rgb(188, 247, 190);"><small>space</small>
+                                                </td>
+                                                <td style="background-color:rgb(188, 247, 190);">
+                                                        <small>{{bigview.APPROVAL}}</small></td> -->
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[2].selected">
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.BUDGETPROGRAM}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.CIPGROUP}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.CIPNAME}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.CIPCODE}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.WORKSTREAM}}</small></td>
+                                                
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.ESTIMATEDBUDGET}}</small></td>
+                                                <!-- <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.QUOTEAMT}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.BASELINEBUDGET}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.QUOTATION}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.APPROVEDAMT}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.INVOICEDAMT}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.AUTHORIZER}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.PRIORITY}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.DISCRETIONARY}}</small></td> -->
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.CAPEX_OPEX}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.FUNDINGYEAR}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.BUDGETDIF}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.FUND_COMMENT}}</small></td>
+                                                <td style="background-color:rgb(247, 247, 188);">
+                                                        <small>{{bigview.FUNDING_SOURCES}}</small></td>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[3].selected">
+                                                <!-- <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE01}}</small></td> -->
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE02}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE03}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE04}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE05}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE06}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE07}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE08}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE09}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATE10}}</small></td>
+                                                <td style="background-color:rgb(192, 178, 183);">
+                                                        <small>{{bigview.DATABAG}}</small></td>
+                                        </ng-container>
+                                        <ng-container *ngIf="sections[4].selected">
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.LAST_TRACKDATE}}</small></td>
+                                                <!-- <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.FORECAST_START}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.FORECAST_END}}</small></td> -->
+                                                <!-- <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG01}}</small></td> -->
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG02}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG03}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG04}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG05}}</small></td>
+                                                 <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG06}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG07}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG08}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.PROG09}}</small></td>
+                                                        <td style="background-color:rgb(79, 151, 251);">
+                                                                <small>{{bigview.PROG10}}</small></td>
+                                                <td style="background-color:rgb(79, 151, 251);">
+                                                        <small>{{bigview.LAST_COMMENT}}</small></td>
+                                        </ng-container>
+                                </tr>
+                        </table>
+                </div>
+        </div>
+</div>

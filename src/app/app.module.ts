@@ -1,16 +1,86 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import bootstrap from "bootstrap";
 import { AppComponent } from './app.component';
+import { LoginComponent } from './components/login/login.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material-module';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_DATE_FORMATS } from './_classes/dateset';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './components/home/home.component';
+import { ProjectlistComponent } from './components/projectlist/projectlist.component';
+import { SearchpipePipe } from './_classes/searchpipe.pipe';
+import { AbsarequestComponent } from './components/absarequest/absarequest.component';
+import { RelinkComponent } from './components/relink/relink.component';
+import { GanttComponent } from './components/gantt/gantt.component';
+import { NgGanttEditorModule } from 'ng-gantt';
+import { CommentsComponent } from './components/comments/comments.component';
+import { MultiSitesComponent } from './components/multi-sites/multi-sites.component';
+import { WorklistComponent } from './components/worklist/worklist.component';
+import { FundciplineComponent } from './components/fundcipline/fundcipline.component';
+import { TransfersComponent } from './components/transfers/transfers.component';
+import { ReqapprovalComponent } from './components/reqapproval/reqapproval.component';
+import { AbsabudgetComponent } from './components/absabudget/absabudget.component';
+import { ModalModule } from './_modal';
+import { ProgressComponent } from './components/progress/progress.component';
+import { FundingeditorComponent } from './components/fundingeditor/fundingeditor.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { WorklistMultiComponent } from './components/worklist-multi/worklist-multi.component';
+import { MassimportComponent } from './components/massimport/massimport.component';
+import { FundFinderComponent } from './components/fund-finder/fund-finder.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { TaskEditComponent } from './components/task-edit/task-edit.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    HomeComponent,
+    SearchpipePipe,
+    ProjectlistComponent,
+    AbsarequestComponent,
+    RelinkComponent,
+    GanttComponent,
+    CommentsComponent,
+    MultiSitesComponent,
+    WorklistComponent,
+    FundciplineComponent,
+    FundingeditorComponent,
+    FundFinderComponent,
+    TransfersComponent,
+    ReqapprovalComponent,
+    AbsabudgetComponent,
+    ProgressComponent,
+    FeedbackComponent,
+    DashboardComponent,
+    WorklistMultiComponent,
+    MassimportComponent,
+    AdminComponent,
+    TaskEditComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ModalModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot([]),
+    HttpClientModule,
+    NgGanttEditorModule,
   ],
-  providers: [],
+  exports:[MaterialModule],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }, 
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },FormGroupDirective],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  entryComponents: [LoginComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

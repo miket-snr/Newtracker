@@ -1,0 +1,197 @@
+<div style="height:100%;">
+  <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
+    <mat-spinner>Hey</mat-spinner>
+  </div>
+  <div class="card">
+
+
+    <div class="modal-header">
+      <h2>Fund Planner</h2>
+      <button type="button" class="close" aria-label="Close" (click)="closer.emit('Save')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <div class="mycontainer">
+      <form [formGroup]="fundingForm" (ngSubmit)="onSubmit()">
+        <table class="table">
+          <!-- <tr>
+              <td>
+                Current or Deferred
+              </td>
+              <td colspan="2">
+                <select class="form-control" formControlName="defer">
+                  <option [ngValue]="'C'"> Current</option>
+                  <option [ngValue]="'D'"> Deferred</option>
+                  <option [ngValue]="'U'"> Unsure</option>
+                </select>
+              </td>
+
+              <td *ngIf="true">
+                Deferred year
+              </td>
+              <td colspan="2"> <select class="form-control" formControlName="deferyear">
+                  <option [ngValue]="'2020'"> 2020</option>
+                  <option [ngValue]="'2021'"> 2021</option>
+                  <option ngValue="2022"> 2022</option>
+                </select>
+              </td>
+            </tr> -->
+          <tr>
+            <td>
+              Funding Initiative
+            </td>
+            <td colspan="2">
+              <div class="row">
+                <div class="col-8"><input type="text" class="form-control" formControlName="initiative"></div>
+                <!-- <div class="col-4" *ngIf="fundingForm.value.im_position.charAt(0) != 'A' ">
+                    <button type="button" class="btn btn-sm btn-danger">Generate</button>
+                  </div> -->
+              </div>
+            </td>
+            <td colspan="2"> <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button></td>
+          </tr>
+          <tr>
+            <td>Cip Group</td>
+            <td colspan="2"><select formControlName="cipgroup" placeholder="Select a Line" class="form-control">
+                <option [value]="''">Select an Option</option>
+                <option *ngFor="let groupoption of apiserv.cipgroups" [value]="groupoption.code">
+                  {{groupoption.text }}
+                </option>
+              </select>
+            </td>
+            <td>Cip Code</td>
+            <td colspan="2">
+              <select formControlName="cipcode" placeholder="Select a Line" class="form-control">
+                <option [value]="''">Select an Option</option>
+                <option *ngFor="let groupline of apiserv.cipcodes" [value]="groupline.code">
+                  {{groupline.text }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          <!-- <tr>
+              <td colspan="1">Cip Description</td>
+              <td colspan="5" style="background-color: aliceblue;">
+              <input type="text" class="form-control" formControlName="cipname" [disabled]="true"> </td>
+            </tr> -->
+          <tr>
+
+            <td>
+              Opex Capex
+            </td>
+            <td colspan="2"> <select class="form-control" formControlName="capex_opex">
+                <option [ngValue]="'U'"> Unsure</option>
+                <option [ngValue]="'C'"> Capex</option>
+                <option [ngValue]="'O'"> Opex</option>
+              </select>
+            </td>
+            <td>Workstream</td>
+            <td colspan="2">
+              <select formControlName="workstream" placeholder="Select a Line" class="form-control">
+                <option [value]="''">Select an Option</option>
+                <option *ngFor="let groupline of apiserv.workstreams" [value]="groupline.code">
+                  {{groupline.text }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Pre-Approval Budget
+            </td>
+            <td colspan="2"><input type="number" class="form-control" formControlName="estimatedbudget"></td>
+
+            <td>
+              Quotation
+            </td>
+            <td colspan="2"><input type="number" class="form-control" formControlName="quotation"></td>
+          </tr>
+
+        </table>
+
+        <div formArrayName="fundersg" *ngFor="let funder of funding.controls; let i = index">
+          <div class="row" [formGroupName]="i">
+            <div class="col-2">Position</div>
+            <div class="col-5">
+              <input class="form-control" placeholder="Funder..." formControlName="funderposition" id="{{'im' + i}}">
+            </div>
+            <!-- <div class="col-2">Amount</div> -->
+            <div class="col-4">
+              <input type="text" class="form-control" placeholder="Amount" formControlName="amount" id="{{'amt' + i}}">
+            </div>
+            <span class="remove" (click)="removeFunder(i)"><b>X</b></span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-success" (click)="sendTask()">Send Task</button>
+      </form>
+      <ng-container *ngIf="help">
+      <div style="padding:15px;">
+        <p>
+          Simply fill the Cipline number into the Initiative field, <br>
+          the other fields will get populated when you save as they are read off the Cipline table.
+        </p>
+        <h4> <b>What is a Cipline number?</b></h4>
+        <p> A certain number of budget lines are provided by ABSA each year and this is called the Ciplist. <br>
+          These are loaded with a fixed number (first 2 digits is the year) and this line never changes.</p>
+        <p> The line amount can be allocated to a Project and any money left over between Cipline Amount <br>
+          and the Approved Purchase order Amount can be transferred to a new line.
+        </p>
+        <ul>Things that can happen to amounts on a Cipline:
+          <li><b>Allocated</b> to a Project</li>
+            <li>Transferred to an existing Cipline via a <b>ReAllocation</b></li>
+          <li>Transferred to a new cipline and this can be a <b>Pooled</b> line</li>
+          <li>Given back as <b>Underspend</b></li>
+          <li>A line can be <b>cancelled</b>> and this money cannot be used for anything else</li>
+          <li>A line can be <b>surrendered</b> and this can be reused for other projects in the same Cipgroup</li>
+
+        </ul>
+        <h4>Where do you find the Cipline number? </h4>
+        <p> Look at the Budget Report and find the relevant line using filters. </p>
+        <h3>What if no Cipline is found? </h3>
+        <ul>
+          If no obvious Cipline number is found then you must provide information in the other Fields     
+          <li>
+            Select the relevant Cip-Group, Cipcode(*important), Workstream, and Amount(*important)
+          </li> 
+          <li>
+            Contact the Regional Manager or the Central Fund manager for assistance, as a new line may
+            have to be created from other lines via savings, surrenders, or Reallocations.
+          </li>   
+        </ul>
+      </div>
+    </ng-container>
+    </div>
+
+    <div class="card-footer text-center">
+      <button *ngIf="checkReady('save')" type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
+        Save
+      </button>
+    </div>
+
+  </div>
+  <div>
+
+  </div>
+
+</div>
+
+<jw-modal id="taskedit">
+  <div class="row" style="height:600px">
+    <div class="col-10 offset-1">
+     <app-task-edit [events]="eventsSubject.asObservable()" [task]="task"  (someChange)="taskClose()"></app-task-edit>
+    </div>
+
+  </div>
+
+</jw-modal>
+
+<jw-modal id="helpfund">
+  <div class="row" style="height:600px">
+    <div class="col-10 offset-1">
+      <img src="..\..\assets\PSFunding.png" alt="" class="help">
+    </div>
+
+  </div>
+
+</jw-modal>

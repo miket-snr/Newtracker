@@ -1,0 +1,39 @@
+<div class="container mb-5">
+    <div class="d-flex justify-content-around row mb-4">
+              <h2>{{listheading}}</h2> <button
+                  type="button" class="btn btn-sm btn-primary" (click)="addComment()">Add Comment </button>
+            </div>
+  <div *ngIf="newcomment" class="card borderon">
+    <div class="bg-primary card-header text-center headingnc">
+New Comment
+    </div>
+    <div class="card-body">
+        <div [formGroup]="commentForm"> 
+            <textarea formControlName="commenttext" class = "w-100 " rows="10"></textarea>
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-around">
+        <button
+        type="button" class="btn btn-sm btn-primary" (click)="saveComment()">Save </button>
+        <button
+        type="button" class="btn btn-sm btn-danger" (click)="cancelComment()">Cancel </button>   
+    </div>
+  </div>
+        <div *ngFor="let commentln of comments ; let i = index" class="card">
+          <div class="card-header">
+           <div class="row">
+           <div class="col-3 text-left">
+               {{commentln.DATEOF}}
+            </div> <div class="col-4 text-right">
+              {{commentln.LEVEL_1}}{{commentln.LEVEL_2}}
+           </div>
+            <div class="col-4 text-right">
+               {{commentln.COMMENTBY}}
+            </div>
+        </div> 
+          </div>
+          <div class="card-body">
+         <pre> {{commentln.COMMENT_TEXT}}</pre>
+        </div>
+      </div>
+      </div>

@@ -1,0 +1,48 @@
+<div  class="container">
+    <form [formGroup]="taskForm" >
+      <div class="row">
+        <div class="col-2 form-control badnews" >Task Activity</div>
+        <div class="col-8" >
+         
+            <select class="form-control" formControlName="ACTIONTYPE">
+              <option [value]="''">Select One ...</option>
+                      <option *ngFor="let action of apiserv.actionlist" [value]="action.code"> {{action.text}}</option>
+            </select>
+     
+        </div>
+        </div>
+    <div class="row mt-4">
+      <div class="col-2 form-control badnews" >Delegate to </div>
+      <div class="col-8" >  
+          <select class="form-control" formControlName="DELEGATENAME">
+            <option *ngFor="let pm of apiserv.pmlist$ | async" [value]="pm.C"> {{pm.D}}</option>
+          </select>
+      </div>
+      </div>
+    <div class="row mt-4">
+    <div class="col-2 form-control badnews" >Instruction</div>
+    <div class="col-8" >
+      <textarea class="form-control" formControlName="INSTRUCTION" ></textarea>
+    </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-2 form-control badnews" >Due Date</div>
+      <div class="col-8" >
+        <input type="date" class="form-control" formControlName="DUEDATE" />
+      </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-2 form-control badnews" >Due Time</div>
+        <div class="col-8" >
+          <input type="time" class="form-control" formControlName="DUETIME" />
+        </div>
+        </div>
+  
+    <!-- <div class="form-control">{{task['DECISION']}}</div>
+    <div class="form-control">{{task['COMMENT']}}</div> -->
+  </form>
+  <div class="row d-flex justify-content-around mt-4">
+    <button type="button" class="btn btn-sm btn-success" (click)="onSave()" >Save - Send Email</button>
+    <button type="button" class="btn btn-sm btn-danger"  (click)="onCancel()">Cancel</button>
+  </div>
+  </div>

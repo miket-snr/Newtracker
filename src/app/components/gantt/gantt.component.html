@@ -1,0 +1,135 @@
+
+<!-- <div class="container1">
+    <ng-gantt [options]="editorOptions" [data]="data" #editor></ng-gantt>
+</div> -->
+
+<!-- <div class="row">
+    <div class="col-2 ml-4 bg-secondary text-white">
+    WBS: {{project['PROJLINK']}}
+    </div>
+    <div class="col-3 ml-4 bg-secondary text-white">
+       {{project['KNOWNAS']}}
+      </div>
+      <div class="col-2 ml-4 bg-secondary text-white">
+        {{project['WORKSTREAM']}}
+        </div> 
+  </div> -->
+  <div class="container-fluid">
+    <div>
+      <ng-gantt [options]="editorOptions" [data]="data" #editor></ng-gantt>
+    </div>
+    
+  </div>
+  
+  <div class="mt-3">
+    <div class="container">
+    <div class="row d-flex justify-content-between">
+      <button type="button"  class="btn btn-sm btn-secondary" (click)="changeData()">Add Task!</button>  
+      <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('progress')">Update Progress!</button>  
+      <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('reschedule')">Re-Schedule!</button>  
+    </div>
+    
+    <!-- <app-requesteditor></app-requesteditor> -->
+  
+      <div >
+      
+  <div [hidden]="hide">
+    <form [formGroup] ="taskForm" >   
+  <table class="table">
+  
+   <tr>
+    <td style="width:100px">Select Parent Phase</td>
+    <td style="width:200px">
+      <select class="form-control" type="text" formControlName="pParent">
+  
+  <option *ngFor="let v of phaselist" [value]="v.pID">{{v.pName}}</option>
+  <!-- <option value="1">Project Phase</option>
+  <option value="2">Initiation</option>
+  <option value="3">Costing & DD</option>
+  <option value="4">Approval </option>
+  <option value="6">Lead Time</option>
+  <option value="7">On Site</option>
+  <option value="8">Proof of Completion</option>
+  <option value="9">Billing</option> -->
+      </select>
+      </td>
+      <td style="width:100px">
+        Delegated To
+      </td>
+      <td style="width:200px">
+       <select name="" id="w" class="form-control" formControlName="pRes">
+    <option value="1">Self</option>
+    <option value="2">Somebody</option>
+       </select>
+      </td>
+   </tr>
+   <tr>
+    <td>Task Short Title</td>
+    <td colspan = "3"><input type="text" class="form-control"   formControlName="pName"></td>
+   </tr>
+   <tr>
+    <td>
+      Start Date
+    </td>
+    <td>
+      <input type="date" class="form-control" formControlName="pStart">
+    </td>
+    <td>End Date</td>
+    <td>
+      <input type="date" class="form-control" formControlName="pEnd">
+    </td>
+   </tr>
+  =
+   <tr>
+    <td>
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" value="" formControlName="pSendMail">Send Email
+      </label>
+    </td>
+    <td>
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" value="">Set Reminder
+      </label>
+    </td>
+    <td>  
+      <span> Weight%</span>
+    </td>
+    <td>  <input type="text" class="form-control" value=""></td>
+   </tr>
+   <tr>
+    <td>Notes:</td>
+    <td colspan="2"><textarea class="form-control"></textarea></td>
+   </tr>
+   <tr>
+    <td colspan="4">
+    <div class="d-flex justify-content-between">
+      <ng-container *ngIf="!insert">
+      <button type="button" class="btn btn-sm btn-primary" [disabled]="!taskForm.valid"(click)="updateTask()">Update Task</button>
+    </ng-container>
+    <ng-container *ngIf="insert">
+      <button type="button" class="btn btn-sm btn-primary" [disabled]="!taskForm.valid" (click)="insertTask()">Insert Task</button>
+    </ng-container>
+    
+      <button type="button" class="btn btn-sm btn-danger" [hidden]="taskForm.value.pID < '100'" [disabled]=""(click)="deleteTask()">Delete Task</button>
+    
+      <button type="button" class="btn btn-sm btn-secondary" (click)="cancelTask()">Cancel Edit</button>
+    </div>
+  </td>
+   </tr>
+  </table>
+  </form>
+  </div> 
+  <div *ngIf="reschedule">
+<app-reqapproval [dates]="dates" [planner]="'plan'"></app-reqapproval>
+<button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('reschedule')">Close</button>  
+  </div>
+  <div *ngIf="progress">
+    <app-reqapproval [dates]="dates" [planner]="'progress'"></app-reqapproval>
+    <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('progress')">Close</button>  
+      </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  

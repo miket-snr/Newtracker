@@ -1,0 +1,64 @@
+
+
+<div [hidden]="register" >
+    <div class="card mx-auto vertical-center" style="width:400px;" [hidden]="authserv.waiting">
+        <div class="card-header text-center h3">
+            <b>Request OTP</b>
+        </div>
+        <div *ngIf="authserv.loading" class="d-flex justify-content-center">
+            <mat-spinner>Hey</mat-spinner>
+         </div>
+         
+        <div class="card-body">
+            <form [formGroup]="otpgroup">
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Via Email </mat-label>
+                <input type="text" matInput placeholder="Via Email" formControlName="email">
+                <mat-error *ngIf="!otpgroup.controls['email'].valid">
+                   Not a Valid Email
+                  </mat-error>
+            </mat-form-field>
+            <ng-container *ngIf="false">
+            <div class="text-center h2">or..</div>
+            
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>Via SMS</mat-label>
+                <input type="text" matInput placeholder="Cell No for SMS" formControlName="sms">
+                <mat-error *ngIf="!otpgroup.controls['sms'].valid">
+                    Not a Valid Cellphone number
+                   </mat-error>
+            </mat-form-field>
+        </ng-container>
+        </form>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-sm btn-primary"
+             (click)="getOTP()" [disabled]="otpgroup.invalid || 
+             !(otpgroup.value.email || otpgroup.value.sms)">Submit</button>
+           
+        </div>
+    </div>
+
+    <div [hidden]="!authserv.waiting" class="card mx-auto vertical-center" style="width:400px;">
+        <div class="card-header text-center h3">
+            <b>Confirm OTP</b>
+        </div>
+        <div *ngIf="authserv.loading" class="d-flex justify-content-center">
+            <mat-spinner>Hey</mat-spinner>
+         </div>
+         <form (ng-submit)="confirmOTP()">         
+        <div class="card-body">
+            <div [formGroup]="otpgroupin">
+            <mat-form-field class="full-width" appearance="standard">
+                <mat-label>OTP </mat-label>
+                <input type="text" matInput placeholder="OTP (lower case)" formControlName="otp">
+            </mat-form-field>
+        </div>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-sm btn-primary" (click)="confirmOTP()">Submit</button>
+           
+        </div>
+    </form>
+    </div>
+</div>

@@ -1,0 +1,400 @@
+
+<div class="mycontainer" *ngIf="!comments">
+       <div class="row">
+     <!--   <div class="col-6">
+           <form [formGroup]="pmForm">
+                <p style="width:300px;"><label for="boq" class="control-label">Select Project Manager </label>
+                    <select name="boq" class="form-control" formControlName="pm">
+                      <option *ngFor="let perc of pmlist" [value]="perc.B">{{ perc.B }}</option>
+                    </select>
+                  </p>
+                </form> 
+        </div> -->
+        <div class="col-6">
+            <div class="col-4">
+                <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button>
+            </div>
+        </div>
+     </div>
+    
+     <div class="row" [hidden]="printing">
+        <div class="col-1">
+            <!-- <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="selectAll()" [checked]="selectedAll">
+              <label class="form-check-label">
+                Select All
+              </label>
+            </div> -->
+            <!-- <div class="form-check" *ngFor="let n of sections">
+              <input class="form-check-input" type="checkbox" value="{{n.name}}" [(ngModel)]="n.selected"
+                (change)="checkIfAllSelected()">
+              <label class="form-check-label">
+                {{n.name}}
+              </label>
+            </div> -->
+            <mat-divider></mat-divider> 
+            <!-- <form [formGroup]="pmForm">
+              <div class="searchbox">
+                <label for="pm" class="control-label "><small>Select Project Manager</small> </label>
+                <select name="pm" class="form-control  form-control-sm" formControlName="pmanager">
+                  <option *ngFor="let perc of apiserv.pmlist$ | async" [value]="perc.B"><small>{{ perc.D }}</small></option>
+                </select>
+              </div>
+            </form> -->
+            <form [formGroup]="pmForm">
+              <div class="searchbox">
+                <label for="pm" class="control-label "><small>Region</small> </label>
+                <select name="pm" class="form-control  form-control-sm" formControlName="region">
+                  <option *ngFor="let reg of apiserv.regions " [value]="reg.code"><small>{{ reg.text }}</small></option>
+                </select>
+              </div>
+
+            <div class="searchbox">
+              <mat-form-field appearance="fill" style="width:100%">
+                <mat-label>Cip Group</mat-label>
+                <mat-select formControlName="cipgroup"   >
+                  <mat-option value=""> * All</mat-option>
+                  <mat-option *ngFor="let perc of apiserv.cipgroups" [value]="perc.code" ><small>{{ perc.text }}</small></mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <div class="card-header" (click)="openjw('cipgroup')">
+                Cip Group
+              </div>
+              <div>{{pmForm.value.cipgroup}}</div> -->
+            </div>
+      
+            <div class="searchbox">
+              <mat-form-field appearance="fill" style="width:100%">
+                <mat-label>Cip Code</mat-label>
+                <mat-select formControlName="cipcode"   >
+                  <mat-option value=""> * All</mat-option>
+                  <mat-option *ngFor="let perc of apiserv.cipcodes" [value]="perc.code"><small>{{ perc.text }}</small></mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="searchbox">
+              <mat-form-field appearance="fill" style="width:100%">
+                <mat-label>Cipline</mat-label>
+                <mat-select formControlName="cipline"   >
+                  <mat-option value=""> * All</mat-option>
+                  <mat-option *ngFor="let perc of apiserv.ciplines" [value]="perc.code"><small>{{ perc.text }}</small></mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- <div class="searchbox">
+              <div class="card-header" (click)="openjw('status')">
+                Status
+              </div>
+              <div>{{pmForm.value.status}}</div>
+            </div>
+            <div class="searchbox">
+              <div class="card-header" (click)="openjw('site')">
+                Site
+              </div>
+              <div>{{pmForm.value.site}}</div>
+            </div> -->
+          </form>
+          </div>
+        <div class="col-11">
+            <ng-container *ngIf="funding">
+                <table class="table table-bordered table-responsive-md table-striped text-center" id="tracklist">
+                    <thead>
+                        <tr>
+                          <th>Initiative</th>
+                            <th class="text-center" style="background-color:azure;"><small>Project</small></th>
+                            <th class="text-left" style="width:275px;background-color:azure;"><small>Title</small></th>
+                            <!-- <th class="text-center"><small>Status</small></th> -->
+                            <th class="text-center"><small>Region</small></th>
+                            <!-- <ng-container *ngIf="selectedAll">
+                            <th class="text-left"><small>Scope</small></th>
+                            <th class="text-center"><small>BoQ</small></th>
+                            <th class="text-center"><small>Costs</small></th>
+                            <th class="text-center"><small>OHS Risk</small></th>
+                            <th class="text-center"><small>Client Approval</small></th>
+                            <th class="text-center"><small>PO Date</small></th>
+                            <th class="text-center"><small>Forecast <br> Start</small></th>
+                            <th class="text-center"><small>Forecast <br>End</small></th>
+                            <th class="text-center"><small>Implementation</small></th>       
+                            <th class="text-center"><small>Practical Compl</small></th>
+                            <th class="text-center"><small>Invoices<br>Submitted</small></th>
+                           </ng-container> -->
+                            <!-- <th class="text-center"><small>Percentage<br>Complete</small></th> -->
+                            <th class="text-center"><small>Oneview</small></th>
+                            <th class="text-left" style="width:225px;"><small>Known as</small></th>
+                           
+                            <th class="text-center"><small>Cip group</small></th>
+                            <th class="text-center"><small>Cip Code</small></th>          
+                            <th class="text-center"><small>Cip Line</small></th>          
+                            <th class="text-center"><small>Workstream</small></th>
+                            <th class="text-center"><small>Cip Budget</small></th>
+                            <th class="text-center"><small>Approved</small></th>
+                            <!-- <th class="text-center"><small>Costs</small></th>
+                            <th class="text-center"><small>Travel</small></th>
+                            <th class="text-center"><small>Commitments </small></th>
+                            <th class="text-center"><small>Revenue</small></th>
+                            <th class="text-center"><small>Man Fee</small></th> -->
+                            <th class="text-center"  style="width:100px;background-color:azure;"><small>Available</small></th>
+                            <!-- <th class="text-center"  style="width:100px;background-color:azure;"><small>Claim</small></th> -->
+                            <th class="text-center"><small>Note</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of searchlistnew; let i = index; trackBy:trackById;">
+            
+                        <ng-container >
+                        <td  [ngClass]=" (item.reference == item.initiative )? 'alert1' : 'normal'" (click)="goTo(item)"><small>{{item.initiative}}</small></td>
+                        <td ><small>{{item.reference}}</small></td>
+                        <td ><small>{{item.title}}</small></td>
+                        <!-- <td ><small>{{item.status}}</small></td> -->
+                        <td ><small>{{item.region}}</small></td>
+                        <!-- <ng-container *ngIf="selectedAll">
+                        <td><small>{{item.scope}} </small></td>
+                        <td><small>{{item.boq}}</small></td>
+                        <td><small>{{item.costs}}</small></td>
+                        <td><small>{{item.OHSRisk}} </small></td>
+                        <td><small>{{item.approval}}</small></td>
+                        <td><small>{{item.absaPO}}</small></td>
+                        <td><small>{{item.forecaststart}}</small></td>
+                        <td><small>{{item.forecastend}}</small></td> 
+                        <td><small>{{item.implement}}</small></td>
+                        <td><small>{{item.invsubmitted}}</small></td>
+                        <td><small>{{item.practicalcomp}}</small></td>
+                        </ng-container>
+                        <td><small>{{item.progress}}</small></td> -->
+                        <td ><small>{{item.site}}</small></td>
+                        <td ><small>{{item.knownas}}</small></td>
+                        <td ><small>{{item.cipgroup}}</small></td>
+                        <td ><small>{{item.cipcode}}</small></td>
+                        <td ><small>{{item.cipline}}</small></td>
+                        <td ><small>{{item.workstream}}</small></td>
+                        <td ><small>{{item.cipbudget}}</small></td>
+                        <!-- <td ><small>{{item.budget}}</small></td>
+                        <td ><small>{{item.costfee}}</small></td>
+                        <td ><small>{{item.travel}}</small></td>
+                        <td ><small>{{item.commitment}}</small></td>
+                        <td ><small>{{item.revenue}}</small></td>
+                        <td ><small>{{item.m_fee}}</small></td> -->
+                        
+                        <td ><small>{{item.estimatedbudget}}</small></td>
+                        <td ><small>{{item.available}}</small></td>
+                        <!-- <td ><input type="text" class="smallinput"  name="claiming{{i}}"
+                            (change)="newValue($event,i, item)" [(ngModel)]="item.claiming"></td> -->
+                        <td ><small><button type="button" class="btn btn-sm btn-secondary" (click)="confirm(item)">Select</button></small></td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+            </ng-container>
+        </div>   
+        </div>
+     <div [hidden]="!printing">
+        <table class="table table-bordered table-responsive-md table-striped text-center" >
+            <thead>
+                <tr>
+                    <th class="text-center"><small>Project</small></th>
+                    <th class="text-left" style="width:275px;"><small>Title</small></th>
+                    <th class="text-center"><small>Status</small></th>
+                    <th class="text-left"><small>Scope</small></th>
+                    <th class="text-center"><small>BOQ</small></th>
+                    <th class="text-center"><small>Costs</small></th>
+                    <th class="text-center"><small>OHS Risk</small></th>
+                    <!-- <th class="text-center">Full Year</th> -->
+                    <th class="text-center"><small>Forecast Start</small></th>
+                    <th class="text-center"><small>Forecast End</small></th>
+                    <th class="text-center"><small>Approval</small></th>
+                    <th class="text-center"><small>Absa PO</small></th>
+                    <th class="text-center"><small>Implementation</small></th>
+                    <th class="text-center"><small>Invoices</small></th>
+                    <th class="text-center"><small>Practical Compl</small></th>
+                    <th class="text-center"><small>Progress</small></th>
+                    <th class="text-left" style="width:275px;"><small>Site</small></th>
+                    <th class="text-center"><small>Cip group</small></th>
+                    <th class="text-center"><small>Cip Line</small></th>
+                   
+                    <th class="text-center"><small>Workstream</small></th>
+                </tr>
+            </thead>
+            <tbody>
+    
+                <tr *ngFor="let item of searchlist; let i = index; trackBy:trackById;">
+    
+                    <ng-container >
+                    <td (click)="goTo(item)" ><small>{{item.reference}}</small></td>
+                    <td ><small>{{item.title}}</small></td>
+                    <td ><small>{{item.status}}</small></td>
+                    <td><select class="smallinput" name="scope{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.scope" [disabled]="item.costs=='100%'">
+                            <option *ngFor="let perc of scopes" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+                    <td><select class="smallinput" name="boq{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.boq"  [disabled]="item.costs=='100%'">
+                            <option *ngFor="let perc of boqs" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+                    <td><select class="smallinput" name="costs{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.costs"  [disabled]="item.costs=='100%'">
+                            <option *ngFor="let perc of costs" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+    
+                    <td><select class="smallinput" name="OHSRisk{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.OHSRisk"  [disabled]="item.costs=='100%'">
+                            <option value="">N/A</option>
+                            <option value="L">Low Risk</option>
+                            <option value="M">Medium Risk</option>
+                            <option value="H">High Risk</option>
+                        </select></td>
+    
+                    <td><input type="date" class="smallinput"  name="forecaststart{{i}}"
+                            (change)="newValue($event,i, item)" [(ngModel)]="item.forecaststart"></td>
+    
+                    <td><input type="date" class="smallinput"  name="forecastend{{i}}"
+                            (change)="newValue($event,i, item)" [(ngModel)]="item.forecastend"></td>
+    
+                    <td><input type="date" class="smallinput"  name="approval{{i}}"
+                            (change)="newValue($event,i, item)" [(ngModel)]="item.approval"  [disabled]="item.costs!='100%'"></td>
+    
+    
+                    <td><select class="smallinput" name="absaPO{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.absaPO"  [disabled]="item.costs!='100%'">
+                            <option *ngFor="let perc of pos" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+    
+                    <td><select class="smallinput" name="implement{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.implement"  [disabled]="item.absaPO!='100%'">
+                            <option *ngFor="let perc of implements" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+                    <td><select class="smallinput" name="invsubmitted{{i}}" (change)="newValue($event,i, item)"
+                            [(ngModel)]="item.invsubmitted"  [disabled]="item.absaPO!='100%'">
+                            <option *ngFor="let perc of invsubs" [value]="perc.code">{{ perc.text }}</option>
+                        </select></td>
+    
+                    <td><input type="date" class="smallinput"  name="practicalcomp{{i}}"
+                            (change)="newValue($event,i, item)" [(ngModel)]="item.practicalcomp"  [disabled]="item.absaPO!='100%'"></td>
+    
+                    <td><input type="text" class="smallinput" disabled="true" name="progress{{i}}"
+                            [(ngModel)]="item.progress"></td>
+                            <td ><small>{{item.site}}</small></td>
+                            <td ><small>{{item.cipgroup}}</small></td>
+                            <td ><small>{{item.cipcode}}</small></td>
+                            <td ><small>{{item.workstream}}</small></td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+  
+    <jw-modal id="selections">
+        <form [formGroup]="pmForm">
+          
+          <!-- <div *ngIf="currentfield == 'REGION'" class="searchbox">
+            <label for="region" class="control-label"><small>Region</small> </label>
+            <select name="region" class="form-control  form-control-sm" formControlName="region">
+              <option *ngFor="let perc of filters.regions.codes" [value]="perc.code"><small>{{ perc.text}}</small></option>
+            </select>
+          </div> -->
+      
+          <div *ngIf="currentfield == 'CIPGROUP'" class="searchbox">
+            <!-- <mat-form-field appearance="fill" style="width:60%">
+                <mat-label>Cip Group</mat-label>
+                <mat-select formControlName="cipgroup" multiple  >
+                  <mat-option *ngFor="let perc of filters.cipgroups.codes" [value]="perc.code" (click)="checkAll(perc.code)"><small>{{ perc.text }}</small></mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            <!-- <label for="cipgroup" class="control-label"><small>Cip Group </small></label>
+            <select multiple name="cipgroup" class="form-control  form-control-sm extendable" formControlName="cipgroup" 
+            (blur)="filterCipgroup()">
+              <option *ngFor="let perc of filters.cipgroups.codes" [value]="perc.code"><small>{{ perc.text }}</small></option>
+            </select> -->
+          </div>
+      
+          <div *ngIf="currentfield == 'CIPCODE'" class="searchbox" style="height:400px; padding-left: 30px;">
+            <!-- <label for="cipcode" class="control-label"><small>Cip Code</small> </label>
+            <select name="cipcode" class="form-control  form-control-sm" formControlName="cipcode">
+              <option *ngFor="let perc of filters.cipcodes" [value]="perc.code"><small>{{ perc.text }}</small></option>
+            </select>
+          </div>
+          <div> -->
+          <!-- <mat-form-field appearance="fill" style="width:60%">
+            <mat-label>Cip Code</mat-label>
+            <mat-select formControlName="cipcode" multiple  >
+              <mat-option *ngFor="let perc of filters.cipcodes.codes" [value]="perc.code"><small>{{ perc.text }}</small></mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+          <div *ngIf="currentfield == 'STATUS'" class="searchbox" style="height:400px">
+            <!-- <label for="cipcode" class="control-label"><small>Status</small> </label>
+            <select name="cipcode" class="form-control  form-control-sm" formControlName="status" multiple>
+              <option *ngFor="let perc of filters.status.codes" [value]="perc.code"><small>{{ perc.text }}</small></option>
+            </select> -->
+          </div>
+          <div *ngIf="currentfield == 'SITE'" class="searchbox" style="height:400px">
+            <!-- <mat-form-field appearance="fill" style="width:60%">
+                <mat-label>Oneview Number</mat-label>
+                <mat-select formControlName="site" multiple  >
+                  <mat-option *ngFor="let perc of filters.sites.codes" [value]="perc.code"><small>{{ perc.text }}</small></mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            <!-- <label for="site" class="control-label"><small>Site</small> </label>
+            <select multiple name="site" class="form-control  form-control-sm multiple" formControlName="site">
+              <option *ngFor="let perc of filters.sites.codes" [value]="perc.code"><small>{{ perc.text }}</small></option>
+            </select> -->
+          </div>
+          
+        </form>
+    
+        <!-- <ul class="list-group">
+          <li class="list-group-item" *ngFor="let searchline of searchlistnew">
+            {{searchline[currentfield]}}
+          </li>
+        </ul> -->
+        <div class="card-footer">
+          <div class="d-flex justify-content-center">
+            <button type = "button" class="btn btn-sm btn-primary" (click)="closejw('selections')">Apply</button>
+          </div>
+        </div>
+      </jw-modal>
+      <jw-modal id="fundcomment">
+       <div class="modal-header">
+         <h2>Comments</h2>
+         <button type="button" class="close" aria-label="Close" (click)="modalServicejw.close('fundcomment')">
+           <span aria-hidden="true">×</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <app-comments [reference]="1"></app-comments>
+     
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-outline-dark" (click)="closejw('Newrequest')">Ok</button>
+       </div>
+      </jw-modal>
+      <jw-modal id="Newrequest">
+        <div class="modal-header">
+          <h2>Comments</h2>
+          <button type="button" class="close" aria-label="Close" (click)="modalServicejw.close('Newrequest')">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-comments [reference]="1"></app-comments>
+      
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="closejw('Newrequest')">Ok</button>
+        </div>
+       </jw-modal>
+       <jw-modal id="areyousure">
+        <div class="modal-header">
+          <h2>Confirmation</h2>
+          <button type="button" class="close" aria-label="Close" (click)="modalServicejw.close('areyousure')">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="closejw('areyousure')">Ok</button>
+        </div>
+       </jw-modal>
+       <jw-modal id="cipline">
+        <ng-container *ngIf="apiserv.currentcipline">
+                <app-transfers></app-transfers>
+        </ng-container>

@@ -1,0 +1,6 @@
+﻿<div class="jw-modal">
+    <div    [ngClass]="size == 'lg' ? 'jw-modal-body' :(size == 'xl') ? 'jw-modal-bodyxl':(size == 'sm') ? 'jw-modal-bodysm':'jw-modal-md'" >
+        <ng-content></ng-content>
+    </div>
+</div>
+<div class="jw-modal-background"></div>

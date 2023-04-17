@@ -1,0 +1,12 @@
+.help{
+
+  
+margin: 20px;
+  
+      
+      }
+.mycontainer {
+    max-width:900px;
+    margin: auto;
+    border:1px solid lightblue;
+}

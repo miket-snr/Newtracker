@@ -1,0 +1,68 @@
+.tableFixHead          { overflow: auto; height: 500px; width: 100vw; }
+.tableFixHead thead th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
+.tableFixHead tbody th { position: sticky; left: 0; }
+.smallinput {
+    font-size: 12px;
+    border:none;
+    width:100%;
+    
+}
+.alert1 {
+    color: red ;
+}
+.normal {
+    color: black ;
+}
+td {
+    padding:2px;
+    border-bottom: 1px solid rgb(159, 159, 160);
+    min-width:80px;
+    text-overflow: ellipsis;
+}
+th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
+
+th.text-center {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+th small {
+    font-weight: 600;
+    font-size: 11px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.searchbox {
+    border-bottom: 1px solid black;
+    margin-top: 15px ;
+    z-index: 100 ;
+    background-color: aliceblue;
+  }
+  .mycontainer {
+    padding:7px;
+  }
+  .mycontainer {
+    padding: 20px;
+    height: 690px;
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  .multisite{
+   background-color:red;
+  }
+  .multisite2{
+    background-color:azure;
+  }
+
+  table {
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }

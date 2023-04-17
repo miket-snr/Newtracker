@@ -1,0 +1,383 @@
+<div class="mycontainer">
+        <div class="row">
+                <!-- <div class="col-1">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" (change)="selectAll()" [checked]="selectedAll">
+                <label class="form-check-label">
+                    Select All
+                </label>
+            </div>
+            <div class="form-check" *ngFor="let n of sections">
+                <input class="form-check-input" type="checkbox" value="{{n.name}}" [(ngModel)]="n.selected"
+                    (change)="checkIfAllSelected()">
+                <label class="form-check-label">
+                    {{n.name}}
+                </label>
+            </div>
+            <mat-divider></mat-divider>
+
+             <div class="searchbox">
+          <div class="card-header" (click)="openjw('region')">
+            Region
+          </div>
+          <div>{{pmForm.value.region}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('cipgroup')">
+            Cip Group
+          </div>
+          <div>{{pmForm.value.cipgroup}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('cipcode')">
+            Cip Lines
+          </div>
+          <div>{{pmForm.value.cipcode}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('status')">
+            Status
+          </div>
+          <div>{{pmForm.value.status}}</div>
+        </div>
+        <div class="searchbox">
+          <div class="card-header" (click)="openjw('site')">
+            Site
+          </div>
+          <div>{{pmForm.value.site}}</div>
+        </div> 
+        </div>-->
+                <div class="col-12">
+
+
+                        <form [formGroup]="pmForm">
+                                <div class="row  mb-2">
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Select Region </small>
+                                        </div>
+                                        <div class="col-2"> <select name="pm" class="form-control  form-control-sm "
+                                                        formControlName="region">
+                                                        <option *ngFor="let perc of apiserv.regions"
+                                                                [value]="perc.code"><small>{{ perc.text }}</small>
+                                                        </option>
+                                                </select>
+                                        </div>
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Free search</small>
+                                        </div>
+                                        <div class="col-2">
+                                                <input class="form-control  form-control-sm " type="text" id="searchbox"
+                                                        [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                        <div class="col-1 text-right pr-2">
+                                                <small>Select Budget Group </small>
+                                        </div>
+                                        <div class="col-2"> <select name="pm" class="form-control  form-control-sm "
+                                                        formControlName="budgetgroup">
+                                                        <option *ngFor="let perc of grouplist"><small>{{ perc }}</small>
+                                                        </option>
+                                                </select>
+                                        </div>
+                                        <div class="col-1">
+                                                <button type="button" class="btn btn-sm btn-success"
+                                                        (click)="exportexcel()">
+                                                        Export to Excel
+                                                </button>
+                                        </div>
+                                        <!-- <div class="col-3 text-center">
+
+            <b>Active Project List </b>
+          </div>
+          <div class="col-2"> -->
+                                        <!-- <label for="searchbox" style="margin-right:10px;">Type to filter the List </label>
+        <input class="inputfilter" type="text" id="searchbox" [(ngModel)]="searchbox"
+          [ngModelOptions]="{standalone: true}">-->
+                                        <!-- </div>
+          <div class="col-3 d-flex justify-content-around">
+            <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button> -->
+                                        <!-- <button type="button" class="btn btn-sm btn-primary mt-1" (click)="feedback()">Mass Feedback</button>
+          </div> -->
+                                </div>
+                        </form>
+
+                        <table class="table table-bordered" id="projlist">
+                                <tr>
+                                        <th class="text-center"><small style="font-weight: bold;">Initiative</small>
+                                        </th>
+                                        <th class="text-center"><small style="font-weight: bold;">Execution</small></th>
+                                        <th class="text-center"><small style="font-weight: bold;">Group</small></th>
+
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">End of Life</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Region</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Province</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center">
+                                                <small style="font-weight: bold;">Oneview</small>
+                                        </th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Known As</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Title</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Workstream</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Proposed Start</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Proposed End</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Cash Flow</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Opex Capex</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Cip Group</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Cip Code</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Cip Name</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Status</small></th>
+                                        <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">Value</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Project</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">WBS Title</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">PO No</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">PO Value</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Start</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">End</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">POC</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Billing</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Cashflow</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Progress</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Budget</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Expenses</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Travel</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Commitments</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">Revenue</small></th>
+                                        <th style="background-color:#eaf8e4;" class="text-center"><small
+                                                        style="font-weight: bold;">M-Fee</small></th>
+
+                                </tr>
+
+
+                                <tr *ngFor="let budgetview of searchlistnew  | searchpipe: [searchbox, 'tag']">
+                                        <td (click)="onSelect(budgetview)"><small>{{budgetview.INITIATIVE}}</small></td>
+                                        <td (click)="onSelect(budgetview)"><small>{{budgetview.EXECUTIONYEAR}}</small>
+                                        </td>
+                                        <td (click)="onSelect(budgetview)"><small>{{budgetview.BUDGETGROUP}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251); ">
+                                                <small>{{budgetview.ENDOFLIFE}}</small>
+                                        </td>
+
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.REGION}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.PROVINCE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.ONEVIEW}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.KNOWNAS}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.TITLE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.WORKSTREAM}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.FCASTSTARTDATE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.FCASTENDDATE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.FCASTCASHFLOWDATE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.OPEX_CAPEX}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.CIPGROUP}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.CIPCODE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.CIPNAME}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.STATUS}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.BASE_VALUE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.PROJLINK}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.PROJTITLE}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.PONUMBER}}</small>
+                                        </td>
+                                        <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.APPROVEDAMT}}</small>
+                                        </td>
+                                        <td
+                                                [ngClass]="budgetview.PHASE > 'PHASE08'  ? 'text-center todo' : budgetview.DATE06 < todaydate  && budgetview.DATE06 > '1999-01-01' ?'text-center late': 'text-center todo'">
+                                                {{budgetview.DATE06}}</td>
+                                        <td
+                                                [ngClass]="budgetview.PHASE > 'PHASE08'  && budgetview.DATE07 > '1999-01-01' ? 'text-center todo' : budgetview.DATE07 < todaydate  && budgetview.DATE07 > '1999-01-01' ?'text-center late': 'text-center todo'">
+                                                {{budgetview.DATE07}}</td>
+                                        <td
+                                                [ngClass]="budgetview.PHASE > 'PHASE08'  && budgetview.DATE08 > '1999-01-01' ? 'text-center todo' : budgetview.DATE08 < todaydate  && budgetview.DATE08 > '1999-01-01' ?'text-center late': 'text-center todo'">
+                                                {{budgetview.DATE08}}</td>
+                                        <td
+                                                [ngClass]="budgetview.PHASE > 'PHASE09'  && budgetview.DATE09 > '1999-01-01'  ? 'text-center todo'  : budgetview.DATE09 < todaydate && budgetview.DATE09 > '1999-01-01' ?'text-center late': 'text-center todo'">
+                                                {{budgetview.DATE09}}</td>
+                                        <td
+                                                [ngClass]="budgetview.PHASE > 'PHASEAA'  && budgetview.DATE10 > '1999-01-01'  ? 'text-center todo'  : budgetview.DATE10 < todaydate && budgetview.DATE10 > '1999-01-01' ?'text-center late': 'text-center todo'">
+                                                {{budgetview.DATE10}}</td>
+                                        <td class="text-center" style="background-color:rgb(155, 219, 251);">
+                                                <small>{{budgetview.PROGRESS + '%'}}</small>
+                                        </td>
+                                        <td class="text-right odd">{{budgetview.BUDGET}}</td>
+                                        <td class="text-right even">{{budgetview.COSTS}}</td>
+                                        <td class="text-right odd">{{budgetview.TRAVEL}}</td>
+                                        <td class="text-right even">{{budgetview.COMMITMENT}}</td>
+                                        <td class="text-right odd">{{budgetview.REVENUE}}</td>
+                                        <td class="text-right even">{{budgetview.M_FEE}}</td>
+
+                                        <!-- <td style="background-color:rgb(114, 171, 251);">
+                                                <small>{{budgetview.LAST_COMMENT}}</small></td>
+                                        <td (click)="openpdf()">View</td> -->
+                                </tr>
+                        </table>
+                </div>
+        </div>
+        <div class="row">
+
+
+        </div>
+</div>
+<jw-modal id="cipline">
+        <ng-container *ngIf="apiserv.currentcipline">
+                <app-transfers></app-transfers>
+        </ng-container>
+</jw-modal>
+<jw-modal id="pdf">
+        <ng-container *ngIf="budgetview">
+                <table class="table">
+                        <tr>
+                                <td class="padded"> Initiative</td>
+                                <td class="padded" (click)="onSelect(budgetview)">{{budgetview.ABSAREQNO}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Execution</td>
+                                <td class="padded" (click)="onSelect(budgetview)">{{budgetview.EXECUTIONYEAR}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded">Budget Group</td>
+                                <td class="padded" (click)="onSelect(budgetview)">{{budgetview.BUDGETGROUP}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> End of Life</td>
+                                <td class="padded">{{budgetview.ENDOFLIFE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Region</td>
+                                <td class="padded">{{budgetview.REGION}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Province</td>
+                                <td class="padded">{{budgetview.PROVINCE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Oneview</td>
+                                <td class="padded">{{budgetview.ONEVIEW}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Known As</td>
+                                <td class="padded">{{budgetview.KNOWNAS}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Title</td>
+                                <td class="padded">{{budgetview.TITLE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Workstream</td>
+                                <td class="padded">{{budgetview.WORKSTREAM}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Proposed Start</td>
+                                <td class="padded">{{budgetview.PROPSTARTDATE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Proposed End</td>
+                                <td class="padded">{{budgetview.PROPENDDATE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Cash Flow</td>
+                                <td class="padded">{{budgetview.CASHFLOWDATE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Opex Capex</td>
+                                <td class="padded">{{budgetview.OPEX_CAPEX}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Cip Group</td>
+                                <td class="padded">{{budgetview.CIPGROUP}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Cip Code</td>
+                                <td class="padded">{{budgetview.CIPCODE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Cip Name</td>
+                                <td class="padded">{{budgetview.CIPNAME}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Status</td>
+                                <td class="padded">{{budgetview.STATUS}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Value</td>
+                                <td class="padded">{{budgetview.BASE_VALUE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Available</td>
+                                <td class="padded">{{budgetview.AVAILABLE_VALUE}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Category</td>
+                                <td class="padded">{{budgetview.CATEGORY}}</td>
+                        </tr>
+                        <tr>
+                                <td class="padded"> Last Comment</td>
+                                <td class="padded">{{budgetview.LAST_COMMENT}}</td>
+                        </tr>
+                </table>
+
+        </ng-container>
+
+</jw-modal>

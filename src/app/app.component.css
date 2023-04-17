@@ -1,0 +1,20 @@
+span {
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+    
+  }
+  .signature {
+    font-size:0.8rem;
+  }
+  .inout{  
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        transform: rotate(180deg);
+  }
+  .mat-primary {
+    background: #1134df;
+    color: #fff;
+}
