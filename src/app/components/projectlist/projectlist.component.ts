@@ -308,8 +308,6 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
       TRACKNOTE:''
     }
     this.apiserv.getReqView(proj.ABSAREQNO);
-    // this.router.navigate(['requestedit/' + proj.ABSAREQNO])
-    // // this.apiserv.getCommentList(this.currentposnr);
     this._router.navigateByUrl('/requestedit/' + proj.ABSAREQNO)
 
     //this.openDialog();

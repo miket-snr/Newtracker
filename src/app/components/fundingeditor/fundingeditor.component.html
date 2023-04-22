@@ -123,42 +123,15 @@
             <span class="remove" (click)="removeFunder(i)"><b>X</b></span>
           </div>
         </div>
-        <button type="button" class="btn btn-sm btn-success" (click)="sendTask()">Send Task</button>
+        <div  class="row d-flex justify-content-around">
+          <button [disabled]="false" type="button" class="btn btn-sm btn-success" (click)="sendTask()">Send Task</button>
+          <button [disabled]="true" type="button" class="btn btn-sm btn-danger" >Generate new initiative</button>
+        </div>
+        
       </form>
       <ng-container *ngIf="help">
       <div style="padding:15px;">
-        <p>
-          Simply fill the Cipline number into the Initiative field, <br>
-          the other fields will get populated when you save as they are read off the Cipline table.
-        </p>
-        <h4> <b>What is a Cipline number?</b></h4>
-        <p> A certain number of budget lines are provided by ABSA each year and this is called the Ciplist. <br>
-          These are loaded with a fixed number (first 2 digits is the year) and this line never changes.</p>
-        <p> The line amount can be allocated to a Project and any money left over between Cipline Amount <br>
-          and the Approved Purchase order Amount can be transferred to a new line.
-        </p>
-        <ul>Things that can happen to amounts on a Cipline:
-          <li><b>Allocated</b> to a Project</li>
-            <li>Transferred to an existing Cipline via a <b>ReAllocation</b></li>
-          <li>Transferred to a new cipline and this can be a <b>Pooled</b> line</li>
-          <li>Given back as <b>Underspend</b></li>
-          <li>A line can be <b>cancelled</b>> and this money cannot be used for anything else</li>
-          <li>A line can be <b>surrendered</b> and this can be reused for other projects in the same Cipgroup</li>
-
-        </ul>
-        <h4>Where do you find the Cipline number? </h4>
-        <p> Look at the Budget Report and find the relevant line using filters. </p>
-        <h3>What if no Cipline is found? </h3>
-        <ul>
-          If no obvious Cipline number is found then you must provide information in the other Fields     
-          <li>
-            Select the relevant Cip-Group, Cipcode(*important), Workstream, and Amount(*important)
-          </li> 
-          <li>
-            Contact the Regional Manager or the Central Fund manager for assistance, as a new line may
-            have to be created from other lines via savings, surrenders, or Reallocations.
-          </li>   
-        </ul>
+        <quill-view [content]="mytext" format="text" theme="snow"></quill-view>
       </div>
     </ng-container>
     </div>

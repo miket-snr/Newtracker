@@ -36,7 +36,8 @@ import { MassimportComponent } from './components/massimport/massimport.componen
 import { FundFinderComponent } from './components/fund-finder/fund-finder.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { TaskEditComponent } from './components/task-edit/task-edit.component';
-
+import { QuillModule }  from 'ngx-quill';
+import { HelpComponent } from './components/help/help.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,7 +63,8 @@ import { TaskEditComponent } from './components/task-edit/task-edit.component';
     WorklistMultiComponent,
     MassimportComponent,
     AdminComponent,
-    TaskEditComponent
+    TaskEditComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +77,7 @@ import { TaskEditComponent } from './components/task-edit/task-edit.component';
     RouterModule.forRoot([]),
     HttpClientModule,
     NgGanttEditorModule,
+    QuillModule.forRoot(),
   ],
   exports:[MaterialModule],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }, 

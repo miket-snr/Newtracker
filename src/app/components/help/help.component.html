@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-3">
+        Help Text Keycode
+    </div>
+    <div class="col-4">
+        <input class="form-control" [(ngModel)]="helper.KEYCODE">
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        Help Text Title
+    </div>
+    <div class="col-4">
+        <input class="form-control" [(ngModel)]="helper.TITLE">
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        Help Text Question
+    </div>
+    <div class="col-4">
+        <input class="form-control" [(ngModel)]="helper.QUESTION">
+    </div>
+    <div class="col-2 offset-1">
+        <button type="button" class="btn btn-primary" (click)="pushToSap()">Save</button>
+    </div>
+</div>
+
+
+<div class="row mb-3">
+    <div class="col-6 offset-3">
+        <quill-editor [(ngModel)]="helper.LINE1" ></quill-editor>
+    </div>
+</div>
+
+
+<h2>Preview Block:</h2>
+
+
+<quill-view [content]="helper.LINE1" format="text" theme="snow"></quill-view>

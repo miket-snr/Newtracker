@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.worker();
-    }, 1000);
+    }, 5000);
     // this.apiserv.testcontainerBS.subscribe( line => {
     //   if ( line != ''){
     //     this.counter++;

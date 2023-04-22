@@ -450,7 +450,7 @@ async putMain(pdf = this.pdf){
          LINE_3:linein.LINE_3,
          DATEOF: linein.DATEOF, 
          COMMENTBY: linein.COMMENTBY,
-         COMMENT_TEXT: atob(linein.COMMENT_TEXT),
+         COMMENT_TEXT: this.apiserv.xtdatob(linein.COMMENT_TEXT),
          COMMENTNO: linein.COMMENTNO
        }
      })

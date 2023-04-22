@@ -295,7 +295,7 @@ updateProgress(blankdate, change){
     this.datedata.FORECAST_START = this.datedata.DATE06;
     this.datedata.FORECAST_END = this.datedata.DATE07;
     this.newdates = { ...this.apiserv.lclstate.dates, ...this.datedata} ;
-    this.newdates.TRACKNOTE = btoa(this.newdates.TRACKNOTE);
+    this.newdates.TRACKNOTE = this.apiserv.xtdbtoa(this.newdates.TRACKNOTE);
     this.apiserv.lclstate.dates = JSON.parse(JSON.stringify(this.newdates));
     let updater = [this.newdates];
     let todo = {DATA: JSON.stringify(updater),TRACKTYPE:'PHASE'}

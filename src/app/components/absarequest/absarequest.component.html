@@ -275,6 +275,7 @@
                                 <option value=""> Select type....</option>
                                 <option value="N"> No</option>
                                 <option value="Y"> Yes</option>
+                                <option value="U"> NA</option>
                               </select>
                             </div>
                           </div>
@@ -287,7 +288,8 @@
                                 required>
                                 <option value=""> Select type....</option>
                                 <option value="F"> Freehold</option>
-                                <option value="L"> Lesed</option>
+                                <option value="L"> Leased</option>
+                                <option value="U"> NA</option>
                               </select>
                             </div>
                           </div>
@@ -395,19 +397,37 @@
                               formControlName="approval_motivate"></textarea></td>
                         </tr>
                         <tr>
-                          <td>Requested Amount </td>
-                          <td colspan="2">
-                            <input class="form-control" formControlName="baselinebudget">
-                          </td>
-                         
                           <td>Submit for Approval Date</td>
                           <td>
                             <input type="date" class="form-control" formControlName="approval_submitdate">
 
                           </td>
+                          <td>Requested Amount </td>
+                          <td >
+                            <input class="form-control" formControlName="baselinebudget">
+                          </td>
+
                           <td></td>
                         </tr>
+
                         <tr>
+                          <td>Approval Date</td>
+                          <td ><input type="date" class="form-control" formControlName="approval_date"></td>
+                          <td>Approval Amount</td>
+                          <td ><input type="number" class="form-control" formControlName="approved_amt"></td>
+                        </tr>
+                        <tr>
+                          <td>Submitted to Absa legal</td>
+                          <td ><input type="date" class="form-control" formControlName="approvaltolegal"></td>
+                        
+                        <td>Purchase Order</td>
+                        <td ><input class="form-control" formControlName="ponumber"></td>
+                      </tr>
+                        <tr>
+                        <td>Approved by Absa legal</td>
+                        <td ><input type="date" class="form-control" formControlName="approvedbylegal"></td>
+                      </tr>
+                      <tr>
                           <td>Approval Status </td>
                           <td colspan="2">
                             <select class="form-control" formControlName="approval_status">
@@ -415,16 +435,7 @@
                                 {{approval.text}}</option>
                             </select>
                           </td>
-                          <td>Approval Date</td>
-                          <td ><input type="date" class="form-control" formControlName="approval_date"></td>
-                       
-                        </tr>
-                        <tr>
-                          <td>Purchase Order</td>
-                          <td colspan="2"><input class="form-control" formControlName="ponumber"></td>
-                          <td>Approval Amount</td>
-                          <td ><input type="number" class="form-control" formControlName="approved_amt"></td>
-
+                         
                         </tr>
                         <tr>
                           <td>Approval Note</td>

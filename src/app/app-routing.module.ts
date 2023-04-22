@@ -13,6 +13,7 @@ import { TransfersComponent } from './components/transfers/transfers.component';
 import { WorklistComponent } from './components/worklist/worklist.component';
 import { MassimportComponent } from './components/massimport/massimport.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { HelpComponent } from './components/help/help.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'cipfund',component:FundciplineComponent},
   {path: 'dashboard',component:DashboardComponent},
   { path: 'home', component: HomeComponent},
+  { path: 'help', component: HelpComponent},
   { path: 'imports', component: MassimportComponent},
   { path: 'login', component: LoginComponent},
   { path: 'planner', component: GanttComponent},

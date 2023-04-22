@@ -6,9 +6,12 @@
       <mat-toolbar>Menu</mat-toolbar>
       
       <mat-nav-list>
-        <mat-list-item [routerLink]="['home/dashboard']">
-          <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+        <mat-list-item [routerLink]="['worklist']">
+          <mat-icon>dashboard</mat-icon><span>Worklist</span>
       </mat-list-item>
+      <mat-list-item [routerLink]="['dashboard']">
+        <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+    </mat-list-item>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
         <mat-expansion-panel-header>
             Budget
@@ -86,6 +89,9 @@
       <a mat-list-item [routerLink]="['admin']">
           <mat-icon>create</mat-icon><span>Json Debug</span>
       </a>
+      <a mat-list-item [routerLink]="['help']">
+        <mat-icon>create</mat-icon><span>Help</span>
+    </a>
      
   </mat-nav-list>
 </mat-expansion-panel>

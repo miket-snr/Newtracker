@@ -112,10 +112,10 @@
 
   </table>
     <div class="row">
-      <div class="col-6 offset-3">
+      <div class="col-6 offset-1">
         <div class="card pl-4 pr-4 pt-4">
          
-            <div class="row mt-2">
+            <!-- <div class="row mt-2">
               <div class="col-3 offset-1">
                 <span>Program</span>
               </div>
@@ -128,23 +128,19 @@
                   </option>
                 </select>
               </div>
-            </div>
+            </div> -->
 
             <div class="row mt-2">
               <div class="col-3 offset-1">
-                <span>Cip Line</span>
+                <span>Initiative</span>
               </div>
 
               <div class="col-6">
-                <select [(ngModel)]="docheader.cipcode" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
-                  class="form-control">
-                  <option *ngFor="let groupline of apiserv.cipcodes" [value]="groupline.lineout">
-                    {{groupline.lineout }}
-                  </option>
-                </select>
+                <input [(ngModel)]="budgetview.INITIATIVE" [disabled]="true"
+                  class="form-control">                 
               </div>
             </div>
-            <div class="row mt-2">
+            <!-- <div class="row mt-2">
               <div class="col-3 offset-1">
                 <span>Funding Line From</span>
               </div>
@@ -153,32 +149,86 @@
                 <input [(ngModel)]="docheader.impositionof" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
                   class="form-control" />
               </div>
-            </div>
+            </div> -->
             <div class="row mt-2">
               <div class="col-3 offset-1">
                 <span>Entry Code</span>
-              </div>
+              </div> 
 
               <div class="col-6">
-                <select [(ngModel)]="docheader.entrycode" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                <select [(ngModel)]="docheader.ENTRYCODE" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
                   class="form-control">
                   <option value="Savings">Under Spend</option>
                   <option value="Cancelled">Cancel</option>
                   <option value="Surrender">Surrender</option>
                   <option value="ReAllocate">Re Allocate</option>
                   <option value="Allocate">Allocate</option>
-                  <option value="Defer">Defer</option>
+                  <option value="Deferred">Deferral</option>
+                 
                 </select>
               </div>
             </div>
-            <ng-container *ngIf="true">
+            <ng-container *ngIf="docheader.ENTRYCODE.length > 2  && docheader.ENTRYCODE =='ReAllocate'">
+              <div class="row mt-2">
+                <div class="col-3 offset-1">
+                  <span>Absa Agreement</span>
+                </div>
+  
+                <div class="col-6">
+                  <select [(ngModel)]="docheader.AGREEMENT" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                  class="form-control">
+                  <option value="">Please Select</option>
+                  <option value="U">Not Required</option>
+                  <option value="Y">Agreement - See Note</option>
+                </select>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-3 offset-1">
+                  <span>Region</span>
+                </div>
+  
+                <div class="col-6">
+                  <input class="form-control" [(ngModel)]="docheader.REGION"  class="form-control">
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-3 offset-1">
+                  <span>Oneview</span>
+                </div>
+  
+                <div class="col-6">
+                  <input class="form-control" [(ngModel)]="docheader.ONEVIEW"  class="form-control">
+                </div>
+              </div>
+             
+              <div class="row mt-2">
+                <div class="col-3 offset-1">
+                  <span>Cip Code</span>
+                </div>
+  
+                <div class="col-6">
+                  <input class="form-control" [(ngModel)]="docheader.CIPCODE"  class="form-control">
+                </div>
+              </div>
+            </ng-container>
             <div class="row mt-2">
               <div class="col-3 offset-1">
-                <span>Funding Line To</span>
+                <span>Short Description</span>
               </div>
 
               <div class="col-6">
-                <select [(ngModel)]="docheader.impositionto" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
+                <input class="form-control" [(ngModel)]="docheader.SHORTCOMMENT"  class="form-control">
+              </div>
+            </div>
+            <ng-container *ngIf="docheader.ENTRYCODE =='ReAllocate'">
+            <div class="row mt-2">
+              <div class="col-3 offset-1">
+                <span>Reallocate to</span>
+              </div>
+
+              <div class="col-6">
+                <select [(ngModel)]="docheader.PARTNERID" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
                   class="form-control">
                   <option value="1">To be added</option>
                   <!-- <option *ngFor="let fundoption of apiserv.cipfundlines$ | async" [value]="fundoption.lineout">
@@ -188,20 +238,14 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="true">
+          <ng-container *ngIf="docheader.ENTRYCODE =='Allocate'">
             <div class="row mt-2">
               <div class="col-3 offset-1">
-                <span>Funding Line To</span>
+                <span>Allocate to Project</span>
               </div>
 
               <div class="col-6">
-                <select [(ngModel)]="docheader.impositionto" (selectionChange)="onGroupSelect()" placeholder="Select a Line"
-                  class="form-control">
-                  <option value="1">To be added</option>
-                  <!-- <option *ngFor="let fundoption of apiserv.cipfundlines$ | async" [value]="fundoption.lineout">
-                        {{fundoption.lineout }}
-                      </option> -->
-                </select>
+                <input class="form-control" [(ngModel)]="docheader.PROJLINK"  class="form-control">
               </div>
             </div>
           </ng-container>
@@ -211,7 +255,7 @@
               </div>
 
               <div class="col-6">
-                <input type="number" class="form-control" [(ngModel)]="docheader.valueof">
+                <input type="number" class="form-control" [(ngModel)]="docheader.VALUEOF">
               </div>
             </div>
             <div class="row mt-2">
@@ -221,7 +265,7 @@
               </div>
 
               <div class="col-6">
-                <input type="date" class="form-control" [(ngModel)]="docheader.postingdate">
+                <input type="date" class="form-control" [(ngModel)]="docheader.POSTINGDATE">
               </div>
             </div>
           
@@ -231,20 +275,27 @@
               </div>
 
               <div class="col-6">
-                <textarea class="form-control" [(ngModel)]="docheader.comment"></textarea>
+                <textarea class="form-control" [(ngModel)]="docheader.NOTE"></textarea>
               </div>
             </div>
       
         </div>
-        <div class="card-footer d-flex justify-content-center">
-          <button type="button" class="btn btn-sm btn-outline-primary mr-4">Save</button>
+        <!-- <div class="card-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-4" [disabled]="docheader.VALUEOF == 0">Save</button>
           <button type="button" class="btn btn-sm btn-outline-danger ml-4">Reset</button>
 
-        </div>
+        </div> -->
+      </div>
+      <div class="col-4">
+        <button type = "button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helpbtntext}}</button>
+        <ng-container *ngIf="help">
+      <quill-view [content]="helptext"></quill-view>
+    </ng-container>
       </div>
     </div>
     <div class="row d-flex justify-content-around mt-3">
       <button type="button" 
+      [disabled]="!checkValue(docheader)"
       class="btn btn-sm btn-primary" >Update SAP</button>
       <button type="button" 
       class="btn btn-sm btn-danger" (click)="closejw('cipline')">Close</button>

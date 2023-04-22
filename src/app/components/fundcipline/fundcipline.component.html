@@ -1,5 +1,5 @@
 
-<div class="mycontainer" *ngIf="!comments">
+<div class="mycontainer" >
        <div class="row">
      <!--   <div class="col-6">
            <form [formGroup]="pmForm">
@@ -10,11 +10,16 @@
                   </p>
                 </form> 
         </div> -->
-        <div class="col-6">
-            <div class="col-4">
+        <div class="col-4">
                 <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button>
             </div>
-        </div>
+            <div class="col-2 text-right pr-2">
+              <small>Free search</small>
+      </div>
+      <div class="col-4">
+              <input class="form-control  form-control-sm " type="text" id="searchbox"
+                      [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+      </div>
      </div>
     
      <div class="row" [hidden]="printing">
@@ -62,6 +67,7 @@
               </div>
               <div>{{pmForm.value.cipgroup}}</div> -->
             </div>
+
       
             <div class="searchbox">
               <mat-form-field appearance="fill" style="width:100%">
@@ -73,6 +79,9 @@
               </mat-form-field>
             </div>
             <div class="searchbox">
+              <button class="btn btn-sm btn-outline-success" (click)="showHelp()">Show Help</button>
+            </div>
+            <!-- <div class="searchbox">
               <mat-form-field appearance="fill" style="width:100%">
                 <mat-label>Cipline</mat-label>
                 <mat-select formControlName="cipline"   >
@@ -80,7 +89,7 @@
                   <mat-option *ngFor="let perc of apiserv.ciplines" [value]="perc.code"><small>{{ perc.text }}</small></mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+            </div> -->
             <!-- <div class="searchbox">
               <div class="card-header" (click)="openjw('status')">
                 Status
@@ -103,8 +112,9 @@
                           <th>Initiative</th>
                             <th class="text-center" style="background-color:azure;"><small>Project</small></th>
                             <th class="text-left" style="width:275px;background-color:azure;"><small>Title</small></th>
-                            <!-- <th class="text-center"><small>Status</small></th> -->
+                             <th class="text-center"><small>Type</small></th>
                             <th class="text-center"><small>Region</small></th>
+                            <th class="text-center"><small>PO Number</small></th>
                             <!-- <ng-container *ngIf="selectedAll">
                             <th class="text-left"><small>Scope</small></th>
                             <th class="text-center"><small>BoQ</small></th>
@@ -120,15 +130,15 @@
                            </ng-container> -->
                             <!-- <th class="text-center"><small>Percentage<br>Complete</small></th> -->
                             <th class="text-center"><small>Oneview</small></th>
-                            <th class="text-left" style="width:225px;"><small>Known as</small></th>
+                            <th class="text-left" style="width:125px;"><small>Known as</small></th>
                            
                             <th class="text-center"><small>Cip group</small></th>
                             <th class="text-center"><small>Cip Code</small></th>          
                             <th class="text-center"><small>Cip Line</small></th>          
                             <th class="text-center"><small>Workstream</small></th>
                             <th class="text-center"><small>Cip Budget</small></th>
-                            <th class="text-center"><small>Approved</small></th>
-                            <!-- <th class="text-center"><small>Costs</small></th>
+                          <!--   <th class="text-center"><small>Approved</small></th>
+                            <th class="text-center"><small>Costs</small></th>
                             <th class="text-center"><small>Travel</small></th>
                             <th class="text-center"><small>Commitments </small></th>
                             <th class="text-center"><small>Revenue</small></th>
@@ -139,14 +149,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let item of searchlistnew; let i = index; trackBy:trackById;">
+                    <tr *ngFor="let item of searchlistnew | searchpipe: [searchbox, 'tag'] ">
             
                         <ng-container >
                         <td  [ngClass]=" (item.reference == item.initiative )? 'alert1' : 'normal'" (click)="goTo(item)"><small>{{item.initiative}}</small></td>
                         <td ><small>{{item.reference}}</small></td>
                         <td ><small>{{item.title}}</small></td>
-                        <!-- <td ><small>{{item.status}}</small></td> -->
+                         <td ><small>{{item.budgetgroup}}</small></td> 
                         <td ><small>{{item.region}}</small></td>
+                        <td ><small>{{item.ponumber}}</small></td>
                         <!-- <ng-container *ngIf="selectedAll">
                         <td><small>{{item.scope}} </small></td>
                         <td><small>{{item.boq}}</small></td>
@@ -173,13 +184,14 @@
                         <td ><small>{{item.travel}}</small></td>
                         <td ><small>{{item.commitment}}</small></td>
                         <td ><small>{{item.revenue}}</small></td>
-                        <td ><small>{{item.m_fee}}</small></td> -->
+                        <td ><small>{{item.m_fee}}</small></td> 
                         
-                        <td ><small>{{item.estimatedbudget}}</small></td>
+                        <td ><small>{{item.estimatedbudget}}</small></td>-->
+                       
                         <td ><small>{{item.available}}</small></td>
-                        <!-- <td ><input type="text" class="smallinput"  name="claiming{{i}}"
+                         <!-- <td ><input type="text" class="smallinput"  name="claiming{{i}}"
                             (change)="newValue($event,i, item)" [(ngModel)]="item.claiming"></td> -->
-                        <td ><small><button type="button" class="btn btn-sm btn-secondary" (click)="confirm(item)">Select</button></small></td>
+                        <td ><small><button type="button" class="btn btn-sm btn-secondary" (click)="goTo(item)">Select</button></small></td>
                         </ng-container>
                     </tr>
                 </tbody>
@@ -281,6 +293,7 @@
             </tbody>
         </table>
         </div>
+       
     </div>
   
     <jw-modal id="selections">
@@ -398,3 +411,7 @@
         <ng-container *ngIf="apiserv.currentcipline">
                 <app-transfers></app-transfers>
         </ng-container>
+       </jw-modal>
+       <jw-modal id="helptext">
+         Not Published yet
+       </jw-modal>

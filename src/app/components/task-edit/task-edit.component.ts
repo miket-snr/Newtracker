@@ -41,7 +41,7 @@ this.eventsSubscription.unsubscribe();
 onSave(){
   this.task.LINKEDTYPE = 'NR';
   this.task.DECISION = 'SENDMAIL';
-  this.task.INSTRUCTION = btoa(this.task.INSTRUCTION )
+  this.task.INSTRUCTION = this.apiserv.xtdbtoa(this.task.INSTRUCTION )
   this.task.LINKEDOBJNR = this.apiserv.lclstate.currentreq['ABSAREQNO']
   this.apiserv.postGEN(this.task, 'NEW_TASKREQUEST').subscribe(reply =>{
     if (reply && reply.RESULT.TASK_STATUS ){

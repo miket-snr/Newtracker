@@ -177,12 +177,15 @@ this.resetFilters();
           quotation: line.QUOTATION, claiming: 0,
           cipbudget: line.CIPLINEBUDGET || 0,
           estimatedbudget: line.APPROVED_AMT || 0,
-          available: Math.floor(( line.CIPLINEBUDGET - line.APPROVED_AMT ) * 100) /100 ,
+          available: Math.floor(( line.BUDGETDIF ) * 100) /100 ,
+          ponumber: line.PONUMBER,
           costfee : line.COSTFEE || 0,
           travel: line.TRAVEL || 0,
           commitment: line.COMMITMENT || 0,
           revenue: line.REVENUE || 0,
-          m_fee: line.M_FEE || 0
+          m_fee: line.M_FEE || 0,
+          budgetgroup: line.BUDGETGROUP,
+          tag: line.INITIATIVE + ' ' + line.PROJLINK + ' ' + line.TITLE + ' ' + line.BUDGETGROUP + ' ' + line.PONUMBER + ' ' + line.CIPLINEBUDGET + line.KNOWNAS 
         }
       })
       // this.searchlist.forEach(item => {
@@ -219,6 +222,10 @@ this.resetFilters();
   }
   checkChange() {
    return  this.changelist.length > 0? 'Ignore Changes and Close' : 'Close'
+  }
+
+  showHelp() {
+    this.modalServicejw.open('helptext')
   }
   openjw(thefield = 'ABSAREQNO') {
     if (thefield == 'areyousure') {
