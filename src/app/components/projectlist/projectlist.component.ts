@@ -305,7 +305,8 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
       FORECAST_END:'',
       RATING:'',
       LAST_COMMENT: '',
-      TRACKNOTE:''
+      TRACKNOTE:'',
+      ONEVIEW: '',
     }
     this.apiserv.getReqView(proj.ABSAREQNO);
     this._router.navigateByUrl('/requestedit/' + proj.ABSAREQNO)

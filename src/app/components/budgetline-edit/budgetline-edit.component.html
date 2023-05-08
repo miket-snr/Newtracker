@@ -1,0 +1,197 @@
+<div class="container">
+    <!-- <ul class="list-group">
+        <li class="list-group-item">Option for Initiative Management</li>
+        <li class="list-group-item list-group-item-primary">Create a new Budget line</li>
+        <li class="list-group-item list-group-item-secondary">Reallocate to an existing </li>
+        <li class="list-group-item list-group-item-success">Move to Adjustment Pool</li>
+        <li class="list-group-item list-group-item-danger">Move to non reusable Pool</li>
+      </ul>   -->
+<div class="row">
+<div class="col-6 offset-1 d-flex justify-content-center">
+  <h1> New Budget Line</h1>
+</div>
+
+</div>
+        <div class="row">
+          <div class="col-6 offset-1">
+            <div class="card pl-4 pr-4 pt-4">  
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Initiative</span>
+                  </div>
+    
+                  <div class="col-6">
+                    <input [(ngModel)]="vm.INITIATIVE" [disabled]="true"
+                      class="form-control">                 
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Budget Group</span>
+                  </div>
+    
+                  <div class="col-6">
+                    <select [(ngModel)]="vm.BUDGETGROUP" 
+                    class="form-control">
+                    <option *ngFor="let bgroup of apiserv.budgetgroups" [value]="bgroup"> {{bgroup}}</option>
+                   
+                  </select>
+                  </div>
+                  </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Region</span>
+                  </div>
+          
+                  <div class="col-6">
+                    <select class="form-control" name="region" [(ngModel)]="vm.REGION">
+                      <option *ngFor="let region of apiserv.regions" [value]="region.code"> {{region.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Oneview /POOL</span>
+                  </div>
+          
+                  <div class="col-6">
+                    <input class="form-control" [(ngModel)]="vm.ONEVIEW"  class="form-control">
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Cip Group</span>
+                  </div>
+          
+                  <div class="col-6">
+                    <select class="form-control" name="cipgroup" [(ngModel)]="vm.CIPGROUP">
+                      <option *ngFor="let cipgroup of apiserv.cipgroups" [value]="cipgroup.code"> {{cipgroup.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Cip Code</span>
+                  </div>
+          
+                  <div class="col-6">
+                    <select class="form-control" name="cipgroup" [(ngModel)]="vm.CIPCODE">
+                      <option *ngFor="let cipcode of apiserv.cipcodes" [value]="cipcode.code"> {{cipcode.text}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Category</span>
+                  </div>
+          
+                  <div class="col-6">
+                    <select [(ngModel)]="vm.STATUS" 
+                    class="form-control">
+                    <option value="">Please Select</option>
+                    <option value="HOLD">Staging</option>
+                    <option value="LOCKED">Locked</option>
+                    <option value="OPEN">Reusable</option>
+                  </select>
+                  </div>
+                </div>
+          
+              <div class="row mt-2">
+                <div class="col-3 offset-1">
+                  <span>Short Description</span>
+                </div>
+          
+                <div class="col-6">
+                  <input class="form-control" [(ngModel)]="vm.TITLE"  class="form-control">
+                </div>
+              </div>
+                <!-- <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Amount</span>
+                  </div>
+    
+                  <div class="col-6">
+                    <input type="number" class="form-control" [(ngModel)]="vm.BASE_VALUE">
+                  </div>
+                </div>-->
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <div>Start Date</div>
+                        </div> 
+    
+                  <div class="col-6">
+                    <input type="date" class="form-control" [(ngModel)]="vm.FCASTSTARTDATE">
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <div>End Date</div>
+                        </div>
+    
+                  <div class="col-6">
+                    <input type="date" class="form-control" [(ngModel)]="vm.FCASTENDDATE">
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <div>Cashflow Date</div>
+                        </div>
+    
+                  <div class="col-6">
+                    <input type="date" class="form-control" [(ngModel)]="vm.FCASTCASHFLOWDATE">
+                  </div>
+                </div>
+              
+                <div class="row mt-2">
+                  <div class="col-3 offset-1">
+                    <span>Note</span>
+                  </div>
+    
+                  <div class="col-6">
+                    <textarea class="form-control" [(ngModel)]="docheader.NOTE"></textarea>
+                  </div>
+                </div>
+          
+        
+            <!-- <div class="card-footer d-flex justify-content-center">
+              <button type="button" class="btn btn-sm btn-outline-primary mr-4" [disabled]="docheader.VALUEOF == 0">Save</button>
+              <button type="button" class="btn btn-sm btn-outline-danger ml-4">Reset</button>
+    
+            </div> -->
+         
+          <!-- <div class="col-4">
+            <button type = "button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helpbtntext}}</button>
+            <ng-container *ngIf="help">
+          <quill-view [content]="helptext"></quill-view>
+        </ng-container>
+          </div> -->
+ 
+        <div class="row d-flex justify-content-around mt-3">
+          <button type="button" 
+          [disabled]="!checkValue(vm)"
+          class="btn btn-sm btn-primary" (click)="updateSAP()">Update SAP</button>
+    <!--         <button type="button" 
+          class="btn btn-sm btn-danger" (click)="closejw('cipline')">Close</button>
+    <div *ngIf="funding"><span>Amount Claimed {{amountclaimed}}</span></div> -->
+      </div>
+    
+    <jw-modal id="newbudgetline">
+
+    </jw-modal>
+     
+    
+    
+    <!-- <div class="row">
+      <div class="col-4 d-flex justify-content-around">
+        <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+      </div>
+      <div class="col-4 d-flex justify-content-around">
+        <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+      </div>
+      <div class="col-4 d-flex justify-content-around">
+        <button type = "button" class="btn btn-sm btn-primary">btn1</button>
+      </div>
+    </div> -->

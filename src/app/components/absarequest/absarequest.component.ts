@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms'
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray, NgForm } from '@angular/forms'
 import { ActivatedRoute, PreloadingStrategy, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { formatDate, Location } from '@angular/common';
 import { ModalService } from 'src/app/_modal/modal.service';
 import { dateset } from 'src/app/_classes/dateset';
 import { GenPdfService } from 'src/app/_services/gen-pdf.service';
+import { absareq } from 'src/app/_classes/absareq';
 
 @Component({
   selector: 'app-absarequest',
@@ -17,78 +18,18 @@ import { GenPdfService } from 'src/app/_services/gen-pdf.service';
 })
 export class AbsarequestComponent implements OnInit, OnDestroy {
   @Input() edit: boolean = true;
+  @ViewChild('reqForm', { static: true }) ngForm: NgForm;
+
+  formChangesSubscription: Subscription;
   varioussites = false;
   //  edit = true;
   editdetail = false;
   replytext = '';
 
   taskedit = false;
+  vm = {}
   requestForm = new FormGroup({
-    absareqno:  new FormControl({value:''}),
-    projlink: new FormControl(),
-    title: new FormControl(' ', [Validators.required, Validators.minLength(10), Validators.maxLength(40)]),
-    region: new FormControl(),
-    provregion: new FormControl(),
-    multisites: new FormControl(),
-    varioussites: new FormControl(),
-    oneview: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    knownas: new FormControl(),
-    sites: new FormControl(),
-    details: new FormControl('', [Validators.required, Validators.minLength(15)]),
-    propstartdate: new FormControl('', [Validators.required]),
-    propenddate: new FormControl('', [Validators.required]),
-    status: new FormControl(),
-    cipname: new FormControl('unknown:unknown'),
-    cipcode: new FormControl('unknown'),
-    cipgroup: new FormControl('unknown'),
-    estimatedbudget: new FormControl(),
-    baselinebudget: new FormControl(),
-    budgetdif: new FormControl(),
-    quotation: new FormControl(),
-    funders: this.fb.array([]),
-    funding: new FormControl(),
-    authorizer: new FormControl(),
-    pmanager: new FormControl(),
-    epriority: new FormControl(''),
-    capex_opex: new FormControl(),
-    discretionary: new FormControl(),
-    im_position: new FormControl(),
-    retrospective: new FormControl(false),
-    planstatus: new FormControl(),
-    sitenotes: new FormControl(),
-    leased_free: new FormControl(),
-    leaseend: new FormControl(),
-    endoflife: new FormControl(),
-    ponumber: new FormControl(),
-    buildingid: new FormControl(),
-    forecast_start: new FormControl(formatDate(new Date(), "yyyy-MM-dd", "en")),
-    forecast_end: new FormControl(formatDate(new Date(), "yyyy-MM-dd", "en")),
-    quarter: new FormControl(),
-    scope: new FormControl(),
-    boq: new FormControl(),
-    costs: new FormControl(),
-    rating: new FormControl(),
-    po: new FormControl(),
-    approval: new FormControl(),
-    approvalstatus:new FormControl(),
-    approval_motivate:new FormControl() ,
-    approval_status:new FormControl(),
-    approval_date:new FormControl(),
-    approval_submitdate:new FormControl(),
-    approved_amt:new FormControl(),
-    approval_note:new FormControl(),
-    implement: new FormControl(),
-    ppract_complete: new FormControl(),
-    ohsrisk: new FormControl(),
-    doneby: new FormControl(),
-    clientapproval: new FormControl(formatDate(new Date(), "yyyy-MM-dd", "en")),
-    invsubmitted: new FormControl(),
-    progress: new FormControl({value:'',disabled:true}),
-    ciplinebudget: new FormControl(),
-    portfoliomgr: new FormControl(),
-    accountant: new FormControl(),
-    background: new FormControl(),
-    appreqlink: new FormControl(),
+  
 
     // varioussites: new FormControl(this.varioussites)
   })
@@ -155,6 +96,9 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.requestForm.disable();
+    this.formChangesSubscription = this.ngForm.form.valueChanges.subscribe(x => {
+      console.log(x);
+    })
     this.addFunder();
     this.reqno = this.route.snapshot.paramMap.get('id');
 
@@ -180,10 +124,10 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     this.pmlist = this.apiserv.pmlist;
     // this.addaSite();
 
-    this.filteredOptions = this.requestForm.controls.cipname.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => this._filter(value || '')),
-    );
+    // this.filteredOptions = this.requestForm.controls.cipname.valueChanges.pipe(
+    //   startWith(''),
+    //   map((value: any) => this._filter(value || '')),
+    // );
 
     // this.apiserv.cipgrouplines$.subscribe(inner => {
     //   this.grouplines = inner
@@ -205,6 +149,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.tasksub) { this.tasksub.unsubscribe() };
     if (this.curreqsub) { this.curreqsub.unsubscribe(); }
+    this.formChangesSubscription.unsubscribe();
   }
 
   get funders(): FormArray {
@@ -249,6 +194,14 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   tabChanged(event) {
     // tbil - useful for - do you want to save
    // this.requestForm.get('title').disable();
+  //  if (event.index == 7){
+  //   this.apiserv.getProgresslist('','',this.reqno);
+  //  this.router.navigate(['worklist'])
+  //  }
+  }
+  backToList(){
+   this.apiserv.getProgresslist('','',this.reqno);
+   this.router.navigate(['worklist']) 
   }
   greaterThan(a, b) {
     return a > b
@@ -286,7 +239,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     })
   }
   addFunder() {
-    this.funders.push(this.newFunder());
+    // this.funders.push(this.newFunder());
     //  this.varioussites =  this.sites.length > 1 ? true : false 
   }
   removeFunder(index = -1) {
@@ -306,14 +259,9 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     }
   }
   existingReq(reqno) {
-    // this.apiserv.getSingleRequest(reqno);
-   
-    // this.tasksub = this.apiserv.tasklist$.subscribe(listof => {
-    //   this.tasks = listof;
-    // })
     this.curreqsub = this.apiserv.currentreq$.subscribe(creq => {
       if (creq['ABSAREQNO'] >= '60000000') {
-        this.request.request = { ...creq };
+        this.vm = { ...creq };
         this.apiserv.currentprojBS.next(creq);
         // if (this.request.request['DATES'].length > 20) {
         //   this.apiserv.currentdates = JSON.parse(atob(this.request.request['DATES']))
@@ -324,8 +272,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
         // }
         // this.reqdates = this.apiserv.currentdates;
         // this.apiserv.currentreqdatesBS.next([JSON.parse(atob(this.request.request['DATES']))]);
-       this.putFormValues();
-        this.requestForm.get('cipname').setValue(this.request.funding['CIPCODE'] + ':' + this.request.funding['CIPNAME'], { emitEvent: false });
+      //  this.putFormValues();
+      //   this.requestForm.get('cipname').setValue(this.request.funding['CIPCODE'] + ':' + this.request.funding['CIPNAME'], { emitEvent: false });
         this.stable = true;
       }
     });
@@ -377,17 +325,17 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
       //   return this.sectionid == 4 && this.request['STATUS'] === 'STEP20'
       // }
       case 'savenew': {
-        return this.requestForm.value['title'] && this.requestForm.value.title.length > 10 && 
-        this.requestForm.value.details.length > 15 
-         && this.requestForm.value['propstartdate'] 
-         && this.requestForm.value['propenddate'] 
-         && this.requestForm.value['region']
+      let returnmsg =  (this.vm['TITLE'] && this.vm['TITLE'].length > 10 && 
+        this.vm['DETAILS'].length > 15 
+         && this.vm['PROPSTARTDATE'] 
+         && this.vm['PROPENDDATE'] 
+         && this.vm['REGION']) ? true: false;
+         return returnmsg;
         break;
       }
       case 'save': {
-        return this.requestForm.value['title'] && this.requestForm.value.title.length > 10 && 
-        this.requestForm.value.details.length > 15 
-        && this.request.request['STATUS'] !== 'STEP20'
+        return this.vm['TITLE'] && this.vm['TITLE'].length > 10 && 
+        this.vm['DETAILS'].length > 15 ;
         break;
       }
     }
@@ -417,8 +365,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     // this.child.submitData();
    let tempobj = {};
     if (this.request.request['ABSAREQNO'] < '10000000' ) {
-    let propstartdate = new Date(this.requestForm.value.propstartdate)
-    let propenddate = new Date(this.requestForm.value.propenddate)
+    let propstartdate = new Date(this.vm['PROPSTARTDATE'])
+    let propenddate = new Date(this.vm['PROPENDDATE'])
     let startdate = propstartdate.getFullYear() +
       this.padStr(propstartdate.getMonth() + 1) +
       this.padStr(propstartdate.getDate());
@@ -426,23 +374,28 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
       this.padStr(propenddate.getMonth() + 1) +
       this.padStr(propenddate.getDate());
     tempobj = {
-      TITLE: this.apiserv.xtdbtoa(this.requestForm.value.title),
-      DETAILS: this.apiserv.xtdbtoa(this.requestForm.value.details),
-      REGION: this.requestForm.value.region,
+      TITLE: this.apiserv.xtdbtoa(this.vm['TITLE']),
+      DETAILS: this.apiserv.xtdbtoa(this.vm['DETAILS']),
+      REGION: this.vm['REGION'],
       PROPSTARTDATE: startdate,
       PROPENDDATE: enddate,
       SAPUSER: this.authserv.currentUserValue.SAPUSER,
-      RETROSPECTIVE: this.requestForm.value.retrospective,
-      EPRIORITY: this.requestForm.value.epriority
+      RETROSPECTIVE: this.vm['RETROSPECTIVE'],
+      EPRIORITY: this.vm['EPRIORITY']
     }
   }
-    const modeltosap =  (this.request.request['ABSAREQNO'] > '10000000' ) ? this.mapFormtoSAP(): tempobj;
+    const modeltosap =  (this.vm['ABSAREQNO'] > '10000000' ) ? this.mapFormtoSAP(): tempobj;
+    if (this.vm['ABSAREQNO'] > '10000000' ) {
+    this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').subscribe(reply => {
+      this.apiserv.messagesBS.next(this.replytext + JSON.parse(reply.RESULT).ABSAREQNO);
+      
+    })
+  } else {
     this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').subscribe(reply => {
       this.apiserv.messagesBS.next(this.replytext + JSON.parse(reply.RESULT).ABSAREQNO);
       this.redirectTo('/requestedit~'+JSON.parse(reply.RESULT).ABSAREQNO);
     })
-
-    console.log(this.requestForm.value);
+  }
   }
   public async openPDF() {
   await  this.pdfserv.Build_pdf(this.request.request['ABSAREQNO'] );
@@ -453,26 +406,30 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     this.router.navigate(['relink' + uri ]);
  }
   mapFormtoSAP() {
-    if (!this.requestForm.value.propstartdate || !this.requestForm.value.title) {
+    if (!this.vm['PROPSTARTDATE'] || !this.vm['TITLE']) {
       this.apiserv.messagesBS.next('Error! Need Start Date and Title');
       return;
     }
-    let propstartdate = new Date(this.requestForm.value.propstartdate)
-    let propenddate = new Date(this.requestForm.value.propenddate)
+    let propstartdate = new Date(this.vm['PROPSTARTDATE'])
+    let propenddate = new Date(this.vm['PROPENDDATE'])
     let startdate = propstartdate.getFullYear() +
       this.padStr(propstartdate.getMonth() + 1) +
       this.padStr(propstartdate.getDate());
     let enddate = propenddate.getFullYear() +
       this.padStr(propenddate.getMonth() + 1) +
       this.padStr(propenddate.getDate());
-    let modeltosap1 = this.request.request;
-    if (this.request.request['ABSAREQNO'] >= '60000000') {
-      modeltosap1 = { ...modeltosap1, ...this.request.request }
+      let modeltosap = {};
+      const control = this.blankRequest();
+for (const p in control){
+    modeltosap[p] = p in this.vm ? this.vm[p]: '';
+}
+    
+    if (this.vm['ABSAREQNO'] >= '60000000') {
       this.replytext = 'Request Modified ';
     } else {
       this.replytext = 'New Request Created ';
-      modeltosap1['CREATEDBY'] = this.authserv.currentUserValue['EMAIL'];
-      this.apiserv.currentreqBS.next([modeltosap1])
+      modeltosap['CREATEDBY'] = this.authserv.currentUserValue['EMAIL'];
+     // this.apiserv.currentreqBS.next([modeltosap1])
     }
    // this.reqdates['REFERENCE'] = this.request.request['ABSAREQNO'];
     // let lclobj = {}
@@ -482,54 +439,37 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     // }
 
 
-    const modeltosap = {
-      ...modeltosap1, ...{
-        TITLE: this.requestForm.value.title,
-        REGION: this.requestForm.value.region,
-        PROVREGION: this.requestForm.value.provregion,
-        ONEVIEW: this.requestForm.value.oneview,
-        BACKGROUND: this.apiserv.xtdbtoa(this.requestForm.value.background + ' '), 
-        PLANNEDQUARTER : this.requestForm.value.plannedquarter,
-        PROJLINK : this.requestForm.value.projlink,
-        APPREQLINK: this.requestForm.value.appreqlink,
-        STATUS: this.requestForm.value.status ,
-        EXECUTIONYEAR : this.requestForm.value.executionyear,
-        SITENOTES: this.apiserv.xtdbtoa(this.requestForm.value.sitenotes + ' '),
-        KNOWNAS: this.requestForm.value.knownas,
-        OHSRISK: this.requestForm.value.ohsrisk,
-        DETAILS: this.apiserv.xtdbtoa(this.requestForm.value.details + ' '),
-        PROPSTARTDATE: startdate,
-        PROPENDDATE: enddate,
-        SITES: this.apiserv.xtdbtoa(this.requestForm.value.sites),
-        VARIOUSSITES: this.requestForm.value.varioussites,
+        modeltosap['STITLE'] = this.encodeTxt( modeltosap['TITLE']) ;
+        modeltosap['BACKGROUND'] = this.encodeTxt( modeltosap['BACKGROUND'] ); 
+        modeltosap['SITENOTES'] = this.encodeTxt(  modeltosap['SITENOTES']);
+        modeltosap['SKNOWNAS'] = this.encodeTxt( modeltosap['KNOWNAS'] );
+        modeltosap['DETAILS'] = this.encodeTxt(  modeltosap['DETAILS']);
+        // modeltosap['PROPSTARTDATE'] = this.encodeTxt( startdate,
+        // modeltosap['PROPENDDATE'] = this.encodeTxt( enddate,
+        modeltosap['SITES'] = this.encodeTxt(  modeltosap['SITES'] );
+        modeltosap['APPROVAL_MOTIVATE'] = this.encodeTxt( modeltosap['APPROVAL_MOTIVATE'] );
+        modeltosap['APPROVAL_NOTE'] = this.encodeTxt( modeltosap['APPROVAL_NOTE'] );
+        // modeltosap['APPROVAL_STATUS'] = this.encodeTxt( this.requestForm.value.approval_status,
+        // modeltosap['APPROVAL_SUBMITDATE'] = this.encodeTxt( this.requestForm.value.approval_submitdate,
+        // modeltosap['APPROVAL_DATE'] = this.encodeTxt( this.requestForm.value.approval_date,
+        // modeltosap['APPROVAL_AMT'] = this.encodeTxt( this.requestForm.value.approval_amt,
+        // modeltosap['APPROVAL_NOTE '] = this.encodeTxt( this.apiserv.xtdbtoa(this.requestForm.value.approval_note + ' '),
 
-        // CIPGROUP: this.requestForm.value.cipgroup,
-        // CIPNAME: this.requestForm.value.cipname.split(':')[1],
-        // CIPCODE: this.requestForm.value.cipname.split(':')[0],
-       // CIPLINEBUDGET: this.requestForm.value.estimatedbudget,
-        AUTHORIZER: this.requestForm.value.authorizer,
-        EPRIORITY: this.requestForm.value.epriority,
-        SAPUSER: this.authserv.currentUserValue.SAPUSER,
-        PMANAGER: this.requestForm.value.pmanager,
-        PLANSTATUS: this.requestForm.value.planstatus ? this.requestForm.value.planstatus : 'na',
-        APPROVAL_MOTIVATE : this.apiserv.xtdbtoa(this.requestForm.value.approval_motivate + ' '),
-        APPROVAL_STATUS: this.requestForm.value.approval_status,
-        APPROVAL_SUBMITDATE: this.requestForm.value.approval_submitdate,
-        APPROVAL_DATE: this.requestForm.value.approval_date,
-        APPROVAL_AMT: this.requestForm.value.approval_amt,
-        APPROVAL_NOTE : this.apiserv.xtdbtoa(this.requestForm.value.approval_note + ' '),
-        PONUMBER: this.requestForm.value.ponumber ,
-        DATES: JSON.stringify(this.reqdates),
-        FUNDING: JSON.stringify(this.requestForm.value.funding),
-        ENDOFLIFE: this.requestForm.value.endoflife,
-        LEASED_FREE: this.requestForm.value.leased_free,
-        LEASEEND: this.requestForm.value.leaseend,
-        BUILDINGID: this.requestForm.value.buildingid,
-        FCAST_START: this.requestForm.value.fcast_start,
-        FCAST_END: this.requestForm.value.fcast_end,
-      }
-    }
+        // modeltosap['DATES'] = this.encodeTxt( JSON.stringify(this.reqdates),
+
+        // modeltosap['FCAST_START'] = this.encodeTxt( this.requestForm.value.fcast_start,
+        // modeltosap['FCAST_END'] = this.encodeTxt( this.requestForm.value.fcast_end,
+      
+    
     return modeltosap;
+  }
+
+  encodeTxt(field: string){
+    if (field && field.length > 0){
+    return  this.apiserv.xtdbtoa(field)
+    } else {
+      return '';
+    }
   }
   padStr(i) {
     return (i < 10) ? "0" + i : "" + i;
@@ -541,45 +481,60 @@ savePhases() {
   blankRequest(){
     // this.apiserv.currentdates = this.dateserv.getblankDates('PRABSAP');
     return {
-      MANDT: '',
       ABSAREQNO: '',
-      SUBREQUESTNO: '',
       TITLE: '',
+      DETAILS: '',
+      BACKGROUND: '',
+      EPRIORITY: '',
       REGION: '',
       PROVREGION: '',
       ONEVIEW: '',
+      BUILDINGID: '',
       KNOWNAS: '',
-      CIPGROUP: '',
-      CIPNAME: '',
-      CIPCODE: '',
-      CREATEDBY: '',
-      CREATEDON: '',
-      IM_POSITION: '',
-      APPREQLINK: '',
+      ENDOFLIFE: '',
+      PROPSTARTDATE: '',
+      PROPENDDATE: '',
+      PLANNEDQUARTER: '',
       PROJLINK: '',
       STATUS: '',
-      ESTIMATEDBUDGET: 0,
-      BASELINEBUDGET: 0,
-      QUOTATION: 0,
-      DETAILS: '',
       SAPUSER: '',
-      AUTHORIZER: '',
-      PRIORITY: '',
       RETROSPECTIVE: '',
       VARIOUSSITES: '',
+      SITES: '',
       PMANAGER: '',
       PLANSTATUS: '',
       SITENOTES: '',
-      FUNDING: '',
-      DEFER: '',
-      DEFERYEAR: '',
+      EXECUTIONYEAR: '',
       OHSRISK: '',
-      BUDGETDIF: 0,
-      // PROPSTARTDATE: this.apiserv.currentdates.DATE06,
-      // PROPENDDATE: this.apiserv.currentdates.DATE07,
-      DISCRETIONARY: 'D',
-      CAPEX_OPEX: 'C',
-      DATES: JSON.stringify(this.reqdates)
+      LEASED_FREE: '',
+      LEASEEND: '',
+      CREATEDBY: '',
+      CREATEDON: '',
+      LOADTYPE: '',
+      BASELINEBUDGET: 0,
+      APPROVAL_MOTIVATE: '',
+      APPROVAL_STATUS: '',
+      APPROVAL_SUBMITDATE: '',
+      APPROVAL_DATE: '',
+      APPROVED_AMT: '',
+      APPROVAL_NOTE: '',
+      DATES: '',
+      APPRO_REQUEST: '',
+      FUNDINGSUMMARY: '',
+      PONUMBER: '',
+      PHASE: '',
+      FCAST_START: '',
+      FCAST_END: '',
+      PORTFOLIOMGR: '',
+      ACCOUNTANT: '',
+      INITIATIVE: '',
+      APPROVALTOLEGAL: '',
+      APPROVEDBYLEGAL: '',
+      APPTOBFMLEGAL: '',
+      APPBYBFMLEGAL: '',      
+      POVALUE:0,
+      PODATE:'',
+   
     }
   }
   lessThan(a, b) {
@@ -607,15 +562,7 @@ savePhases() {
       // Object.assign(this.reqdates, newdates)
       this.emitEventToChild();
     })
-    this.requestForm.get('oneview').valueChanges.subscribe(val => {
-      // let siteArr = <FormArray>this.requestForm.controls["sites"];
-      if (val.length === 6 && val.substring(5, 6) == 'X') {
-        this.apiserv.postGEN({ a: '', B: val, C: '', D: 'site' }, 'GET_LOOKUPS').subscribe(reply => {
-          this.requestForm.get('knownas').patchValue(reply.RESULT[0].B, { emitEvent: false });
-          this.requestForm.get('buildingid').patchValue(reply.RESULT[0].C, { emitEvent: false });
-        })
-      }
-    });
+   
     this.taskForm.valueChanges.subscribe(val => {
       let lcob = {};
       for (const key in val) {
@@ -632,6 +579,15 @@ savePhases() {
         this.taskForm.get('INSTRUCTION').patchValue(lcob['instruction'], { emitEvent: false });
       }
     })
+  }
+  onChange(){
+        // let siteArr = <FormArray>this.requestForm.controls["sites"];
+      if (this.vm['ONEVIEW'].length === 6 && this.vm['ONEVIEW'].substring(5, 6) == 'X') {
+        this.apiserv.postGEN({ a: '', B: this.vm['ONEVIEW'], C: '', D: 'site' }, 'GET_LOOKUPS').subscribe(reply => {
+          this.vm['KNOWNAS']=reply.RESULT[0].B
+          this.vm['BUILDINGID'] = reply.RESULT[0].C;
+        })
+      }
   }
   openjw(modalname) {
     this.modalServicejw.open(modalname)

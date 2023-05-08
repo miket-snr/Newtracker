@@ -3,14 +3,14 @@
     <mat-spinner>Hey</mat-spinner>
   </div>
   <div class="card">
-
-
-    <div class="modal-header">
-      <h2>Fund Planner</h2>
-      <button type="button" class="close" aria-label="Close" (click)="closer.emit('Save')">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
+      <div class="row">
+        <div class="col-6">
+          <h2>Fund Planner</h2>
+        </div>
+        <div class="col-4 offset-1">
+          <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button>
+        </div>
+      </div>
 
     <div class="mycontainer">
       <form [formGroup]="fundingForm" (ngSubmit)="onSubmit()">
@@ -44,12 +44,25 @@
             <td colspan="2">
               <div class="row">
                 <div class="col-8"><input type="text" class="form-control" formControlName="initiative"></div>
-                <!-- <div class="col-4" *ngIf="fundingForm.value.im_position.charAt(0) != 'A' ">
-                    <button type="button" class="btn btn-sm btn-danger">Generate</button>
-                  </div> -->
+                <div class="col-4" *ngIf="!fundingForm.value.initiative">
+                    <button type="button" class="btn btn-sm btn-danger" (click)="fundLocator()">Fund Locator
+                    </button>
+                  </div>
               </div>
             </td>
-            <td colspan="2"> <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button></td>
+            <td>
+              Budget Group
+            </td>
+            <td colspan="2">
+              <div class="row">
+                <div class="col-8">
+                <select class="form-control" formControlName="budgetprogram">
+                  <option *ngFor="let grouper of apiserv.budgetgroups" [value]="grouper">{{grouper}}</option>
+                </select>
+                </div>
+              </div>
+            </td>
+            <!-- <td colspan="2"> <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button></td> -->
           </tr>
           <tr>
             <td>Cip Group</td>
@@ -88,12 +101,13 @@
             </td>
             <td>Workstream</td>
             <td colspan="2">
-              <select formControlName="workstream" placeholder="Select a Line" class="form-control">
+              <input type="text" class="form-control" formControlName="workstream" [disabled]="true">
+              <!-- <select formControlName="workstream" placeholder="Select a Line" class="form-control">
                 <option [value]="''">Select an Option</option>
                 <option *ngFor="let groupline of apiserv.workstreams" [value]="groupline.code">
                   {{groupline.text }}
                 </option>
-              </select>
+              </select> -->
             </td>
           </tr>
           <tr>
@@ -141,7 +155,7 @@
         Save
       </button>
     </div>
-
+<!-- <app-fundcipline></app-fundcipline> -->
   </div>
   <div>
 

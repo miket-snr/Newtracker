@@ -15,6 +15,11 @@ export class HomeComponent implements OnInit {
   counter = 0;
   out = '';
   ngOnInit(): void {
+    if(this.apiserv.progressBS.value.length == 0)
+    {
+      this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager);
+    }
+    
     setTimeout(() => {
       this.worker();
     }, 5000);

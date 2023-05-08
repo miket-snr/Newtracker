@@ -1,0 +1,124 @@
+<div class="mycontainer">
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="row mt-2 mb-2">
+
+
+                <div class="col-1 text-right pr-2">
+                    <small>Free search</small>
+                </div>
+                <div class="col-4">
+                    <input class="form-control  form-control-sm " type="text" id="searchbox" [(ngModel)]="searchbox"
+                        [ngModelOptions]="{standalone: true}">
+                </div>
+
+                <!-- <div class="col-1">
+                    <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">
+                        Export to Excel
+                    </button>
+                </div>-->
+                <div class="col-1 offset-1">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="updateSap()"
+                    [disabled]="!tosave">
+                        Save to SAP
+                    </button>
+                </div> 
+                <div class="col-1 offset-1">Select Other Region</div>
+                <div class="col-2">
+                    <select name="regionin" class="form-control  form-control-sm"
+                    (change)="apiserv.getFunding(myregion)"  [(ngModel)]="myregion">
+                        <option *ngFor="let reg of apiserv.regions " [value]="reg.code"><small>{{ reg.text }}</small>
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <form #f="ngForm">
+                <!-- ******************************************************************* -->
+                <div class="tableFixHead">
+                    <table class="table table-bordered table-responsive-md table-striped text-center" id="fundinglist">
+                        <thead>
+                            <tr>
+                                <!-- <th class="text-center">Edit</th> -->
+                                <th class="text-left">Project</th>
+                                <th class="text-left">Title</th>
+                                <th class="text-left">Region</th>
+                                <th class="text-center" style="width:25px;">Capex</th>
+                                <th class="text-center">Initiative</th>
+                                <th class="text-center">Budget Group</th>
+                                <th class="text-center">Cip Group</th>
+                                <th class="text-center">Cip Code</th>
+                                <!-- <th class="text-center">Workstream</th> -->
+
+                                <th class="text-center">Knownas</th>
+                                <th class="text-center">SAP Status</th>
+
+                                <!-- <th class="text-center">Detailed Note</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr
+                                *ngFor="let item of searchlistnew  | searchpipe: [searchbox, 'tag'] ; let i = index; trackBy: rowTrackByFunction">
+                                <!-- <td > <button type="button" (click)="unlock(item.id)" 
+                      [ngClass]="lockbox[item.id]?'btn btn-sm btn-primary':'btn btn-sm btn-danger'"
+                        >{{lockbox[item.id]?'Edit':'Cancel'}}</button>
+                      </td> -->
+                                <td class="pt-1"><small>{{ item.PROJLINK}}</small></td>
+                                <td><small>{{ item.TITLE}}</small></td>
+                                <td><small>{{ item.REGION}}</small></td>
+
+                                <td style="width:25px;">
+                                    <select [(ngModel)]="item.CAPEX_OPEX" [disabled]="lockbox[item.id]"
+                                         name="capex{{i}}" (change)="newValue(item)">
+                                        <option [ngValue]="'U'"> Unsure</option>
+                                        <option [ngValue]="'C'"> Capex</option>
+                                        <option [ngValue]="'O'"> Opex</option>
+                                    </select>
+
+                                </td>
+                                <td>
+                                    <input type="number" class="smallinput" [disabled]="lockbox[item.id]"
+                                        name="initiative{{i}}" (change)="newValue(item)" [(ngModel)]="item.INITIATIVE"
+                                        size="8">
+                                </td>
+                                <td>  <select [(ngModel)]="item.BUDGETPROGRAM" [disabled]="lockbox[item.id]"
+                                    name="budgetgroup{{i}}" (change)="newValue(item)">
+                                   <option [ngValue]="'CIP2023'"> CIP2023</option>
+                                   <option [ngValue]="'OPEX'"> OPEX</option>
+                                   <option [ngValue]="'ROL2022'"> ROL2022</option>
+                                   <option [ngValue]="'RXL2022'"> RXL2022</option>
+                                   <option [ngValue]="'UNKNOWN'"> UNKNOWN</option>
+                               </select>
+                                </td>
+                                <td><input type="text" class="smallinput" name="cipgroup{{i}}"
+                                        [disabled]="lockbox[item.id]" (change)="newValue(item)" [(ngModel)]="item.CIPGROUP"
+                                        size="8">
+                                </td>
+
+                                <td><input type="text" class="smallinput" name="cipcode{{i}}"
+                                        [disabled]="lockbox[item.id]" (change)="newValue(item)" [(ngModel)]="item.CIPCODE"
+                                        size="8"></td>
+
+                                <!-- <td><button type="button" [ngClass]="lockbox[item.id]?'btn btn-sm btn-outline-secondary':'btn btn-sm btn-danger'"
+                        (click)="saveLine(item)"
+                        [disabled]="lockbox[item.id]"
+                        >Save</button>
+                    </td> -->
+
+                                <td><small>{{ item.KNOWNAS}}</small></td>
+                                <td><small>{{ item.STATUS}}</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <jw-modal id="admin">
+
+            <p>hi from admin modal</p>
+
+        </jw-modal>

@@ -13,11 +13,13 @@ export class ApidataService {
     active: 0,
     region: '',
     pmanager: '',
+    filtercip: false,
     dates: {},
     sites: '',
     currentreq: {},
     phase: '',
     comments: [],
+    funding: [],
     feedback: {
       REFERENCE: '',
       BUDGETAMT: 0,
@@ -25,7 +27,8 @@ export class ApidataService {
       FORECAST_END: '',
       RATING: '',
       LAST_COMMENT: '',
-      TRACKNOTE: ''
+      TRACKNOTE: '',
+      ONEVIEW: '',
     }
   }
   regions = [];
@@ -53,7 +56,12 @@ export class ApidataService {
   currentpspid = '00000000';
   currentcipline: any;
   helptexts = []
-
+budgetgroups = ['* All','CIP2023',
+'OPEX',
+'ROL2022',
+'RXL2022',
+'UNKNOWN',
+]
   public loadingBS = new BehaviorSubject<boolean>(false)
   public ciplineadjBS = new BehaviorSubject([]);
 
@@ -68,6 +76,19 @@ export class ApidataService {
 
   public budgetlistBS = new BehaviorSubject([]);
   public budgetlist$ = this.budgetlistBS.asObservable();
+
+  public fundinglistBS = new BehaviorSubject([]);
+  public fundinglist$ = this.fundinglistBS.asObservable();
+
+  public mvtdocsBS = new BehaviorSubject([]);
+  public mvtdocs$ = this.mvtdocsBS.asObservable();
+
+  public cashflowBS = new BehaviorSubject([]);
+  public cashflow$ = this.cashflowBS.asObservable();
+
+  public triangleBS = new BehaviorSubject([]);
+  public triangle$ = this.triangleBS.asObservable();
+
 
   public currentprojBS = new BehaviorSubject([]);
   public currentproj$ = this.currentprojBS.asObservable();
@@ -102,6 +123,24 @@ export class ApidataService {
       this.wbs2reqmapperBS.next(true)
     })
   }
+  getFunding(region = '*'){
+    this.postGEN({ REGION: region }, 'GET_FUNDING').subscribe(reply => {
+      reply.RESULT.forEach(line => {
+        line.TITLE = this.xtdatob(line.TITLE);
+        line.KNOWNAS = this.xtdatob(line.KNOWNAS);
+        line.FUND_COMMENT = this.xtdatob(line.FUND_COMMENT);
+        line.FUND_SOURCES = this.xtdatob(line.FUND_SOURCES);
+      })
+      this.lclstate.funding = reply.RESULT;
+      this.fundinglistBS.next(reply.RESULT)
+    })
+  }
+
+  putFunding(lclobj: any){
+    this.postGEN(lclobj, 'UPDATE_MASSFUNDING').subscribe(reply => {
+     console.log(reply.RESULT)
+      })
+    }
   getCipline(cipid = '') {
     this.postGEN({ INITIATIVE: cipid }, 'GET_CIPLINE_MVTS').subscribe(reply => {
       reply.RESULT.forEach(line => {
@@ -114,8 +153,46 @@ export class ApidataService {
     })
   }
 
-  getBIGList(region = '', pm = '*' ,asbsareqno = '') {
-  
+  getMVTDocs() {
+    this.postGEN({ INITIATIVE: "0" }, 'GET_CIPLINE_MVTDOCS').subscribe(reply => {
+      reply.RESULT.forEach(line => {
+        line.SHORTCOMMENT = this.xtdatob(line.SHORTCOMMENT);
+        line.NOTE = this.xtdatob(line.NOTE);
+      })
+      this.mvtdocsBS.next(reply.RESULT)
+    })
+  }
+
+  getCashflow() {
+    this.postGEN({ REGION: "*" }, 'BUILD_CASHFLOW').subscribe(reply => {
+      reply.RESULT.forEach(line => {
+        line.SHORTCOMMENT = this.xtdatob(line.SHORTCOMMENT);
+        line.NOTE = this.xtdatob(line.NOTE);
+      })
+      this.cashflowBS.next(reply.RESULT)
+    })
+  }
+
+  getReqList(reqno = 0){
+    let lclobj = {};
+    if (reqno > 100000) {
+      lclobj = { ABSAREQNO: reqno, LOADTYPE: "A" } 
+    } else {
+      lclobj = { LOADTYPE: "A" }
+    }
+    this.postGEN(lclobj, 'GET_CURRENTLIST').subscribe(reply => {
+      reply.RESULT.forEach(line => {
+        line.TITLE = this.xtdatob(line.TITLE);
+        line.KNOWNAS = this.xtdatob(line.KNOWNAS);
+        line.APPROVAL_MOTIVATE = this.xtdatob(line.APPROVAL_MOTIVATE);
+        line.APPROVAL_NOTE = this.xtdatob(line.APPROVAL_NOTE);
+      })
+      this.triangleBS.next(reply.RESULT)
+    })
+
+  }
+  getBIGList(region = '', pm = '*', asbsareqno = '') {
+
     this.postGEN({ REGION: region, PMANAGER: pm }, "GET_BIGVIEW").subscribe(reply => {
       if (!reply || reply.RESULT.length == 0) {
         return
@@ -126,19 +203,21 @@ export class ApidataService {
           return
         } else { return }
       }
-     let feedback = this.processBigview(reply.RESULT)
+      let feedback = this.processBigview(reply.RESULT)
       this.biglistBS.next(feedback);
       //  this.getAbsaReqList();
     })
   }
-  processBigview(reply){
-   return reply.forEach(ele => {
+  processBigview(reply) {
+    let ans = reply;
+    ans.forEach(ele => {
       ele.DETAILS = this.xtdatob(ele.DETAILS)
       ele.SITENOTES = this.xtdatob(ele.SITENOTES)
       ele.SITES = this.xtdatob(ele.SITES)
-      ele.KNOWNAS = this.xtdatob(ele.KNOWNAS)
+      ele.KNOWNAS = this.xtdatob(ele.SKNOWNAS)
+      ele.TITLE = this.xtdatob(ele.STITLE)
       ele.LAST_COMMENT = this.xtdatob(ele.LAST_COMMENT)
-      ele.DATES = ele.DATES ? this.xtdatob(ele.DATES) : ''
+      ele.DATES = ele.DATES ? ele.DATES : ''
       if (ele.DATES.includes('PROG')) {
         try {
           let lclobj = JSON.parse(ele.DATES)
@@ -150,8 +229,9 @@ export class ApidataService {
       ele.FUNDING = this.xtdatob(ele.FUNDING)
       ele.APPROVAL_MOTIVATE = this.xtdatob(ele.APPROVAL_MOTIVATE)
       ele.APPROVAL_NOTE = this.xtdatob(ele.APPROVAL_NOTE)
-      ele.APPROVAL = this.xtdatob(ele.APPROVAL)
+      // ele.APPROVAL = this.xtdatob(ele.APPROVAL)
     })
+    return ans;
   }
   formatDate(datein): string {
     datein = new Date(datein);
@@ -215,8 +295,11 @@ export class ApidataService {
         return
       }
       if (reply.RESULT) {
+
         let feedback = this.processBigview(reply.RESULT)
-        this.lclstate.dates = JSON.parse(atob(reply.RESULT[0].DATES))
+        this.lclstate.dates = JSON.parse(reply.RESULT[0].DATES)
+        this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
+        this.lclstate.dates['LAST_COMMENT'] = this.xtdatob(this.lclstate.dates['LAST_COMMENT'])
         this.lclstate.phase = reply.RESULT[0].PHASE;
         this.lclstate.currentreq = reply.RESULT[0];
         this.currentreqBS.next(feedback[0]);
@@ -258,21 +341,29 @@ export class ApidataService {
   }
 
   xtdbtoa(instring: string) {
+    if (instring){
     try {
       return btoa(encodeURIComponent(instring))
     } catch (err) {
       this.messagesBS.next('Conversion Failed')
     }
     return '';
+  } else {
+    return '';
+  }
   }
 
   xtdatob(instring: string) {
+    if (instring) {
     try {
       return atob(decodeURIComponent(instring))
     } catch (err) {
       this.messagesBS.next('Conversion Failed')
     }
     return '';
+  } else {
+    return '';
+  }
   }
 
   async getone(reference) {
@@ -313,185 +404,89 @@ export class ApidataService {
     this.tasklinesBS.next(temp);
     this.reqdata = [...temp];
   }
-
+locateFunds(region,cipgroup,cipcode){
+  
+}
   getProgresslist(region, pmanager, reference = '') {
+    if (reference.length > 1)  {
+      region = '*';
+      pmanager = '*'
+    }else {
     if (this.progressBS.value.length == 0 || this.lclstate.region != region || this.lclstate.pmanager != pmanager) {
       this.progressBS.next([]);
       this.lclstate.region = region;
       this.lclstate.pmanager = pmanager;
-      this.postGEN({ REGION: region, MASK: pmanager, REFERENCE: reference, ACTION: 'F' }, 'GET_PROJLIST').subscribe(list => {
-        if (list.RESULT[0]?.STATUS != 'Error') {
-
-          let titem = list.RESULT.map(line => {
-            if (line.length < 2) { return }
-            let innerline = JSON.parse(line.PROGRESSTRACK)
-            let temp = {
-              ABSAREQNO: line.ABSAREQNO,
-              PROJLINK: line.PROJLINK,
-              KNOWNAS: line.KNOWNAS,
-              INITIATIVE: line.INITIATIVE,
-              STATUS: line.STATUS,
-              TITLE: line.TITLE,
-              DUEDATE: line.DUEDATE,
-              PMANAGER: line.PMANAGER,
-              PROG01: innerline[0].PROG01,
-              PROG02: innerline[0].PROG02,
-              PROG03: innerline[0].PROG03,
-              PROG04: innerline[0].PROG04,
-              PROG05: innerline[0].PROG05,
-              PROG06: innerline[0].PROG06,
-              PROG07: innerline[0].PROG07,
-              PROG08: innerline[0].PROG08,
-              PROG09: innerline[0].PROG09,
-              PROG10: innerline[0].PROG10,
-              DATE06: innerline[0].DATE06,
-              DATE07: innerline[0].DATE07,
-              COMMENT: line.LASTCOMMENT,
-              DATE08: innerline[0].DATE08,
-              DATE09: innerline[0].DATE09,
-              DATE10: innerline[0].DATE10,
-              PHASE: line.PHASE,
-              BUDGET: line.BUDGET,
-              COSTS: line.COSTS,
-              TRAVEL: line.TRAVEL,
-              COMMITMENT: line.COMMITMENT,
-              REVENUE: line.REVENUE,
-              M_FEE: line.M_FEE,
-            }
-            return temp
-          })
-          this.progressBS.next(titem);
-        }
-      })
+    } else {
+      region = this.lclstate.region;
+      pmanager = this.lclstate.pmanager;
     }
-    let old = ([{
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 1',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_5'
-    }, {
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 1',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_7'
-    }, {
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 1',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_3'
-    },
-    {
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles 21',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 2',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_2'
-    }, {
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles 22',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 2',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_1'
-    }, {
-      REFERENCE: 'ASP-GW0123',
-      KNOWNAS: 'Maponye Mall',
-      STATUS: '',
-      TITLE: 'Fix the tiles 23',
-      DUEDATE: '2023-03-12',
-      PMANAGER: 'Additional Resource 2',
-      PROG_1: '0%',
-      PROG_2: '0%',
-      PROG_3: '0%',
-      PROG_4: '0%',
-      PROG_5: '0%',
-      PROG_6: '0%',
-      PROG_7: '0%',
-      PROG_8: '0%',
-      PROG_9: '0%',
-      PROG10: '0%',
-      FORECAST_START: '2023-01-21',
-      FORECAST_END: '2023-04-01',
-      COMMENT: 'last comment here',
-      PHASE: 'PHASE_2'
-    },]);
+  }
+    this.postGEN({ REGION: region, MASK: pmanager, REFERENCE: reference, ACTION: 'F' }, 'GET_PROJLIST').subscribe(list => {
+      if (list.RESULT[0]?.STATUS != 'Error') {
+
+        let titem = list.RESULT.map(line => {
+          if (line.length < 2) { return }
+          let innerline = JSON.parse(line.PROGRESSTRACK)
+          let temp = {
+            ABSAREQNO: line.ABSAREQNO,
+            PROJLINK: line.PROJLINK,
+            ONEVIEW: line.ONEVIEW,
+            KNOWNAS: this.xtdatob(line.SKNOWNAS),
+            BASELINEBUDGET: line.BASELINEBUDGET,
+            POVALUE: line.POVALUE,
+            CIPBUDGET: line.CIPBUDGET,
+            INITIATIVE: line.INITIATIVE,
+            CIPCODE: line.CIPCODE,
+            BUDGETGROUP: line.CIPGROUP,
+            STATUS: line.STATUS,
+            TITLE: this.xtdatob(line.STITLE),
+            DUEDATE: line.DUEDATE,
+            PMANAGER: line.PMANAGER,
+            PROG01: innerline[0].PROG01,
+            PROG02: innerline[0].PROG02,
+            PROG03: innerline[0].PROG03,
+            PROG04: innerline[0].PROG04,
+            PROG05: innerline[0].PROG05,
+            PROG06: innerline[0].PROG06,
+            PROG07: innerline[0].PROG07,
+            PROG08: innerline[0].PROG08,
+            PROG09: innerline[0].PROG09,
+            PROG10: innerline[0].PROG10,
+            DATE06: innerline[0].DATE06,
+            DATE07: innerline[0].DATE07,
+            COMMENT: line.LASTCOMMENT,
+            DATE08: innerline[0].DATE08,
+            DATE09: innerline[0].DATE09,
+            DATE10: innerline[0].DATE10,
+            PHASE: line.PHASE,
+            BUDGET: line.BUDGET,
+            COSTS: line.COSTS,
+            TRAVEL: line.TRAVEL,
+            COMMITMENT: line.COMMITMENT,
+            REVENUE: line.REVENUE,
+            M_FEE: line.M_FEE,
+          }
+          return temp
+        })
+        if (this.progressBS.value.length == 0) {
+          this.progressBS.next(titem);
+        } else {
+          let tbstemp = this.progressBS.value;
+          let idx = tbstemp.findIndex(line => {
+            return line.ABSAREQNO == titem[0].ABSAREQNO;
+          })
+          if (idx) {
+            tbstemp[idx] = titem[0];
+            this.progressBS.next(tbstemp);
+          } else {
+            this.progressBS.next(titem);
+          }
+        }
+
+      }
+    })
+
+
   }
 
   /*******postGen******************************************************* */
@@ -739,5 +734,15 @@ export class ApidataService {
     this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 100, text: 'Completed' }] })
     return this.phaseprog;
   }
-
+  formatString(strin = '') {
+    if (strin.substring(strin.length - 2).includes('.')) {
+      strin = strin + '0';
+    }
+    if (!strin.substring(strin.length - 3).includes('.')) {
+      strin = strin + '.00'
+    }
+    strin = strin.replace(/,/g," ");
+    let tempstr = (strin.includes("-")) ? '    (' + strin.substring(1) + ')' : '       ' + strin;
+    return tempstr.substring(tempstr.length - 14)
+  }
 }

@@ -9,21 +9,46 @@
         <mat-list-item [routerLink]="['worklist']">
           <mat-icon>dashboard</mat-icon><span>Worklist</span>
       </mat-list-item>
+      
       <mat-list-item [routerLink]="['dashboard']">
         <mat-icon>dashboard</mat-icon><span>Dashboard</span>
     </mat-list-item>
+      <mat-expansion-panel [class.mat-elevation-z0]="true">
+         <mat-expansion-panel-header>
+          <mat-icon>dashboard</mat-icon>- Focus Lists
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item [routerLink]="['approvals']">
+            <mat-icon>create</mat-icon><span>Approval Crosscheck</span>
+        </a>
+        <a mat-list-item [routerLink]="['cashflow']">
+          <mat-icon>create</mat-icon><span>Cashflow Base</span>
+      </a>    
+    <a mat-list-item [routerLink]="['mvtdocs']">
+      <mat-icon>create</mat-icon><span>View Movements</span>
+  </a>
+  <mat-list-item [routerLink]="['massfund']">
+    <mat-icon>create</mat-icon><span>Mass Edit Funding</span>
+</mat-list-item>
+ 
+        </mat-nav-list>
+    </mat-expansion-panel>
+   
       <mat-expansion-panel [class.mat-elevation-z0]="true">
         <mat-expansion-panel-header>
             Budget
         </mat-expansion-panel-header>
         <mat-nav-list>
-          <a mat-list-item [routerLink]="['budget']">
-            <mat-icon>create</mat-icon><span>View Budget</span>
-        </a>
+         
         <a mat-list-item [routerLink]="['cipfund']">
           <mat-icon>playlist_add_check</mat-icon><span>Recon of Cip Budget</span>
       </a>
-          
+      <a mat-list-item [routerLink]="['budgetedit']">
+        <mat-icon>playlist_add_check</mat-icon><span>Create Budget line</span>
+    </a>
+    <a mat-list-item [routerLink]="['budget']">
+      <mat-icon>create</mat-icon><span>Old View Budget</span>
+  </a>
         </mat-nav-list>
     </mat-expansion-panel>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
@@ -35,25 +60,10 @@
               <a mat-list-item [routerLink]="['relink/requestedit~0']">
                   <mat-icon>create</mat-icon><span>New Requirement</span>
               </a>
-              <a mat-list-item [routerLink]="['requestlist']">
-                  <mat-icon>drafts</mat-icon><span> Requirements</span>
-              </a>
+             
           </mat-nav-list>
       </mat-expansion-panel>
-    <mat-divider></mat-divider>
-    <mat-expansion-panel [class.mat-elevation-z0]="true">
-      <mat-expansion-panel-header>
-          Requests
-      </mat-expansion-panel-header>
-      <mat-nav-list>
-          <a mat-list-item [routerLink]="['requestlist']">
-            <mat-icon>filter_list</mat-icon><span>Requests</span>
-        </a>
-        <a mat-list-item [routerLink]="['approvallist']">
-          <mat-icon>filter_list</mat-icon><span>Approval Queue</span>
-      </a>
-      </mat-nav-list>
-  </mat-expansion-panel>
+
 <mat-divider></mat-divider>
     <mat-expansion-panel [class.mat-elevation-z0]="true">
       <mat-expansion-panel-header>

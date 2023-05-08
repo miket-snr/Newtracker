@@ -66,10 +66,12 @@ export class AppComponent {
       if (user.SAPUSER.length > 2 || this.authserv.loggedin) {
         this.dialog.closeAll();
         this.sapuser = user.SAPUSER.length > 3 ? user.SAPUSER : user.NAME_FIRST;
-        this.apiserv.lclstate.pmanager = (this.authserv.currentUserValue.VERNA?.length > 3 )? this.authserv.currentUserValue.VERNA :'*'
+        this.apiserv.lclstate.pmanager = (user.DESIGNATION.replace(/\s/g, '') == 'ProjectManager' && this.authserv.currentUserValue.VERNA?.length > 3 )? 
+        this.authserv.currentUserValue.VERNA :'* Show all'
         this.apiserv.lclstate.region = (this.authserv.currentUserValue.REGION?.length > 3 )? this.authserv.currentUserValue.REGION :'*'
       }
     }))
+    // Screen heading
     this.subscriptions.push(
       this.apiserv.currentprojBS.subscribe ( wbs => {
         this.sectionName = 'Project ' + wbs['PROJLINK'];
@@ -77,14 +79,15 @@ export class AppComponent {
     ))
     this.subscriptions.push(
       this.apiserv.messages$.subscribe(item => {
-        if (item.length > 6) {
+        if (item.length > 1) {
           this.openSnackBar(item);
         }
       })
       );
     setTimeout(() => {
       this.opened = false;
-    }, 50);
+    }, 1000);
+
     let temp = this.findGetParameter('r');
     if (temp) {
       this.router.navigate(['/requestedit/' + temp])

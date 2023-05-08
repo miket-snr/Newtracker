@@ -37,7 +37,14 @@ import { FundFinderComponent } from './components/fund-finder/fund-finder.compon
 import { AdminComponent } from './components/admin/admin.component';
 import { TaskEditComponent } from './components/task-edit/task-edit.component';
 import { QuillModule }  from 'ngx-quill';
-import { HelpComponent } from './components/help/help.component'
+import { HelpComponent } from './components/help/help.component';
+import { ApprovalFormComponent } from './components/approval-form/approval-form.component';
+import { CashflowComponent } from './components/cashflow/cashflow.component';
+import { BudgetlineEditComponent } from './components/budgetline-edit/budgetline-edit.component';
+import { MvtdocsListComponent } from './components/mvtdocs-list/mvtdocs-list.component';
+import { FundingmasseditComponent } from './components/funding/fundingmassedit/fundingmassedit.component';
+import { FundinglineeditComponent } from './components/funding/fundinglineedit/fundinglineedit.component';
+import { TriangleComponent } from './components/cflow/triangle/triangle.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +71,14 @@ import { HelpComponent } from './components/help/help.component'
     MassimportComponent,
     AdminComponent,
     TaskEditComponent,
-    HelpComponent
+    HelpComponent,
+    ApprovalFormComponent,
+    CashflowComponent,
+    BudgetlineEditComponent,
+    MvtdocsListComponent,
+    FundingmasseditComponent,
+    FundinglineeditComponent,
+    TriangleComponent
   ],
   imports: [
     BrowserModule,

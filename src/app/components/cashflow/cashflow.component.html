@@ -1,0 +1,128 @@
+
+<div class="mycontainer">
+    <div class="row">
+     
+            <div class="col-12">
+
+<div class="row">
+                
+                                  
+                                    <div class="col-1 text-right pr-2">
+                                            <small>Free search</small>
+                                    </div>
+                                    <div class="col-5">
+                                            <input class="form-control  form-control-sm " type="text" id="searchbox"
+                                                    [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                                    </div>
+
+                                    <div class="col-1">
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                    (click)="exportexcel()">
+                                                    Export to Excel
+                                            </button>
+                                    </div>
+                                </div>
+           
+   
+
+                    <table class="table table-bordered" id="doclist">
+                            <tr>
+                                    <th class="text-center"><small style="font-weight: bold;">Initiative</small>
+                                    </th>
+                                    <th class="text-center"><small style="font-weight: bold;">Project</small></th>
+                                    <th class="text-center"><small style="font-weight: bold;">Region</small></th>
+                                    <th class="text-center"><small style="font-weight: bold;">Oneview</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Knownas</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Title</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Budget Group</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Cipgroup</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Cip Code</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Start Date</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">End Date</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Cash Flow</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Capex</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">EOL</small></th>
+
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Budget</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Available</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">CipBudget</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Approved</small></th>
+                                                    <!-- <th class="text-center"><small style="font-weight: bold;">Oneview</small></th> -->
+                                                    <th class="text-center"><small style="font-weight: bold;">PO Value</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Prev Year</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">SAP Total</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Expenses</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Travel</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Commitments</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Revenue</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">M Fee</small></th>
+
+                            </tr>
+
+
+                            <tr *ngFor="let budgetview of searchlistnew  | searchpipe: [searchbox, 'tag']">
+                                    <td ><small>{{budgetview.INITIATIVE}}</small></td>
+                                    <td ><small>{{budgetview.LOADTYPE=='B'?'Budget':budgetview.PROJLINK}}</small></td>
+                                    <td ><small>{{budgetview.REGION}}</small></td>
+                                    <td ><small>{{budgetview.ONEVIEW}}</small></td>
+                                    <td ><small>{{budgetview.KNOWNAS.substring(0,40)}}</small></td>
+                                    <td ><small>{{budgetview.TITLE}}</small></td>
+                                    <td ><small>{{budgetview.BUDGETGROUP}}</small></td>
+                                    <td ><small>{{budgetview.CIPCODE.substring(0,4)}}</small></td>
+                                    <td ><small>{{budgetview.CIPCODE}}</small></td>
+                                    <td ><small>{{budgetview.DATE06}}</small></td>
+                                    <td ><small>{{budgetview.DATE07}}</small></td>
+                                    <td ><small>{{budgetview.DATE10}}</small></td>
+                                    <td class="text-center"><small>{{budgetview.CAPEX_OPEX}}</small></td>
+                                    <td class="text-center"><small>{{budgetview.ENDOFLIFE}}</small></td>
+
+                                    <td ><small>{{budgetview.LOADTYPE=='P'? 0:budgetview.CIPLINEBUDGET.toFixed(2)}}</small></td>
+                                    <td ><small>{{budgetview.LOADTYPE=='P'? 0:budgetview.BUDGETDIF.toFixed(2)}}</small></td>
+                                     <td ><small>{{budgetview.LOADTYPE=='B'? 0:budgetview.CIPLINEBUDGET.toFixed(2)}}</small></td>
+                                    <!-- <td class="text-right">{{budgetview.BASELINEBUDGET}}</td> -->
+                                    <td class="text-right ">{{budgetview.APPROVED_AMT.toFixed(2)}}</td>
+                                    <td class="text-right ">{{(budgetview.POVALUE * 1.15).toFixed(2)}}</td>
+                                    <td class="text-right ">{{(budgetview.PYVALUE * 1.15).toFixed(2)}}</td>
+                                    <td class="text-right ">{{(budgetview.POVALUE * 1.15 + budgetview.PYVALUE * 1.15).toFixed(2)}}</td>
+                                    <td class="text-right ">{{budgetview.COSTFEE}}</td>
+                                    <td class="text-right ">{{budgetview.TRAVEL}}</td>
+                                    <td class="text-right ">{{budgetview.COMMITMENT}}</td>
+                                    <td class="text-right ">{{budgetview.REVENUE}}</td>
+                                    <td class="text-right ">{{budgetview.M_FEE}}</td>
+                                    <!-- <td ><small>{{apiserv.formatString(budgetview.VALUEOF.toLocaleString())}}</small></td> 
+                                    <td ><small>{{budgetview.APPROVEBY}}</small></td>
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.SHORTCOMMENT}}</small>
+                                    </td>
+
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.CIPCODE}}</small>
+                                    </td>
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.PARTNER_ID}}</small>
+                                    </td>-->
+                                   
+                                  
+                                    
+                            </tr>
+                    </table>
+            </div>
+            </div>
+    </div>
+

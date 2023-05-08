@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { FLINE, FTRANSFER, IMLINE } from 'src/app/_classes/ftransfer';
 import { ModalService } from 'src/app/_modal';
@@ -12,7 +12,7 @@ import { ApidataService } from 'src/app/_services/apidata.service';
   templateUrl: './transfers.component.html',
   styleUrls: ['./transfers.component.css']
 })
-export class TransfersComponent implements OnInit {
+export class TransfersComponent implements OnInit, OnDestroy {
 @Input() itemBS: BehaviorSubject<any> ;
 ciplineadjs = [
   {
@@ -30,22 +30,29 @@ budgetview: any ;
   docheader = {
     INITIATIVE: ' ',
     PROJLINK: ' ',
+    BUDGETGROUP:'',
     ENTRYCODE: ' ',
     VALUEOF: 0,
     ONEVIEW:'',
     REGION: '',
-    SHORTCOMMENT:'',
+    TITLE:'',
+    CIPGROUP:'',
     CIPCODE:'',
-    NOTE: ' ',
     PARTNERID: ' ',
     POSTINGDATE: ' ',
+    NOTE: ' ',
+    CATEGORY:'',
+    STATUS:'',
+    FCASTSTARTDATE:'',
+    FCASTENDDATE:'',
+    FCASTCASHFLOWDATE:'',
     AGREEMENT: '',
-    BUDGETGROUP:''
+    VATINCL: 'X',
   }
   imForm = new FormGroup( {
     im: new FormControl('')
   })
-   
+  private subs: Subscription[] = []; 
  impositions = [];
  imtree = []
   positions = [];
@@ -74,19 +81,22 @@ budgetview: any ;
   constructor(public apiserv: ApidataService , private modaljw: ModalService) { }
 
   ngOnInit(): void {
-    this.apiserv.ciplineadjBS.subscribe(item=> {
+   this.subs.push(this.apiserv.ciplineadjBS.subscribe(item=> {
      this.ciplineadjs = JSON.parse(item[0].MOVEMENTS)
      this.ciplineadjs.forEach(liner=>{
       liner.SHORTCOMMENT = this.apiserv.xtdatob(liner.SHORTCOMMENT)
       liner.NOTE = this.apiserv.xtdatob(liner.NOTE);
      })
      this.budgetview = item[0]
-     this.docheader.ONEVIEW = this.budgetview.ONEVIEW;
-     this.docheader.REGION = this.budgetview.REGION;
-     this.docheader.SHORTCOMMENT = this.budgetview.SHORTCOMMENT;
-     this.docheader.CIPCODE = this.budgetview.CIPCODE;
 
-    })
+for (const p in this.docheader){
+    this.docheader[p] = p in this.budgetview ? this.budgetview[p] : this.docheader[p]
+}
+    this.docheader.CATEGORY = '';
+    this.docheader.VALUEOF = this.budgetview.AVAILABLE_VALUE
+    
+
+    }))
     
     this.imForm.valueChanges.subscribe(value=> {
       // this.apiserv.getPositionFunds(this.imForm.value.im ); 
@@ -98,11 +108,20 @@ budgetview: any ;
 
     return this.options.filter(option => option.tag.toLowerCase().includes(filterValue));
   }
+
+  ngOnDestroy(): void {
+    this.subs.forEach(sub => sub.unsubscribe());
+        this.subs = [];
+  }
   toggle(tag = false) {
     tag = !tag
   }
   closejw(item: any){
     this.modaljw.close(item)
+  }
+
+  findDestination(){
+    this.modaljw.open('fundfinder');
   }
   checkValue(doc:any){
     return ( doc.VALUEOF != 0 &&
@@ -123,9 +142,19 @@ budgetview: any ;
     //   CIPCODETO: this.docheader.cipcodeto,
     //   CREATEDBY: "Webuser"
     // }
-    // this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').subscribe(reply => {
-    //   console.log(reply);
-    // })
+    if (this.docheader.ENTRYCODE == 'RETURN' || this.docheader.ENTRYCODE == 'RETURN'  ){
+      this.docheader.PARTNERID = '';
+    }
+    let tempvm = {...this.docheader}
+    tempvm.TITLE = this.apiserv.xtdbtoa(this.docheader.TITLE)
+    tempvm.NOTE = this.apiserv.xtdbtoa(this.docheader.NOTE)
+    // if (this.docheader.ENTRYCODE == 'RETURN' || this.docheader.ENTRYCODE == 'RETURN'  )
+    this.apiserv.postGEN(tempvm, 'PUT_CIPLINE_MVT').subscribe(reply => {
+      this.docheader.VALUEOF = 0;
+      this.docheader.POSTINGDATE = '';
+      this.docheader.PARTNERID = '';
+      this.closejw('cipline')
+    })
 
     console.log(this.docheader);
   }

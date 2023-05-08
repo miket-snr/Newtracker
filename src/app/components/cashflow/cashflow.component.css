@@ -41,7 +41,7 @@ th small {
   }
   .mycontainer {
     padding: 20px;
-    height: 900px;
+    height: 600px;
     display: block;
     max-width: -moz-fit-content;
     max-width: fit-content;

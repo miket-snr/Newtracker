@@ -33,7 +33,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
         LEVEL_3:linein.LEVEL_3,
         DATEOF: linein.DATEOF, 
         COMMENTBY: linein.COMMENTBY,
-        COMMENT_TEXT: atob(linein.COMMENT_TEXT),
+        COMMENT_TEXT: this.apiserv.xtdatob(linein.COMMENT_TEXT),
         COMMENTNO: linein.COMMENTNO
       }
     })

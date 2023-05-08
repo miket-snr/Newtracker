@@ -1,0 +1,19 @@
+.tableFixHead          { overflow: auto; height: 500px; width: 100vw; }
+.tableFixHead thead th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
+.tableFixHead tbody th { position: sticky; left: 0; }
+.smallinput {
+    font-size: 10px;
+    border:none;
+    width:100%;
+    padding-left: 3px;
+    
+}
+.alert1 {
+    color: red ;
+}
+.normal {
+    color: black ;
+}
+td {
+    padding:2px;
+}

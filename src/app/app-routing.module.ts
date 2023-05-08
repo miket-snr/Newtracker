@@ -14,18 +14,28 @@ import { WorklistComponent } from './components/worklist/worklist.component';
 import { MassimportComponent } from './components/massimport/massimport.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { HelpComponent } from './components/help/help.component';
+import { BudgetlineEditComponent } from './components/budgetline-edit/budgetline-edit.component';
+import { MvtdocsListComponent } from './components/mvtdocs-list/mvtdocs-list.component';
+import { CashflowComponent } from './components/cashflow/cashflow.component';
+import { FundingmasseditComponent } from './components/funding/fundingmassedit/fundingmassedit.component';
+import { TriangleComponent } from './components/cflow/triangle/triangle.component';
 
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {path: 'admin',component:AdminComponent},
+  {path: 'approvals',component:TriangleComponent},
   {path: 'budget',component:AbsabudgetComponent},
+  {path: 'budgetedit',component:BudgetlineEditComponent},
+  {path: 'cashflow',component:CashflowComponent},
   {path: 'cipfund',component:FundciplineComponent},
   {path: 'dashboard',component:DashboardComponent},
+  {path: 'massfund',component:FundingmasseditComponent},
   { path: 'home', component: HomeComponent},
   { path: 'help', component: HelpComponent},
   { path: 'imports', component: MassimportComponent},
   { path: 'login', component: LoginComponent},
+  { path: 'mvtdocs', component: MvtdocsListComponent},
   { path: 'planner', component: GanttComponent},
   { path: 'projectlist', component:ProjectlistComponent},
   { path: 'requestedit/:id', component:AbsarequestComponent},

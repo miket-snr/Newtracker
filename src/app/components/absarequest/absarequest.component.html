@@ -24,7 +24,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-comments [reference]="reqno "></app-comments>
+    <!-- <app-comments [reference]="reqno "></app-comments> -->
 
   </div>
   <div class="modal-footer">
@@ -32,20 +32,20 @@
   </div>
 </ng-template>
 
+<div *ngIf="apiserv.loading" class="d-flex justify-content-center">
+  <mat-spinner diameter="30">Hey</mat-spinner>
+</div>
+<ng-container>
+  <form #reqForm="ngForm" (ngSubmit)="onSubmit()">
 
-<ng-container [formGroup]="requestForm">
-  <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
-    <mat-spinner diameter="30">Hey</mat-spinner>
-  </div>
-  <ng-container *ngIf="stable">
-  <mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="tabindex">
-    <mat-tab label="Requirement" class="tabber">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="tabindex">
+      <mat-tab label="Requirement" class="tabber">
 
-      <div class="d-flex justify-content-left">
+        <div class="d-flex justify-content-left">
 
-        <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
+          <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
 
-          <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+
             <div *ngIf="sectionid[4]" style="height:100%;">
 
               <div class="card">
@@ -57,10 +57,10 @@
                         <span (click)="sectionToggle(0)"><b>Requirements</b>
                           <i [ngClass]="(sectionid[0])? 'arrow down ml-4 mt-3': 'arrow right ml-4 mt-3'"></i>
                         </span>
-                        <span>{{request.request.PROJLINK?
-                          request.request.PROJLINK:request.request.ABSAREQNO}}</span><span>
-                          {{request.request.STATUS}}</span>
-                        <span *ngIf="request.request.ABSAREQNO && request.request.STATUS=='DRAFT'">
+                        <span>{{vm.PROJLINK?
+                          vm.PROJLINK:vm.ABSAREQNO}}</span><span>
+                          {{vm.STATUS}}</span>
+                        <span *ngIf="vm.ABSAREQNO && vm.STATUS=='DRAFT'">
                           <button type="button" class="btn btn-sm btn-danger" (click)="openTasks()">
                             Tasks
                           </button>
@@ -82,13 +82,14 @@
                   <ng-container *ngIf="sectionid[0]">
                     <tr>
                       <td>Project Title Short</td>
-                      <td colspan="2"><input class="form-control" placeholder="Short Title" formControlName="title">
-                        <div class="text-danger" *ngIf="requestForm.controls.title.errors?.minlength">
+                      <td colspan="2"><input class="form-control" placeholder="Short Title" name="title"
+                          [(ngModel)]="vm.TITLE">
+                        <!-- <div class="text-danger" *ngIf="requestForm.controls.title.errors?.minlength">
                           Title must be at least 10 characters long.
                         </div>
                         <div class="text-danger" *ngIf="requestForm.controls.title.errors?.maxlength">
                           Title can be max 50 characters long.
-                        </div>
+                        </div> -->
                       </td>
                     </tr>
                     <tr>
@@ -100,30 +101,33 @@
                         </div> -->
                       </td>
                       <td colspan="4">
-                        <textarea rows="5" formControlName="details" class="form-control"
+                        <textarea rows="5" name="details" [(ngModel)]="vm.DETAILS" class="form-control"
                           placeholder="Detailed description of the problem/request/event..." required>
                   </textarea>
                       </td>
                     </tr>
+                  <ng-container *ngIf="!greaterThan(reqno,'0')">
                     <tr>
                       <td>Priority</td>
                       <td>
-                        <select class="form-control" formControlName="epriority" placeholder="Select a Line" required>
+                        <select class="form-control" name="epriority" [(ngModel)]="vm.EPRIORITY"
+                          placeholder="Select a Line" required>
                           <option value="l"> Low Priority</option>
                           <option value="m"> Medium Priority</option>
                           <option value="h"> High Priority</option>
                         </select>
                       </td>
                       <td colspan="1">
-                        <mat-checkbox class="full-width " (change)="setVarious($event.checked)"
-                          formControlName="retrospective">
+                        <mat-checkbox class="full-width " (change)="setVarious($event.checked)" name="retrospective"
+                          [(ngModel)]="vm.RETROSPECTIVE">
                           Retrospective
                         </mat-checkbox>
                       </td>
+                     
                       <td colspan="1">
                         <mat-form-field appearance="standard">
                           <mat-label>Planned Start Date</mat-label>
-                          <input matInput [matDatepicker]="picker" formControlName="propstartdate">
+                          <input matInput [matDatepicker]="picker" name="propstartdate" [(ngModel)]="vm.PROPSTARTDATE">
                           <mat-hint>MM/DD/YYYY</mat-hint>
                           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                           <mat-datepicker #picker></mat-datepicker>
@@ -132,47 +136,62 @@
                       <td colspan="1">
                         <mat-form-field appearance="standard">
                           <mat-label>Planned End Date</mat-label>
-                          <input matInput [matDatepicker]="picker1" formControlName="propenddate">
+                          <input matInput [matDatepicker]="picker1" name="propenddate" [(ngModel)]="vm.PROPENDDATE">
                           <mat-hint>MM/DD/YYYY</mat-hint>
                           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                           <mat-datepicker #picker1></mat-datepicker>
                         </mat-form-field>
                       </td>
                     </tr>
-
                   </ng-container>
-                  <ng-container *ngIf="!greaterThan(reqno,'0')">
+                 
                     <tr>
                       <td style="width:120px">Region</td>
                       <td style="width:160px;">
-                        <select class="form-control" formControlName="region">
+                        <select class="form-control" name="region" [(ngModel)]="vm.REGION">
                           <option *ngFor="let region of apiserv.regions" [value]="region.code"> {{region.text}}
                           </option>
                         </select>
+
                       </td>
+                      <ng-container *ngIf="greaterThan(reqno,'0')">
+                      <td colspan="1">
+                        Forecast Start</td>
+                        <td>
+                          <input class="form-control" type="date"  [disabled]="true" name="propstartdate2" [(ngModel)]="vm.DATE06">
+
+                      </td>
+                      <td colspan="1">
+                        Forecast End</td>
+                        <td>
+                          <input class="form-control" type="date"  [disabled]="true" name="propenddate2" [(ngModel)]="vm.DATE07">
+
+                      </td>
+                  </ng-container>
                     </tr>
                     <tr *ngIf="!checkReady('savenew')">
                       <td colspan="7" style="background-color: #00ff59;">
                         Compulsory fields- Title, Scope, Region, Planned Start and End Dates
                       </td>
                     </tr>
-                    <ng-container *ngIf="checkReady('savenew') ">
-                    <tr>
-                      <td colspan="7" style="background-color: rgb(0, 238, 255);">
-                        <div class="d-flex justify-content-center">
-                          <button type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
-                            Save and continue
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                    <ng-container *ngIf="checkReady('savenew') && !greaterThan(reqno,'0')">
+                      <tr>
+                        <td colspan="7" style="background-color: rgb(0, 238, 255);">
+                          <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
+                              Save and continue
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
                   </ng-container>
-                  </ng-container>
-                  <ng-container *ngIf="greaterThan(reqno,'0')  && checkReady('save') ">
+                  <ng-container *ngIf="greaterThan(reqno,'0')">
                     <tr>
                       <td colspan="7">
                         <div class="card-footer d-flex justify-content-around">
-                          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="onSubmit()">
+                          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty"
+                            (click)="onSubmit()">
                             Update SAP
                           </button>
                           <button type="button" class="btn btn-sm btn-outline-primary" (click)="openPDF()">
@@ -187,17 +206,17 @@
 
               </div>
             </div>
-          </form>
+
+          </div>
         </div>
-      </div>
-    </mat-tab>
-    <mat-tab *ngIf="greaterThan(reqno,'0')" label="Location" class="tabber">
+      </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0')" label="Location" class="tabber">
 
-      <div class="d-flex justify-content-left">
+        <div class="d-flex justify-content-left">
 
-        <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
+          <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
 
-          <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+
             <div *ngIf="sectionid[4]" style="height:100%;">
 
               <div class="card">
@@ -215,7 +234,7 @@
                       <tr>
                         <td style="width:120px">Region</td>
                         <td style="width:160px;">
-                          <select class="form-control" formControlName="region">
+                          <select class="form-control" name="region" [(ngModel)]="vm.REGION">
                             <option [value]="''">Select One ...</option>
                             <option *ngFor="let region of apiserv.regions" [value]="region.code"> {{region.text}}
                             </option>
@@ -223,7 +242,7 @@
                         </td>
                         <td>Prov-Region</td>
                         <td colspan="1">
-                          <select class="form-control" formControlName="provregion">
+                          <select class="form-control" name="provregion" [(ngModel)]="vm.PROVREGION">
                             <option [value]="''">Select One ...</option>
                             <option *ngFor="let provregion of apiserv.provregions" [value]="provregion.code">
                               {{provregion.text}}
@@ -236,7 +255,7 @@
                               Building ID
                             </div>
                             <div class="col-8">
-                              <input type="text" class="form-control" formControlName="buildingid">
+                              <input type="text" class="form-control" name="buildingid" [(ngModel)]="vm.BUILDINGID">
                             </div>
                           </div>
                         </td>
@@ -244,15 +263,16 @@
                       <tr>
                         <td>One View
                           <div>
-                            <mat-checkbox class="full-width " (change)="setVarious($event.checked)"
-                              formControlName="varioussites">
+                            <mat-checkbox class="full-width " (change)="setVarious($event.checked)" name="varioussites"
+                              [(ngModel)]="vm.VARIOUSSITES">
                               Various Sites
                             </mat-checkbox>
                           </div>
                         </td>
-                        <td><input class="form-control" formControlName="oneview"></td>
+                        <td><input class="form-control" name="oneview" [(ngModel)]="vm.ONEVIEW" (change)="onChange()">
+                        </td>
                         <td>Known As</td>
-                        <td colspan="3"><input class="form-control" formControlName="knownas"></td>
+                        <td colspan="3"><input class="form-control" name="knownas" [(ngModel)]="vm.KNOWNAS"></td>
 
                       </tr>
                       <tr *ngIf="requestForm.value.varioussites">
@@ -262,7 +282,8 @@
                       </tr>
                       <tr>
                         <td>Site Notes</td>
-                        <td colspan="3"><textarea rows="4" class="form-control" formControlName="sitenotes"></textarea>
+                        <td colspan="3"><textarea rows="4" class="form-control" name="sitenotes"
+                            [(ngModel)]="vm.SITENOTES"></textarea>
                         </td>
                         <td colspan="1">
                           <div class="row">
@@ -270,8 +291,8 @@
                               End of Life?
                             </div>
                             <div class="col-8">
-                              <select class="form-control" formControlName="endoflife" placeholder="Select a Line"
-                                required>
+                              <select class="form-control" name="endoflife" [(ngModel)]="vm.ENDOFLIFE"
+                                placeholder="Select a Line" required>
                                 <option value=""> Select type....</option>
                                 <option value="N"> No</option>
                                 <option value="Y"> Yes</option>
@@ -284,8 +305,8 @@
                               Leased or Freehold
                             </div>
                             <div class="col-8">
-                              <select class="form-control" formControlName="leased_free" placeholder="Select a Line"
-                                required>
+                              <select class="form-control" name="leased_free" [(ngModel)]="vm.LEASED_FREE"
+                                placeholder="Select a Line" required>
                                 <option value=""> Select type....</option>
                                 <option value="F"> Freehold</option>
                                 <option value="L"> Leased</option>
@@ -298,7 +319,7 @@
                             <div class="col-8">
                               <mat-form-field appearance="standard">
                                 <mat-label>Leased End Date</mat-label>
-                                <input matInput [matDatepicker]="picker2" formControlName="leaseend">
+                                <input matInput [matDatepicker]="picker2" name="leaseend" [(ngModel)]="vm.LEASEEND">
                                 <mat-hint>MM/DD/YYYY</mat-hint>
                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2></mat-datepicker>
@@ -313,217 +334,88 @@
 
                 </table>
                 <div class="card-footer text-center">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="onSubmit()">
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="onSubmit()"
+                    [disabled]="!reqForm.dirty">
                     Update SAP
                   </button>
                 </div>
               </div>
             </div>
-          </form>
+
+          </div>
         </div>
-      </div>
-    </mat-tab>
-    <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Approval" class="tabber">
+      </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Funding" class="tabber">
+        <app-fundingeditor [vm]="vm"></app-fundingeditor>
+      </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Approval" class="tabber">
+        <app-approval-form [vm]="vm" (save)="onSubmit()"></app-approval-form>
 
-      <div class="d-flex justify-content-left">
-
-        <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
-
-          <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
-            <div style="height:100%;">
-
-              <div class="card">
-                <table class="table">
-
-                  <ng-container *ngIf="greaterThan(reqno,'0')">
-                    <tr>
-                      <td colspan="7" style="background-color: lightblue;">
-                        <div class="d-flex justify-content-between">
-                          <b>Planning</b>
-                          <!-- <button type="button" (click)="open(datemodal)"
-                            class="btn btn-sm btn-outline-primary ml-4">Date
-                            Planning</button> -->
-                        </div>
-                      </td>
-                    </tr>
-
-                    <tr>
-
-                      <td colspan="1">
-                        Assign PM
-                      </td>
-                      <td colspan="2" style="font-size:0.8rem;">
-                        <input class="form-control" formControlName="pmanager">
-                        <!-- <select class="form-control" formControlName="pmanager">
-                          <option *ngFor="let perc of apiserv.pmlist$ | async" [value]="perc.B">{{ perc.D }}</option>
-                        </select> -->
-                      </td>
-                      <td colspan="3">
-                        <div class="row">
-                          <div class="col-2">
-                            Planning Status
-                          </div>
-                          <div class="col-3">
-                            <select class="form-control" formControlName="planstatus" placeholder="Select a Line"
-                              required>
-                              <option value=""> Select current....</option>
-                              <option value="na"> Not Assessed</option>
-                              <option value="possible"> Possible</option>
-                              <option value="possrollover"> Possible Rollover</option>
-                              <option value="rollover"> Rollover</option>
-                              <option value="posssurrender"> Possible Surrender</option>
-                              <option value="surrender"> Surrender</option>
-                            </select>
-                          </div>
-                          <div class="col-2">WBS:</div>
-                          <div class="col-4"><input class="form-control" formControlName="projlink"></div>
-                        </div>
-                      </td>
-
-                    </tr>
-                    <ng-container id="approval">
-
-                      <tr>
-                        <td colspan="7" style="background-color: lightblue;">
-                          <span (click)="sectionToggle(7)"><b>Approval</b>
-                            <i [ngClass]="(sectionid[7])? 'arrow down ml-4 mt-3': 'arrow right ml-4 mt-3'"></i>
-                          </span>
-                        </td>
-                      </tr>
-                      <ng-container>
-                        <tr>
-                          <td>Approval Motivation</td>
-                          <td colspan="3"><textarea rows="4" class="form-control"
-                              formControlName="approval_motivate"></textarea></td>
-                        </tr>
-                        <tr>
-                          <td>Submit for Approval Date</td>
-                          <td>
-                            <input type="date" class="form-control" formControlName="approval_submitdate">
-
-                          </td>
-                          <td>Requested Amount </td>
-                          <td >
-                            <input class="form-control" formControlName="baselinebudget">
-                          </td>
-
-                          <td></td>
-                        </tr>
-
-                        <tr>
-                          <td>Approval Date</td>
-                          <td ><input type="date" class="form-control" formControlName="approval_date"></td>
-                          <td>Approval Amount</td>
-                          <td ><input type="number" class="form-control" formControlName="approved_amt"></td>
-                        </tr>
-                        <tr>
-                          <td>Submitted to Absa legal</td>
-                          <td ><input type="date" class="form-control" formControlName="approvaltolegal"></td>
-                        
-                        <td>Purchase Order</td>
-                        <td ><input class="form-control" formControlName="ponumber"></td>
-                      </tr>
-                        <tr>
-                        <td>Approved by Absa legal</td>
-                        <td ><input type="date" class="form-control" formControlName="approvedbylegal"></td>
-                      </tr>
-                      <tr>
-                          <td>Approval Status </td>
-                          <td colspan="2">
-                            <select class="form-control" formControlName="approval_status">
-                              <option *ngFor="let approval of apiserv.approvals" [ngValue]="approval['code']">
-                                {{approval.text}}</option>
-                            </select>
-                          </td>
-                         
-                        </tr>
-                        <tr>
-                          <td>Approval Note</td>
-                          <td colspan="3"><textarea rows="4" class="form-control"
-                              formControlName="approval_note"></textarea></td>
-                        </tr>
-                      </ng-container>
-                    </ng-container>
-
-                  </ng-container>
-                </table>
-                <div class="card-footer text-center">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="onSubmit()">
-                    Update SAP
-                  </button>
+      </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Progress" class="tabber">
+        <div class="modal-body">
+          <div *ngIf="vm.ABSAREQNO">
+            <ng-container>
+              <div class="row">
+                <div class="col-12">
+                  <app-reqapproval [dates]="apiserv.lclstate.dates"></app-reqapproval>
                 </div>
 
               </div>
-            </div>
-          </form>
+
+
+            </ng-container>
+          </div>
         </div>
-      </div>
-    </mat-tab>
-    <!-- <mat-tab *ngIf="greaterThan(reqno,'0') && requestForm.value.projlink?.charAt(0) != 'A'"
+        <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closejw('trackermodal')">Ok</button>
+      </div> -->
+      </mat-tab>
+      <!-- <mat-tab *ngIf="greaterThan(reqno,'0') && requestForm.value.projlink?.charAt(0) != 'A'"
       label="Appropriation Request" class="tabber">
 
       <app-approreqs [reqno]="reqno"></app-approreqs>
     </mat-tab> -->
-    <mat-tab *ngIf="greaterThan(reqno,'0') " label="Comments" class="tabber">
-      <div *ngIf="request.request.ABSAREQNO">
-        <app-comments [reference]="request.request.ABSAREQNO"></app-comments>
-      </div>
-    </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0') " label="Comments" class="tabber">
+        <div *ngIf="vm.ABSAREQNO">
+          <app-comments [reference]="vm.ABSAREQNO"></app-comments>
+        </div>
+      </mat-tab>
 
-    <!-- <mat-tab *ngIf="greaterThan(reqno,'0')"  label="Date Planning" class="tabber" >
+      <!-- <mat-tab *ngIf="greaterThan(reqno,'0')"  label="Date Planning" class="tabber" >
       <app-dateplanner [events]="eventsSubject.asObservable()" [blankdate]="reqdates" (someChange)="someDateChange(msg)"
       datetype="PRABSAP" [edit]="request.edit.dates">
     </app-dateplanner>
     </mat-tab> -->
 
-    <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Progress" class="tabber">
-      <div class="modal-body">
-        <div *ngIf="request.request.ABSAREQNO">
-          <ng-container>
-            <div class="row">
-              <div class="col-12">
-                <app-reqapproval [dates]="apiserv.lclstate.dates"></app-reqapproval>
-              </div>
-             
-            </div>
-           
-           
-          </ng-container>
-        </div>
-      </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="closejw('trackermodal')">Ok</button>
-      </div> -->
-    </mat-tab>
-    <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Funding" class="tabber">
-      <app-fundingeditor formGroupName="funding"></app-fundingeditor>
-    </mat-tab>
-    <mat-tab *ngIf="greaterThan(reqno,'0')"  (click)="goPlan()" label="Tasks" class="tabber">
-<h3>Task planning is not activated for this phase</h3>
-<!-- (click)="goPlan()" -->
-      <div class="row" >
-        <div class="col-1">Action Type</div>
-        <div class="col-3">Delegate</div>
-        <div class="col-3">Instruction</div>
-        <div class="col-1">Date Due</div>
-        <div class="col-1">Decision</div>
-        <div class="col-2">Delegate Comment</div>
-        <div class="col-1">Edit/Delete</div>
 
-      </div>
-      <div *ngFor="let task of tasks" class="row">
-        <div class="col-1">{{task.ACTIONTYPE}}</div>
-        <div class="col-3">{{task.DELEGATENAME}}</div>
-        <div class="col-3">{{task.INSTRUCTION}}</div>
-        <div class="col-1">{{task.DUEDATE}}</div>
-        <div class="col-1">{{task.DECISION}}</div>
-        <div class="col-2">{{task.COMMENT}}</div>
-        <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span>
-          <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
-          <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
+
+      <mat-tab *ngIf="greaterThan(reqno,'0')" (click)="goPlan()" label="Tasks" class="tabber">
+        <h3>Task planning is not activated for this phase</h3>
+        <!-- (click)="goPlan()" -->
+        <div class="row">
+          <div class="col-1">Action Type</div>
+          <div class="col-3">Delegate</div>
+          <div class="col-3">Instruction</div>
+          <div class="col-1">Date Due</div>
+          <div class="col-1">Decision</div>
+          <div class="col-2">Delegate Comment</div>
+          <div class="col-1">Edit/Delete</div>
+
         </div>
-      </div>
-      <!-- <div class="row d-flex justify-content-between">
+        <div *ngFor="let task of tasks" class="row">
+          <div class="col-1">{{task.ACTIONTYPE}}</div>
+          <div class="col-3">{{task.DELEGATENAME}}</div>
+          <div class="col-3">{{task.INSTRUCTION}}</div>
+          <div class="col-1">{{task.DUEDATE}}</div>
+          <div class="col-1">{{task.DECISION}}</div>
+          <div class="col-2">{{task.COMMENT}}</div>
+          <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span>
+            <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
+            <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
+          </div>
+        </div>
+        <!-- <div class="row d-flex justify-content-between">
         <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addTask()">+ Add task</button>
       </div>
       <div [hidden]="!taskedit">
@@ -531,11 +423,18 @@
           (someChange)="taskClose($event)"></app-task-edit>
       </div> -->
 
-    </mat-tab>
-  </mat-tab-group>
+      </mat-tab>
+      <!-- <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Cashflows" class="tabber">
+        <app-cashflow></app-cashflow>
+      </mat-tab> -->
+      
+    </mat-tab-group>
+  </form>
 </ng-container>
-</ng-container>
+<div class="row mt-4 d-flex justify-content-center">
+  <button type="button" class="btn btn-sm btn-danger" (click)="backToList()">&#8592; to Worklist</button>
+</div>
 
 <jw-modal id="multisite">
-  <app-multi-sites></app-multi-sites>
+  <!-- <app-multi-sites></app-multi-sites> -->
 </jw-modal>

@@ -1,4 +1,5 @@
 export interface USER {
+    DESIGNATION?: any;
     REGION?: string;
     EMAIL: string,
     CELLNO: string;

@@ -16,6 +16,7 @@ export class FundciplineComponent implements OnInit {
   pmForm = new FormGroup({
     pmanager: new FormControl(''),
     region: new FormControl('*'),
+    budgetgroup: new FormControl(['*']),
     cipgroup: new FormControl(['*']),
     cipcode: new FormControl(['*']),
     status: new FormControl(['*']),
@@ -23,6 +24,7 @@ export class FundciplineComponent implements OnInit {
     workstream: new FormControl(['*'])
   })
   searchlist = [];
+  sections: any;
   currentitemBS = new BehaviorSubject({})
   filters ={
     // pmlist:{fieldname:'pmanager', codes:[],selected:['*'],type:'s',temp:[]},
@@ -70,7 +72,14 @@ export class FundciplineComponent implements OnInit {
   constructor(private authserv: AuthService,
      public apiserv: ApidataService,  public modalServicejw: ModalService,
      private router: Router) {
-     
+      this.sections = [
+        { name: 'CIP2023', selected: true },
+        { name: 'OPEX', selected: true },
+        { name: 'ROL2022', selected: true },
+        { name: 'RXL2022', selected: true },
+        { name: 'UNKNOWN', selected: true },
+  
+      ]
       }
 
   ngOnInit(): void {
@@ -121,9 +130,9 @@ this.resetFilters();
 
 
   }
-  selectAll() {
-    this.selectedAll = !this.selectedAll;
-  }
+  // selectAll() {
+  //   this.selectedAll = !this.selectedAll;
+  // }
 
   buildSearchCodes(){
 
@@ -159,15 +168,16 @@ this.resetFilters();
           OHSRisk: line.OHSRISK,
           approval: line.CLIENTAPPROVAL,
           absaPO: line.PO  || '0%',
-          forecaststart: line.FORECAST_START,
-          forecastend: line.FORECAST_END,
+          forecaststart: line.DATE06,
+          forecastend: line.DATE07,
+          cashflowdate: line.DATE10,
           implement: line.IMPLEMENT  || '0%',
           practicalcomp: line.PPRACT_COMPLETE,
           invsubmitted: line.INVSUBMITTED  || '0%',
           progress: '',
           pmanager: line.PMANAGER,
           status: line.STATUS,
-          site: line.ONEVIEW,
+          site: line.CATEGORY == 'POOL'? 'POOL':line.ONEVIEW,
           knownas: line.KNOWNAS,
           region: line.REGION,
           cipcode: line.CIPCODE,
@@ -185,7 +195,8 @@ this.resetFilters();
           revenue: line.REVENUE || 0,
           m_fee: line.M_FEE || 0,
           budgetgroup: line.BUDGETGROUP,
-          tag: line.INITIATIVE + ' ' + line.PROJLINK + ' ' + line.TITLE + ' ' + line.BUDGETGROUP + ' ' + line.PONUMBER + ' ' + line.CIPLINEBUDGET + line.KNOWNAS 
+          category: line.CATEGORY,
+          tag: line.INITIATIVE + ' ' + line.PROJLINK + ' ' + line.ONEVIEW + ' ' +  line.TITLE + ' ' + line.BUDGETGROUP + ' ' + line.PONUMBER + ' ' + line.CIPLINEBUDGET + line.KNOWNAS  + ' ' + line.CATEGORY
         }
       })
       // this.searchlist.forEach(item => {
@@ -446,7 +457,21 @@ return ans;
   this.modalServicejw.close('selections')
 
 }
+checkIfAllSelected() {
+  var totalSelected = 0;
+  for (var i = 0; i < this.sections.length; i++) {
+    if (this.sections[i].selected) totalSelected++;
+  }
+  this.selectedAll = totalSelected === this.sections.length;
 
+  return true;
+}
+selectAll() {
+  this.selectedAll = !this.selectedAll;
 
+  for (var i = 0; i < this.sections.length; i++) {
+    this.sections[i].selected = this.selectedAll;
+  }
+}
 }
 

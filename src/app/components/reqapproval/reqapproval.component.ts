@@ -1,7 +1,9 @@
 import { formatDate } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { absareq } from 'src/app/_classes/absareq';
 import { dateset } from 'src/app/_classes/dateset';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -12,7 +14,7 @@ import { AuthService } from 'src/app/_services/auth.service';
   templateUrl: './reqapproval.component.html',
   styleUrls: ['./reqapproval.component.css']
 })
-export class ReqapprovalComponent implements OnInit {
+export class ReqapprovalComponent implements OnInit, OnDestroy {
   @Input() dates: {
     REFERENCE: '00000000', ONEVIEW: '', DATE01: '', DATE02: '', DATE03: '', DATE04: '', DATE05: '',
     DATE06: '', DATE07: '', DATE08: '', DATE09: '', DATE10: '', PROG01: '', PROG02: '', PROG03: '', PROG04: '',
@@ -20,8 +22,10 @@ export class ReqapprovalComponent implements OnInit {
     DATABAG: '7:21:7:21:14:21:45'
   }
   @Input() planner = 'progress';
+  @Input() vm: absareq;
   site = '';
   knownas = '';
+  sub: Subscription;
   phase = 'PHASE01'
   fact2 = '';
   fact3 = '';
@@ -87,7 +91,7 @@ export class ReqapprovalComponent implements OnInit {
   ngOnInit(): void {
     this.setup()
  
-    this.apiserv.currentreq$.subscribe(reply => {
+  this.sub =   this.apiserv.currentreq$.subscribe(reply => {
       if (reply) {
 this.phase = this.apiserv.lclstate.phase;
 this.datedata = this.apiserv.lclstate.dates;
@@ -98,6 +102,9 @@ this.buildDurations() ;
 
     this.onChanges();
 
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
   comment() {
 
@@ -301,6 +308,7 @@ updateProgress(blankdate, change){
     let todo = {DATA: JSON.stringify(updater),TRACKTYPE:'PHASE'}
     this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
+      this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager, this.newdates.REFERENCE)
     })
   }
   SaveTracker() {

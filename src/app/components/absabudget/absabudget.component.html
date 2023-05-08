@@ -193,7 +193,7 @@
                                                 <small>{{budgetview.PROVINCE}}</small>
                                         </td>
                                         <td style="background-color:rgb(114, 171, 251);">
-                                                <small>{{budgetview.ONEVIEW}}</small>
+                                                <small>{{budgetview.CATEGORY == 'POOL'? 'POOL': budgetview.ONEVIEW}}</small>
                                         </td>
                                         <td style="background-color:rgb(114, 171, 251);">
                                                 <small>{{budgetview.KNOWNAS}}</small>
@@ -229,7 +229,7 @@
                                                 <small>{{budgetview.STATUS}}</small>
                                         </td>
                                         <td style="background-color:rgb(114, 171, 251);">
-                                                <small>{{budgetview.BASE_VALUE}}</small>
+                                                <small>{{apiserv.formatString(budgetview.BASE_VALUE.toLocaleString())}}</small>
                                         </td>
                                         <td style="background-color:rgb(114, 171, 251);">
                                                 <small>{{budgetview.PROJLINK}}</small>
@@ -241,7 +241,7 @@
                                                 <small>{{budgetview.PONUMBER}}</small>
                                         </td>
                                         <td style="background-color:rgb(114, 171, 251);">
-                                                <small>{{budgetview.APPROVEDAMT}}</small>
+                                                <small>{{apiserv.formatString(budgetview.APPROVEDAMT.toLocaleString())}}</small>
                                         </td>
                                         <td
                                                 [ngClass]="budgetview.PHASE > 'PHASE08'  ? 'text-center todo' : budgetview.DATE06 < todaydate  && budgetview.DATE06 > '1999-01-01' ?'text-center late': 'text-center todo'">
@@ -261,12 +261,12 @@
                                         <td class="text-center" style="background-color:rgb(155, 219, 251);">
                                                 <small>{{budgetview.PROGRESS + '%'}}</small>
                                         </td>
-                                        <td class="text-right odd">{{budgetview.BUDGET}}</td>
-                                        <td class="text-right even">{{budgetview.COSTS}}</td>
-                                        <td class="text-right odd">{{budgetview.TRAVEL}}</td>
-                                        <td class="text-right even">{{budgetview.COMMITMENT}}</td>
-                                        <td class="text-right odd">{{budgetview.REVENUE}}</td>
-                                        <td class="text-right even">{{budgetview.M_FEE}}</td>
+                                        <td class="text-right odd">{{ apiserv.formatString(budgetview.BUDGET.toLocaleString())}}</td>
+                                        <td class="text-right even">{{apiserv.formatString(budgetview.COSTS.toLocaleString())}}</td>
+                                        <td class="text-right odd">{{ apiserv.formatString(budgetview.TRAVEL.toLocaleString())}}</td>
+                                        <td class="text-right even">{{apiserv.formatString(budgetview.COMMITMENT.toLocaleString())}}</td>
+                                        <td class="text-right odd">{{ apiserv.formatString(budgetview.REVENUE.toLocaleString())}}</td>
+                                        <td class="text-right even">{{apiserv.formatString(budgetview.M_FEE.toLocaleString())}}</td>
 
                                         <!-- <td style="background-color:rgb(114, 171, 251);">
                                                 <small>{{budgetview.LAST_COMMENT}}</small></td>

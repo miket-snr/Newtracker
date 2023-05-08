@@ -96,20 +96,40 @@ export class MassimportComponent implements OnInit, OnDestroy {
           case 'approval': {
             if (/^[A-Z]{3}-[A-Z]{1}/.test(newobj[0])) {
               let newdate = {}
-              newdate['ABSAREQNO'] = this.apiserv.mapWBS2Req(newobj[0]);
-              if (newdate['ABSAREQNO'] > 1) {
-                newdate['RETROSPECTIVE'] = (newobj[1]);
-                newdate['INITIATIVE'] = (newobj[2]);
-                newdate['APPROVAL_MOTIVATE'] = (newobj[3]);
-                newdate['APPROVAL_STATUS'] = (newobj[4]);
-                newdate['APPROVAL_SUBMITDATE'] = this.formatDate(newobj[5]);
-                newdate['APPROVAL_DATE'] = this.formatDate(newobj[6]);
-                newdate['PONUMBER'] = (newobj[7]);
-                newdate['APPROVED_AMT'] = (newobj[8]);
+              newdate['INITIATIVE'] = this.apiserv.mapWBS2Req(newobj[0]);
+              if (newdate['INITIATIVE'] > 1) {
+                newdate['PROJLINK'] = (newobj[0]);
+                newdate['POSTINGDATE'] = this.formatDate(newobj[1]);
+                newdate['VALUEOF'] = (newobj[2]);
+                newdate['PONUMBER'] = (newobj[3]);
+                newdate['CIPCODE'] = (newobj[4]);
+                newdate['APPROVAL_MOTIVATE'] = (newobj[5]);
+                newdate['APPROVAL_STATUS'] = (newobj[6]);
+                newdate['VATINCL'] = 'X';
+                newdate['ENTRYCODE'] = 'APPROVAL';
+                
+               
                 this.multidates.push(JSON.parse(JSON.stringify(newdate)))
               }
             } else {
-              alert('wrong wbs format')
+              alert('wrong wbs format'+ newobj[0])
+
+            }
+            break;
+          }
+          case 'ponumber': {
+            if (/^[A-Z]{3}-[A-Z]{1}/.test(newobj[3])) {
+              let newdate = {}
+              newdate['CIPLINE_ID'] = this.apiserv.mapWBS2Req(newobj[3]);
+                newdate['PROJLINK'] = (newobj[3]);
+                newdate['POSTINGDATE'] = this.formatDate(newobj[2]);
+                newdate['VALUEOF'] = (newobj[4]);
+                newdate['SHORTCOMMENT'] =(newobj[0]).replace(/#/g,'');
+                newdate['NOTE'] = this.apiserv.xtdbtoa(newobj[1]);
+                newdate['ENTRYCODE'] = 'PONUMBER';              
+                this.multidates.push(JSON.parse(JSON.stringify(newdate)))
+            } else {
+              alert('wrong wbs format'+ newobj[0])
 
             }
             break;
@@ -144,7 +164,7 @@ export class MassimportComponent implements OnInit, OnDestroy {
                 newdate['ONEVIEW'] = (newobj[3]);
                 newdate['ENDOFLIFE'] = (newobj[4]);
                 newdate['LEASED_FREE'] = (newobj[5]);
-                newdate['LEASEEND'] = this.formatDate(newobj[6]);              
+                newdate['LEASEEND'] = this.formatDate(newobj[6]);
                 this.multidates.push(JSON.parse(JSON.stringify(newdate)))
               }
             } else {
@@ -153,34 +173,25 @@ export class MassimportComponent implements OnInit, OnDestroy {
             }
             break;
           }
-          case 'appreq': {
-            if (/^[0-9]*$/.test(newobj[0])) {
+          case 'cipdates': {
+            if (/[0-9]*$/.test(newobj[0])) {
               let newdate = {}
-              newdate['ABSAREQNO'] = '6';
-              if (newdate['ABSAREQNO'] > 1) {
-                newdate['PROJLINK'] = (newobj[1]);
-                newdate['REGION'] = (newobj[1]);
-                newdate['PROVREGION'] = (newobj[2]);
-                newdate['ONEVIEW'] = (newobj[3]);
-                newdate['ENDOFLIFE'] = (newobj[4]);
-                newdate['LEASED_FREE'] = (newobj[5]);
-                newdate['LEASEEND'] = this.formatDate(newobj[6]);                         
-                newdate['PROPSTARTDATE'] = this.formatDate(newobj[6]);              
-                newdate['PROPENDDATE'] = this.formatDate(newobj[6]);              
-                newdate['TITLE'] = (newobj[6]);              
-                newdate['BASELINEBUDGET'] = (newobj[6]);              
-                newdate['CIPCODE'] = (newobj[6]);              
-                newdate['WORKSTREAM'] = (newobj[6]);              
-                this.multidates.push(JSON.parse(JSON.stringify(newdate)))
-              }
-            } else {
+              newdate['INITIATIVE'] = newobj[0];
+              newdate['FCASTSTARTDATE'] = this.formatDate(newobj[1]);
+              newdate['FCASTENDDATE'] = this.formatDate(newobj[2]);
+              newdate['FCASTCASHFLOWDATE'] = (newobj[3]);
+
+              this.multidates.push(JSON.parse(JSON.stringify(newdate)))
+            }
+            else {
               alert('wrong wbs format')
+
 
             }
             break;
           }
         }
-        
+
       }
     })
     this.importarea = '';
@@ -203,7 +214,13 @@ export class MassimportComponent implements OnInit, OnDestroy {
         break;
       }
       case 'approval': {
-        this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates) }, 'MASSUPDATE_REQS', 'PROJECTS').subscribe(result => {
+        this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates) }, 'PUT_APPROVALDOC').subscribe(result => {
+          this.apiserv.messagesBS.next('Done');
+        })
+        break;
+      }
+      case 'ponumber': {
+        this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates) }, 'PUT_PONUMBERDOC').subscribe(result => {
           this.apiserv.messagesBS.next('Done');
         })
         break;
@@ -214,18 +231,18 @@ export class MassimportComponent implements OnInit, OnDestroy {
         })
         break;
       }
-      case 'location':{
-        this.apiserv.postGEN( {DATA:JSON.stringify(this.multidates)}, 'MASSUPDATE_REQS','PROJECTS').subscribe(result=> {
+      case 'location': {
+        this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates) }, 'MASSUPDATE_REQS', 'PROJECTS').subscribe(result => {
           this.apiserv.messagesBS.next('Done');
         })
-              break;
-            }
-            case 'appreq': {
-              this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates) }, 'MASSUPDATE_REQS', 'PROJECTS').subscribe(result => {
-                this.apiserv.messagesBS.next('Done');
-              })
-              break;
-            }
+        break;
+      }
+      case 'cipdates': {
+        this.apiserv.postGEN({ DATA: JSON.stringify(this.multidates), TRACKTYPE: 'CIPDATES' }, 'MASSUPDATE_DATES', 'PROJECTS').subscribe(result => {
+          this.apiserv.messagesBS.next('Done');
+        })
+        break;
+      }
     }
   }
 
@@ -239,10 +256,10 @@ export class MassimportComponent implements OnInit, OnDestroy {
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();
     } catch (e) {
-     // alert(datein)
+      // alert(datein)
     }
-     let reply = yyyy + '-' + mm + '-' + dd;
-     return reply.includes('NaN')? '0000-00-00': reply;
+    let reply = yyyy + '-' + mm + '-' + dd;
+    return reply.includes('NaN') ? '0000-00-00' : reply;
   }
 
 }

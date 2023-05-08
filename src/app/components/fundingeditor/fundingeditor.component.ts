@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
+import { absareq } from 'src/app/_classes/absareq';
 import { ModalService } from 'src/app/_modal';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -12,6 +13,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 })
 export class FundingeditorComponent implements OnInit, OnDestroy {
   @Input() formGroupName!: string
+  @Input() vm: absareq
   @Output() closer = new EventEmitter<string>();
   options = [];
   request = {};
@@ -23,7 +25,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   grouplines = [];
   resource = '';
   parentForm: FormGroup;
-  fundingForm =  this.fb.group({
+  fundingForm = this.fb.group({
     reference: '',
     cipname: '',
     cipcode: '',
@@ -46,11 +48,12 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     budgetdif: '',
     fund_comment: '',
     initiative: '',
+    budgetgroup: '',
     budgetprogram: '',
     funding: this.fb.array([])
   })
-  subs: Subscription ;
-  mytext =  ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
+  subs: Subscription;
+  mytext = ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
   <p> the other fields will get populated when you save as they are read off the Cipline table.</p>
   <h4><strong>What is a Cipline number?</strong></h4>
   <p>A certain number of budget lines are provided by ABSA each year and this is called the Ciplist. </p>
@@ -74,43 +77,50 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
 
   constructor(public apiserv: ApidataService, public fb: FormBuilder,
     private rootFormGroup: FormGroupDirective,
-     public modalServicejw: ModalService,
-     private authserv: AuthService) { }
+    public modalServicejw: ModalService,
+    private authserv: AuthService) { }
 
   ngOnInit(): void {
-    this.parentForm = this.rootFormGroup.control as FormGroup
-    this.subs =    this.apiserv.postGEN({REFERENCE: this.parentForm.value.absareqno}, 'GET_FUNDING').subscribe( line=>{
-      for (let prop in this.fundingForm.value ) {
-      if(line.RESULT[prop.toUpperCase()]){   this.fundingForm.get(prop).setValue(line.RESULT[prop.toUpperCase()],  { emitEvent: false })
+    //this.parentForm = this.rootFormGroup.control as FormGroup
+    this.subs = this.apiserv.postGEN({ REFERENCE: this.vm.ABSAREQNO }, 'GET_FUNDING').subscribe(line => {
+      for (let prop in this.fundingForm.value) {
+        if (line.RESULT[prop.toUpperCase()]) {
+          this.fundingForm.get(prop).setValue(line.RESULT[prop.toUpperCase()], { emitEvent: false })
+        }
       }
-      }
-    
-    this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
-     } )
+
+      this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
+    })
     this.onChanges();
   }
   ngOnDestroy() {
-    this.subs.unsubscribe() ;
+    this.subs.unsubscribe();
   }
   onChanges(): void {
     this.fundingForm.valueChanges.subscribe(val => {
-     this.onCodeSelect();
+      this.onCodeSelect();
     });
   }
   onSubmit() {
     let tobj = {};
-    for (const key in this.fundingForm.value) {  
-      tobj[key.toUpperCase()] = (key == 'funding')? JSON.stringify(this.fundingForm.value[key]) : this.fundingForm.value[key];
+    for (const key in this.fundingForm.value) {
+      tobj[key.toUpperCase()] = (key == 'funding') ? JSON.stringify(this.fundingForm.value[key]) : this.fundingForm.value[key];
     }
-    tobj['INITIATIVE'] =  tobj['INITIATIVE'].replace(/\s/g, '')
-    tobj['FUND_COMMENT'] = this.apiserv.xtdbtoa( tobj['FUND_COMMENT']);
-    tobj['FUNDING_SOURCES'] = this.apiserv.xtdbtoa( tobj['FUNDING_SOURCES']);
-    tobj['REFERENCE'] = this.parentForm.value['absareqno'];
-    this.apiserv.postGEN(tobj, 'UPDATE_FUNDING'). subscribe( ans=> {
+    // tobj['INITIATIVE'] = tobj['INITIATIVE'].replace(/\s/g, '')
+    tobj['FUND_COMMENT'] = this.apiserv.xtdbtoa(tobj['FUND_COMMENT']);
+    tobj['FUNDING_SOURCES'] = this.apiserv.xtdbtoa(tobj['FUNDING_SOURCES']);
+    tobj['REFERENCE'] = this.vm.ABSAREQNO;
+    this.apiserv.postGEN(tobj, 'UPDATE_FUNDING').subscribe(ans => {
       this.apiserv.messagesBS.next(ans.RESULT.MESSAGE);
     })
-    
+
     this.resource = JSON.stringify(tobj);
+  }
+  fundLocator() {
+    if (this.vm['region'] && this.fundingForm.value['cipgroup'] && !this.fundingForm.value['initiative']) {
+      this.apiserv.locateFunds(this.vm['region'], this.fundingForm.value['cipgroup'], this.fundingForm.value['cipgroup'])
+      this.modalServicejw.open('helpfund');
+    }
   }
   closeme(code) {
     this.closer.emit(code)
@@ -145,33 +155,33 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     let line = this.apiserv.cipcodes.find(liner => {
       return liner.code === this.fundingForm.value.cipcode;
     })
-    let txt = ( line && line.RESULT && line.RESULT.text )? line.RESULT.text : this.fundingForm.value.cipcode;
+    let txt = (line && line.RESULT && line.RESULT.text) ? line.RESULT.text : this.fundingForm.value.cipcode;
     this.fundingForm.get('cipname').setValue(txt, { emitEvent: false });
   }
-showHelp(){
-  this.help = !this.help;
-  this.helptext = this.help? "Hide Help": "Show Help";
-}
-
-sendTask() {
-  let lclobj = {
-    LINKEDTYPE: 'BT',
-    SENTBY: this.authserv.currentUserValue.EMAIL.toLocaleUpperCase(),
-    LINKEDOBJNR: this.apiserv.lclstate.currentreq['ABSAREQNO']
+  showHelp() {
+    this.help = !this.help;
+    this.helptext = this.help ? "Hide Help" : "Show Help";
   }
-  this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').subscribe(reply => {
-    const lctask = JSON.parse(JSON.stringify(reply.RESULT));
-    this.task = lctask;
-    this.emitEventToChild();
-    this.modalServicejw.open('taskedit')
-  })
 
-}
-taskClose(){
-  this.modalServicejw.close('taskedit')
-}
-emitEventToChild() {
-  this.eventsSubject.next();
-}
+  sendTask() {
+    let lclobj = {
+      LINKEDTYPE: 'BT',
+      SENTBY: this.authserv.currentUserValue.EMAIL.toLocaleUpperCase(),
+      LINKEDOBJNR: this.apiserv.lclstate.currentreq['ABSAREQNO']
+    }
+    this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').subscribe(reply => {
+      const lctask = JSON.parse(JSON.stringify(reply.RESULT));
+      this.task = lctask;
+      this.emitEventToChild();
+      this.modalServicejw.open('taskedit')
+    })
+
+  }
+  taskClose() {
+    this.modalServicejw.close('taskedit')
+  }
+  emitEventToChild() {
+    this.eventsSubject.next();
+  }
 
 }

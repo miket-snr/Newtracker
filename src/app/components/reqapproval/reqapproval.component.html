@@ -36,7 +36,7 @@
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE01}}</div>
       <div class="col-2 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">...</div>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE01" class="form-control" (change)="newDate(1)"
+        <input type="date" name="1" [(ngModel)]="datedata.DATE01" class="form-control" (change)="newDate(1)"
         [disabled]="datedata.PROG01 == '100'">
       </div>
     </div>
@@ -45,20 +45,20 @@
     <div id="Initiate_Phase02" class="row mb-2 ">
       <div class="col-3 form-control">Initiation with Stakeholders</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[1]" class="form-control" (change)="newDuration(1)"
+        <input type="number" name="11" [(ngModel)]="durations[1]" class="form-control" (change)="newDuration(1)"
           disabled="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE01}}</div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE02}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog02" (change)="newValue(2)" 
-                           [disabled]="datedata.PROG02 == '100'"   [(ngModel)]="datedata.PROG02">
+                           [disabled]="datedata.PROG02 == '100'"   name="2" [(ngModel)]="datedata.PROG02">
             <option *ngFor="let perc of codes[1].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
 
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE02" class="form-control" (change)="newDate(2)" [disabled]="datedata.PROG02 == '100'">
+        <input type="date" name="22" [(ngModel)]="datedata.DATE02" class="form-control" (change)="newDate(2)" [disabled]="datedata.PROG02 == '100'">
       </div>
     </div>
 
@@ -66,79 +66,79 @@
       <div class="col-3 form-control">Costing and DD</div>
 
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[2]" class="form-control" (change)="newDuration(2)"  [disabled]="true">
+        <input type="number" name="222" [(ngModel)]="durations[2]" class="form-control" (change)="newDuration(2)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE02}}</div>
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE03}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog03" (change)="newValue(3)" 
-                     [disabled]="datedata.PROG03 == '100' "  [(ngModel)]="datedata.PROG03">
+                     [disabled]="datedata.PROG03 == '100' "  name="3" [(ngModel)]="datedata.PROG03">
             <option *ngFor="let perc of codes[2].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
 
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE03" class="form-control" (change)="newDate(3)"  [disabled]="datedata.PROG03 == '100'">
+        <input type="date" name="33" [(ngModel)]="datedata.DATE03" class="form-control" (change)="newDate(3)"  [disabled]="datedata.PROG03 == '100'">
       </div>
     </div>
 
     <div id="ApprovalPrep_Phase04" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[2].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[3]" class="form-control" (change)="newDuration(3)" [disabled]="true">
+        <input type="number" name="333" [(ngModel)]="durations[3]" class="form-control" (change)="newDuration(3)" [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE03}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE04}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog04" (change)="newValue(4)" 
-                [disabled]="datedata.PROG04 == '100'"  [(ngModel)]="datedata.PROG04">
+                [disabled]="datedata.PROG04 == '100'"  name="4" [(ngModel)]="datedata.PROG04">
             <option *ngFor="let perc of codes[3].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE04" class="form-control" (change)="newDate(4)" [disabled]="datedata.PROG04 == '100'">
+        <input type="date" name="44" [(ngModel)]="datedata.DATE04" class="form-control" (change)="newDate(4)" [disabled]="datedata.PROG04 == '100'">
       </div>
     </div>
 
     <div id="ApprovalBoard_Phase05" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[3].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[4]" class="form-control" (change)="newDuration(4)"  [disabled]="true">
+        <input type="number" name="" [(ngModel)]="durations[4]" class="form-control" (change)="newDuration(4)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE04}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE05}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog05" (change)="newValue(5)" 
-                  [disabled]="datedata.PROG05 == '100'"  [(ngModel)]="datedata.PROG05">
+                  [disabled]="datedata.PROG05 == '100'"  name="" [(ngModel)]="datedata.PROG05">
             <option *ngFor="let perc of codes[4].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE05" class="form-control" (change)="newDate(5)" [disabled]="datedata.PROG05 == '100'">
+        <input type="date" name="5" [(ngModel)]="datedata.DATE05" class="form-control" (change)="newDate(5)" [disabled]="datedata.PROG05 == '100'">
       </div>
     </div>
 
     <div id="LeadTime_Phase06" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[4].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[5]" class="form-control" (change)="newDuration(5)"  [disabled]="true">
+        <input type="number" name="55" [(ngModel)]="durations[5]" class="form-control" (change)="newDuration(5)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE05}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE06}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog01" (change)="newValue(6)" 
-              [disabled]="datedata.PROG06 == '100'" [(ngModel)]="datedata.PROG06">
+              [disabled]="datedata.PROG06 == '100'" name="" [(ngModel)]="datedata.PROG06">
             <option *ngFor="let perc of codes[5].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE06" class="form-control" (change)="newDate(6)" 
+        <input type="date" name="6" [(ngModel)]="datedata.DATE06" class="form-control" (change)="newDate(6)" 
         [disabled]="datedata.PROG06 == '100'">
       </div>
     </div>
@@ -146,78 +146,78 @@
     <div id="Execution_Phase07" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[5].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[6]" class="form-control" (change)="newDuration(6)"  [disabled]="true">
+        <input type="number" name="66" [(ngModel)]="durations[6]" class="form-control" (change)="newDuration(6)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE06}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE07}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog01" (change)="newValue(7)" 
-                      [disabled]="datedata.PROG07 == '100'" [(ngModel)]="datedata.PROG07">
+                      [disabled]="datedata.PROG07 == '100'" name="7" [(ngModel)]="datedata.PROG07">
             <option *ngFor="let perc of codes[6].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE07" class="form-control" (change)="newDate(7)">
+        <input type="date" name="77" [(ngModel)]="datedata.DATE07" class="form-control" (change)="newDate(7)">
       </div>
     </div>
     <div id="ProofofCompletion_Phase08" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[6].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[7]" class="form-control" (change)="newDuration(7)"  [disabled]="true">
+        <input type="number" name="777" [(ngModel)]="durations[7]" class="form-control" (change)="newDuration(7)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE07}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE08}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog01" (change)="newValue(8)" 
-                [disabled]="datedata.PROG08 == '100'" [(ngModel)]="datedata.PROG08">
+                [disabled]="datedata.PROG08 == '100'" name="8" [(ngModel)]="datedata.PROG08">
             <option *ngFor="let perc of codes[7].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE08" class="form-control" (change)="newDate(8)"  [disabled]="datedata.PROG08 == '100'" >
+        <input type="date" name="88" [(ngModel)]="datedata.DATE08" class="form-control" (change)="newDate(8)"  [disabled]="datedata.PROG08 == '100'" >
       </div>
     </div>
 
     <div id="BillingPrep_Phase09" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[7].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[8]" class="form-control" (change)="newDuration(8)"  [disabled]="true">
+        <input type="number" name="888" [(ngModel)]="durations[8]" class="form-control" (change)="newDuration(8)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE08}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE09}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog01" (change)="newValue(9)" 
-            [disabled]="datedata.PROG09 == '100'" [(ngModel)]="datedata.PROG09">
+            [disabled]="datedata.PROG09 == '100'" name="9" [(ngModel)]="datedata.PROG09">
             <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE09" class="form-control" (change)="newDate(9)" [disabled]="datedata.PROG09 == '100'">
+        <input type="date" name="99" [(ngModel)]="datedata.DATE09" class="form-control" (change)="newDate(9)" [disabled]="datedata.PROG09 == '100'">
       </div>
     </div>
     <div id="CashFlow_Phase10" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[8].target}}</div>
       <div class="col-1 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="number" [(ngModel)]="durations[9]" class="form-control" (change)="newDuration(2)"  [disabled]="true">
+        <input type="number" name="" [(ngModel)]="durations[9]" class="form-control" (change)="newDuration(2)"  [disabled]="true">
       </div>
       <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE09}}</div>
       <ng-container *ngIf="planner == 'progress'">
         <div class="col-1 form-control text-center" [ngClass]="(overdue)? 'badnews ' : 'okay'">{{datedata.DATE10}}</div>
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog01" (change)="newValue(10)" 
-                [disabled]="phase > 'PHASE10'"   [(ngModel)]="datedata.PROG10">
+                [disabled]="phase > 'PHASE10'"   name="" [(ngModel)]="datedata.PROG10">
             <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>
       <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
-        <input type="date" [(ngModel)]="datedata.DATE10" class="form-control"  [disabled]="datedata.PROG10 == '100'">
+        <input type="date" name="10" [(ngModel)]="datedata.DATE10" class="form-control"  [disabled]="datedata.PROG10 == '100'">
       </div>
     </div>
   </ng-container>
@@ -237,7 +237,7 @@
                 Last Comment
             </div>
             <div class="col-7">
-                <textarea [disabled]="true" [ngModel]="datedata.LAST_COMMENT" id="" cols="60" rows="4"></textarea>
+                <textarea [disabled]="true" name="11" [ngModel]="datedata.LAST_COMMENT" id="" cols="60" rows="4"></textarea>
             </div>
         </div>
         
@@ -249,7 +249,7 @@
     Estimated Budget
         </td>
         <td>
-            <input type="number" [(ngModel)]="feedback.BUDGETAMT">
+            <input type="number" name="" [(ngModel)]="feedback.BUDGETAMT">
         </td>
     </tr>
     <tr>
@@ -257,7 +257,7 @@
     Forecast Start
         </td>
         <td>
-            <input type="date" [(ngModel)]="feedback.FORECAST_START">
+            <input type="date" name="" [(ngModel)]="feedback.FORECAST_START">
         </td>
     </tr>
     <tr>
@@ -265,7 +265,7 @@
     Forecast End
         </td>
         <td>
-            <input type="date" [(ngModel)]="feedback.FORECAST_END">
+            <input type="date" name="" [(ngModel)]="feedback.FORECAST_END">
         </td>
     </tr> -->
     <tr>
@@ -273,14 +273,14 @@
     Risk
         </td>
         <td>
-            <select  [(ngModel)]="datedata.RATING">
+            <select  name="rating" [(ngModel)]="datedata.RATING">
               <option >Low</option>
               <option >Medium</option>
               <option >High</option>
             </select>
         </td>
         <td colspan="1">Feedback Note</td>
-        <td colspan="3"><textarea class="form-control" [(ngModel)]="datedata.TRACKNOTE" id="" cols="60" rows="10"></textarea></td>
+        <td colspan="3"><textarea class="form-control" name="TRACKNOTE" [(ngModel)]="datedata.TRACKNOTE" id="" cols="60" rows="10"></textarea></td>
     </tr>
     </table>
       </div>

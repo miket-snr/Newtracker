@@ -25,7 +25,8 @@ export class AuthService {
     PARTNER_ID: '',
     TOKEN: '',
     VERNR:'',
-    VERNA:''
+    VERNA:'',
+    DESIGNATION:''
   }
   public rfqtoken: string;
   loggedin = false;

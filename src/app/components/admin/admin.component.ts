@@ -18,4 +18,14 @@ this.apiserv.postGEN({ABSAREQNO: this.fromno, INITIATIVE:this.tono, PHASE:'PHASE
   console.log(reply)
 })
 }
+goForProj(){
+  this.apiserv.postGEN({REFERENCE: this.fromno + ':' + this.tono, ACTION: 'F'}, 'GET_PROJLIST').subscribe( reply => {
+    console.log(reply)
+  })
+  }
+  goForReq(){
+    this.apiserv.postGEN({ABSAREQNO: this.fromno , INITIATIVE: this.tono, LOADTYPE: 'A'}, 'GET_CURRENTLIST').subscribe( reply => {
+      console.log(reply)
+    })
+    }
 }

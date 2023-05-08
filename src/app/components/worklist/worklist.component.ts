@@ -43,29 +43,17 @@ export class WorklistComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.pmanager = this.apiserv.lclstate.pmanager
     this.region = this.apiserv.lclstate.region
-    if (this.reference > 3) {
-      this.apiserv.getProgresslist(this.region, this.pmanager, this.reference.toString())
-    } else {
-      this.apiserv.getProgresslist(this.region, this.pmanager);
-    }
+    this.filtercip = this.apiserv.lclstate.filtercip;
+    this.pmForm.get('region').setValue(this.region, { emitEvent: false });
+    this.pmForm.get('pm').setValue(this.pmanager, { emitEvent: false });
     this.pmlist = ['* Show all'];
-
-    // A Region change results in a new call to the API - 
-    this.pmForm.get('region').valueChanges.subscribe(value => {
-      this.searchlistnew = [];
-      this.pmlist = ['* Show all'];
-      this.region = value;
-      this.apiserv.getProgresslist(value, '*');
-    })
-
-    // A New region will trigger this on the return from the API call
     this.subs = this.apiserv.progressBS.subscribe(reply => {
       this.searchlist = [];
       if (reply) {
         reply.forEach(element => {
           let tempobj = { tag: '' };
           tempobj.tag = Object.values(element).join('-');
-          element['PROG06'] = element['PROG06'] > 100 ? 0 : element['PROG06'];
+          // element['PROG06'] = element['PROG06'] > 100 ? 0 : element['PROG06'];
           let prog = { progress: this.progressCalc(element) }
           this.searchlist.push({ ...element, ...tempobj, ...prog });
           this.searchlistnew = this.searchlist;
@@ -73,25 +61,51 @@ export class WorklistComponent implements OnInit, OnDestroy {
             this.pmlist.push(element.PMANAGER)
           }
         });
+        this.filterList();
       }
+    // if (this.reference > 3) {
+    //   this.apiserv.getProgresslist(this.region, this.pmanager, this.reference.toString())
+    // } else {
+    //   this.apiserv.getProgresslist(this.region, this.pmanager);
+    // }
+    // A New region will trigger this on the return from the API call
+
       this.apiserv.pmlist = this.pmlist;
       if (this.pmlist.length === 2) {
         this.pmForm.get('pm').setValue(this.pmlist[1], { emitEvent: false });
       }
       this.searchlistnew = [...this.searchlist];
+      this.filterList();
     })
-
+   // A Region change results in a new call to the API - 
+   this.pmForm.get('region').valueChanges.subscribe(value => {
+    this.searchlistnew = [];
+    this.pmlist = ['* Show all'];
+    this.region = value;
+    if (value == 'ALL') {
+      value = '* Show all' ;
+    }
+    this.apiserv.getProgresslist(value, '*');
+    this.apiserv.lclstate.region = value;
+    this.filtercip = false;
+    this.apiserv.lclstate.filtercip = false;
+    this.apiserv.lclstate.pmanager = '* Show all'
+  })
     // A PM Change only filters the existing records
     this.pmForm.get('pm').valueChanges.subscribe(value => {
-      if (value == '* Show all') {
+      if (value == '* Show all' || value.replace(/\s/g,'') < ' ') {
+        this.apiserv.lclstate.pmanager = '* Show all';
         this.searchlistnew = [...this.searchlist]
+        this.filterList();
       } else {
-        let temp = this.searchlist.filter(lt => {
-          return lt.PMANAGER == value;
-        });
-        this.searchlistnew = [];
+        this.apiserv.lclstate.pmanager = value ;
+       this.filterList();
+        // let temp = this.searchlist.filter(lt => {
+        //   return lt.PMANAGER == value;
+        // });
+        // this.searchlistnew = [];
 
-        this.searchlistnew = [...temp];
+        // this.searchlistnew = [...temp];
       }
     })
 
@@ -124,6 +138,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
     this.apiserv.lclstate.comments = [],
     this.apiserv.lclstate.feedback =  {
       REFERENCE:'',
+      ONEVIEW: '',
       BUDGETAMT:0,
       FORECAST_START:'',
       FORECAST_END:'',
@@ -239,17 +254,23 @@ export class WorklistComponent implements OnInit, OnDestroy {
 
   }
   selectUnlinked() {
-    this.searchlistnew = [];
     this.filtercip = !this.filtercip;
+    this.apiserv.lclstate.filtercip = this.filtercip;
+    this.filterList();
+  }
+
+  filterList(){
+    this.searchlistnew = [];
+  
     if (this.filtercip) {
       this.searchlistnew = this.searchlist.filter(lt => {
-        return lt.INITIATIVE < '10000000';
+        return lt.INITIATIVE < '10000000' && lt.INITIATIVE < 1000000 ;
       } ) } else {
         this.searchlistnew = [...this.searchlist];
       } 
-    if (this.pmForm.value.pm > ' ' && this.pmForm.value.pm != '* Show all') {
-      let temp = this.searchlist.filter(lt => {
-        return ((lt.PMANAGER == this.pmForm.value.pmanager));
+    if (this.apiserv.lclstate.pmanager > ' ' && this.apiserv.lclstate.pmanager != '* Show all') {
+      let temp = this.searchlistnew.filter(lt => {
+        return ((lt.PMANAGER == this.apiserv.lclstate.pmanager));
       });
       this.searchlistnew = [...temp]
     }

@@ -1,0 +1,77 @@
+<div class="mycontainer">
+    <div class="row">
+     
+            <div class="col-12">
+
+<div class="row">
+                
+                                  
+                                    <div class="col-1 text-right pr-2">
+                                            <small>Free search</small>
+                                    </div>
+                                    <div class="col-5">
+                                            <input class="form-control  form-control-sm " type="text" id="searchbox"
+                                                    [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                                    </div>
+
+                                    <div class="col-1">
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                    (click)="exportexcel()">
+                                                    Export to Excel
+                                            </button>
+                                    </div>
+                                </div>
+           
+   
+
+                    <table class="table table-bordered" id="doclist">
+                            <tr>
+                                    <th class="text-center"><small style="font-weight: bold;">Document</small>
+                                    <th class="text-center"><small style="font-weight: bold;">Initiative</small>
+                                    </th>
+                                    <th class="text-center"><small style="font-weight: bold;">Project</small></th>
+                                    <th class="text-center"><small style="font-weight: bold;">Entry Code</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Posting Date</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Value Incl</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Posted By</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Title</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Cip Code</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Partner Line</small></th>
+                                  
+                            </tr>
+
+
+                            <tr *ngFor="let budgetview of searchlistnew  | searchpipe: [searchbox, 'tag']">
+                                    <td ><small>{{budgetview.DOCNO}}</small></td>
+                                    <td ><small>{{budgetview.CIPLINE_ID}}</small></td>
+                                    <td ><small>{{budgetview.PROJLINK}}</small></td>
+                                    <td ><small>{{budgetview.ENTRYCODE}}</small></td>
+                                    <td ><small>{{budgetview.POSTINGDATE}}</small></td>
+                                    <td ><small>{{apiserv.formatString(budgetview.VALUEOF.toLocaleString())}}</small></td>
+                                    <td ><small>{{budgetview.APPROVEBY}}</small></td>
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.SHORTCOMMENT.replace('#','')}}</small>
+                                    </td>
+
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.CIPCODE}}</small>
+                                    </td>
+                                    <td style="background-color:rgb(114, 171, 251);">
+                                            <small>{{budgetview.PARTNER_ID}}</small>
+                                    </td>
+                                   
+                                  
+                                    
+                            </tr>
+                    </table>
+            </div>
+            </div>
+    </div>
