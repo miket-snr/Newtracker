@@ -44,7 +44,16 @@ import { BudgetlineEditComponent } from './components/budgetline-edit/budgetline
 import { MvtdocsListComponent } from './components/mvtdocs-list/mvtdocs-list.component';
 import { FundingmasseditComponent } from './components/funding/fundingmassedit/fundingmassedit.component';
 import { FundinglineeditComponent } from './components/funding/fundinglineedit/fundinglineedit.component';
-import { TriangleComponent } from './components/cflow/triangle/triangle.component'
+import { TriangleComponent } from './components/cflow/triangle/triangle.component';
+import { DocumentsComponent } from './components/documents/documents.component';
+import { FileSaverModule } from 'ngx-filesaver';
+import { VideosComponent } from './components/videos/videos.component';
+import { TasklistComponent } from './components/tasklist/tasklist.component';
+import { ImportsComponent } from './components/imports/imports.component';
+import { DebtorsComponent } from './components/debtors/debtors.component';
+import { SelectionlistComponent } from './_helpers/selectionlist/selectionlist.component';
+import { ShowhelpComponent } from './_helpers/showhelp/showhelp.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +87,14 @@ import { TriangleComponent } from './components/cflow/triangle/triangle.componen
     MvtdocsListComponent,
     FundingmasseditComponent,
     FundinglineeditComponent,
-    TriangleComponent
+    TriangleComponent,
+    DocumentsComponent,
+    VideosComponent,
+    TasklistComponent,
+    ImportsComponent,
+    DebtorsComponent,
+    SelectionlistComponent,
+    ShowhelpComponent
   ],
   imports: [
     BrowserModule,
@@ -92,12 +108,14 @@ import { TriangleComponent } from './components/cflow/triangle/triangle.componen
     HttpClientModule,
     NgGanttEditorModule,
     QuillModule.forRoot(),
+    FileSaverModule,
+
   ],
   exports:[MaterialModule],
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }, 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },FormGroupDirective],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  entryComponents: [LoginComponent],
+  entryComponents: [LoginComponent,ShowhelpComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

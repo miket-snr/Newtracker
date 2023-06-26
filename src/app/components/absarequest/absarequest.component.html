@@ -55,19 +55,20 @@
                     <td colspan="6" style="background-color: lightblue;">
                       <div class="d-flex justify-content-between">
                         <span (click)="sectionToggle(0)"><b>Requirements</b>
-                          <i [ngClass]="(sectionid[0])? 'arrow down ml-4 mt-3': 'arrow right ml-4 mt-3'"></i>
+                          
                         </span>
                         <span>{{vm.PROJLINK?
-                          vm.PROJLINK:vm.ABSAREQNO}}</span><span>
-                          {{vm.STATUS}}</span>
-                        <span *ngIf="vm.ABSAREQNO && vm.STATUS=='DRAFT'">
-                          <button type="button" class="btn btn-sm btn-danger" (click)="openTasks()">
-                            Tasks
-                          </button>
+                          vm.PROJLINK:vm.ABSAREQNO}}</span>
+                          <span *ngIf="apiserv.lclstate.closed" style="color: white;background-color: red;">CLOSED</span>
+                          <span>{{vm.STATUS}}</span>
+                        <!-- <span >
+                         
                           <button *ngIf="checkReady('save')" type="button" class="ml-3 btn btn-sm btn-primary"
                             (click)="onSubmit()">
                             Save
-                          </button>
+                          </button></span> -->
+                          <span>
+                          <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp('PSREQ')">{{hlptxt}}</button>
                         </span>
 
                       </div>
@@ -78,6 +79,11 @@
                     Tracker</button>
                    </div>
                   </td> -->
+                  </tr>
+                  <tr *ngIf="helper"  style="background-color: rgb(223, 236, 231);">
+                    <td colspan="6"> <app-help [edit]="false"  [helper]="helpline"></app-help>
+                    </td>  
+                 
                   </tr>
                   <ng-container *ngIf="sectionid[0]">
                     <tr>
@@ -186,11 +192,12 @@
                       </tr>
                     </ng-container>
                   </ng-container>
+           
                   <ng-container *ngIf="greaterThan(reqno,'0')">
                     <tr>
                       <td colspan="7">
                         <div class="card-footer d-flex justify-content-around">
-                          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty"
+                          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty || this.apiserv.lclstate.closed"
                             (click)="onSubmit()">
                             Update SAP
                           </button>
@@ -203,7 +210,7 @@
                   </ng-container>
                 </table>
 
-
+              
               </div>
             </div>
 
@@ -224,11 +231,19 @@
                 <table class="table">
                   <ng-container *ngIf="greaterThan(reqno,'0')">
                     <tr>
-                      <td colspan="7" style="background-color: lightblue;">
+                      <td colspan="5" style="background-color: lightblue;">
                         <span (click)="sectionToggle(1)"><b>Location</b>
-                          <i [ngClass]="(sectionid[1])? 'arrow down ml-4 mt-3': 'arrow right ml-4 mt-3'"></i>
+                        
                         </span>
                       </td>
+                      <td colspan="6" style="background-color: lightblue;"  class="text-right">
+                        <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp('PSLOCATION')">{{hlptxt}}</button>
+                      </td>
+                    </tr>
+                    <tr *ngIf="helper" style="background-color: rgb(223, 236, 231);" >
+                      <td colspan="6"> <app-help [edit]="false"  [helper]="helpline"></app-help>
+                      </td>  
+                   
                     </tr>
                     <ng-container *ngIf="sectionid[1]">
                       <tr>
@@ -296,9 +311,9 @@
                                 <option value=""> Select type....</option>
                                 <option value="N"> No</option>
                                 <option value="Y"> Yes</option>
-                                <option value="U"> NA</option>
+                                <option value="U"> Not Applicable </option>
                               </select>
-                            </div>
+                            </div> 
                           </div>
                           <div class="row mt-1">
                             <div class="col-4">
@@ -310,7 +325,7 @@
                                 <option value=""> Select type....</option>
                                 <option value="F"> Freehold</option>
                                 <option value="L"> Leased</option>
-                                <option value="U"> NA</option>
+                                <option value="U"> Not Applicable</option>
                               </select>
                             </div>
                           </div>
@@ -335,7 +350,7 @@
                 </table>
                 <div class="card-footer text-center">
                   <button type="button" class="btn btn-sm btn-outline-primary" (click)="onSubmit()"
-                    [disabled]="!reqForm.dirty">
+                    [disabled]="!reqForm.dirty || apiserv.lclstate.closed">
                     Update SAP
                   </button>
                 </div>
@@ -344,6 +359,7 @@
 
           </div>
         </div>
+       
       </mat-tab>
       <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Funding" class="tabber">
         <app-fundingeditor [vm]="vm"></app-fundingeditor>
@@ -391,37 +407,7 @@
 
 
       <mat-tab *ngIf="greaterThan(reqno,'0')" (click)="goPlan()" label="Tasks" class="tabber">
-        <h3>Task planning is not activated for this phase</h3>
-        <!-- (click)="goPlan()" -->
-        <div class="row">
-          <div class="col-1">Action Type</div>
-          <div class="col-3">Delegate</div>
-          <div class="col-3">Instruction</div>
-          <div class="col-1">Date Due</div>
-          <div class="col-1">Decision</div>
-          <div class="col-2">Delegate Comment</div>
-          <div class="col-1">Edit/Delete</div>
-
-        </div>
-        <div *ngFor="let task of tasks" class="row">
-          <div class="col-1">{{task.ACTIONTYPE}}</div>
-          <div class="col-3">{{task.DELEGATENAME}}</div>
-          <div class="col-3">{{task.INSTRUCTION}}</div>
-          <div class="col-1">{{task.DUEDATE}}</div>
-          <div class="col-1">{{task.DECISION}}</div>
-          <div class="col-2">{{task.COMMENT}}</div>
-          <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span>
-            <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
-            <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
-          </div>
-        </div>
-        <!-- <div class="row d-flex justify-content-between">
-        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addTask()">+ Add task</button>
-      </div>
-      <div [hidden]="!taskedit">
-        <app-task-edit [events]="eventsSubject.asObservable()" [task]="task"
-          (someChange)="taskClose($event)"></app-task-edit>
-      </div> -->
+   <app-tasklist [reference]="reqno"></app-tasklist>
 
       </mat-tab>
       <!-- <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Cashflows" class="tabber">

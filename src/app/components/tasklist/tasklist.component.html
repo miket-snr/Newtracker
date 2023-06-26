@@ -1,0 +1,30 @@
+     <!-- <h3>Task planning is not activated for this phase</h3>
+        (click)="goPlan()"  -->
+        <div class="row">
+            <div class="col-1">Action Type</div>
+            <div class="col-3">Delegate</div>
+            <div class="col-3">Instruction</div>
+            <div class="col-1">Date Due</div>
+            <div class="col-1">Decision</div>
+            <div class="col-2">Delegate Comment</div>
+            <div class="col-1">Edit/Delete</div>
+            </div>
+          <div *ngFor="let task of tasks" class="row">
+            <div class="col-1">{{task.ACTIONTYPE}}</div>
+            <div class="col-3">{{task.DELEGATENAME}}</div>
+            <div class="col-3">{{task.INSTRUCTION}}</div>
+            <div class="col-1">{{task.DUEDATE}}</div>
+            <div class="col-1">{{task.DECISION}}</div>
+            <div class="col-2">{{task.COMMENT}}</div>
+            <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span>
+              <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
+              <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
+            </div>
+          </div>
+           <div class="row d-flex justify-content-between">
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addTask()">+ Add task</button>
+        </div>
+        <div [hidden]="!taskedit">
+          <app-task-edit [events]="eventsSubject.asObservable()" [task]="currenttask"
+            (someChange)="taskClose($event)"></app-task-edit>
+        </div> 

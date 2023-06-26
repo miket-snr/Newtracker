@@ -51,7 +51,7 @@ export class AuthService {
     }
     this.rfqtoken = this.findGetParameter('t') || '';
     let tempu = this.findGetParameter('u') || '';
-    if (this.rfqtoken > '' && tempu > '') {
+    if (this.rfqtoken == 'xyz' && tempu > '') {
       let t = this.currentUserBS.value;
       t.SAPUSER = tempu;
       t.TOKEN = this.rfqtoken;
@@ -139,13 +139,14 @@ export class AuthService {
         this.waiting = false;
       } else {
       this.currentUserBS.next(token.RESULT[0]);
+      if (token.RESULT[0].TOKEN.length > 3 ){
       localStorage.setItem('BFMUser', JSON.stringify(token.RESULT[0]))
       this.loggedin = true;
       this.loggedinBS.next(false);
       this.loading = false;
       this.waiting = false;  
       window.location.reload();
-      }
+      }}
     })
   }
   findGetParameter(parameterName: string) {

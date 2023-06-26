@@ -1,0 +1,71 @@
+<ng-container *ngIf="authserv.currentUserValue && authserv.currentUserValue['DATABAG']?.includes('ADMIN')"> 
+    <div class="row">
+      <div class="col-lg-6 col-md-12 colsm-12">
+        <div mat-dialog-title>
+          <div class="form-group">
+            <div class="text-center" style="background-color:lightsteelblue">
+              <label for="file-upload" class="custom-file-upload">
+               <small>Click here to load a File </small>
+               </label> 
+            </div>
+            <input type="file" id="file-upload" (change)="handleFileInput($event)">
+          </div>
+        </div>
+      </div>
+    </div>
+    <h1>Rejected Lines</h1>
+<ng-container  *ngIf="importtype =='APPROVE'">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            Motivation
+          </th>
+          <th>
+            Project Number
+          </th>
+          <th>
+            Budget Group
+          </th>
+          <th>
+            Value Incl VAT
+          </th>
+        </tr>
+      </thead>
+   <tr *ngFor="let reject of rejects">
+    <td>{{reject['NOTE'].substring(0,60)}}</td>
+    <td>{{reject['PROJLINK']}}</td>
+    <td>{{reject['BUDGETGROUP']}}</td>
+    <td>{{reject['VALUEOF']}}</td>
+
+   </tr>
+    </table>
+  </ng-container>
+    <ng-container *ngIf="importtype =='PORDERS'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              PO Reference
+            </th>
+            <th>
+              Project Number
+            </th>
+            <th>
+              PO Number
+            </th>
+            <th>
+              Value Incl VAT
+            </th>
+          </tr>
+        </thead>
+     <tr *ngFor="let reject of rejects">
+      <td>{{reject['NOTE'].substring(0,60)}}</td>
+      <td>{{reject['PROJLINK']}}</td>
+      <td>{{reject['SHORTCOMMENT']}}</td>
+      <td>{{reject['VALUEOF']}}</td>
+  
+     </tr>
+      </table>
+    </ng-container>
+    </ng-container>

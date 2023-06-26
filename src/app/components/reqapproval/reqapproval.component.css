@@ -11,3 +11,8 @@
 .shaded {
     background-color: azure;
 }
+.smallinput {
+    font-size:0.8em;
+    padding-left: 1px;
+    padding-right: 1px;
+}

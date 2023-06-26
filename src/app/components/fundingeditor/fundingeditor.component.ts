@@ -5,6 +5,7 @@ import { absareq } from 'src/app/_classes/absareq';
 import { ModalService } from 'src/app/_modal';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { DialogService } from 'src/app/_services/dialog.service';
 
 @Component({
   selector: 'app-fundingeditor',
@@ -53,6 +54,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     funding: this.fb.array([])
   })
   subs: Subscription;
+	helpline = this.apiserv.getHelptexts('PSFUNDING');
   mytext = ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
   <p> the other fields will get populated when you save as they are read off the Cipline table.</p>
   <h4><strong>What is a Cipline number?</strong></h4>
@@ -78,14 +80,15 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   constructor(public apiserv: ApidataService, public fb: FormBuilder,
     private rootFormGroup: FormGroupDirective,
     public modalServicejw: ModalService,
-    private authserv: AuthService) { }
+    private authserv: AuthService, 
+    private helper2: DialogService) { }
 
   ngOnInit(): void {
     //this.parentForm = this.rootFormGroup.control as FormGroup
     this.subs = this.apiserv.postGEN({ REFERENCE: this.vm.ABSAREQNO }, 'GET_FUNDING').subscribe(line => {
       for (let prop in this.fundingForm.value) {
-        if (line.RESULT[prop.toUpperCase()]) {
-          this.fundingForm.get(prop).setValue(line.RESULT[prop.toUpperCase()], { emitEvent: false })
+        if (this.vm[prop.toUpperCase()]) {
+          this.fundingForm.get(prop).setValue(this.vm[prop.toUpperCase()], { emitEvent: false })
         }
       }
 
@@ -158,10 +161,11 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     let txt = (line && line.RESULT && line.RESULT.text) ? line.RESULT.text : this.fundingForm.value.cipcode;
     this.fundingForm.get('cipname').setValue(txt, { emitEvent: false });
   }
-  showHelp() {
-    this.help = !this.help;
-    this.helptext = this.help ? "Hide Help" : "Show Help";
-  }
+  showHelp(){
+    this.helper2.helpopen({title:'Funding', helptext:this.helpline.LINE1}) 
+    // = !this.helper;
+    // this.hlptxt = this.helper? 'Hide Help' : "Show Help";
+    }
 
   sendTask() {
     let lclobj = {

@@ -39,11 +39,13 @@ ngOnDestroy()
 this.eventsSubscription.unsubscribe();
 } 
 onSave(){
-  this.task.LINKEDTYPE = 'NR';
-  this.task.DECISION = 'SENDMAIL';
-  this.task.INSTRUCTION = this.apiserv.xtdbtoa(this.task.INSTRUCTION )
-  this.task.LINKEDOBJNR = this.apiserv.lclstate.currentreq['ABSAREQNO']
-  this.apiserv.postGEN(this.task, 'NEW_TASKREQUEST').subscribe(reply =>{
+  let taskout = {...this.task}
+
+  taskout.LINKEDTYPE = 'NR';
+  taskout.DECISION = 'SENDMAIL';
+  taskout.INSTRUCTION = this.apiserv.xtdbtoa(this.task.INSTRUCTION )
+  taskout.LINKEDOBJNR = this.apiserv.lclstate.currentreq['ABSAREQNO']
+  this.apiserv.postGEN(taskout, 'NEW_TASKREQUEST').subscribe(reply =>{
     if (reply && reply.RESULT.TASK_STATUS ){
       this.apiserv.messagesBS.next(reply.RESULT.ACTION_REPLY)
 
@@ -85,9 +87,9 @@ formChanges(){
 }
 doUpdatefromParent(){
   for (const field in this.taskForm.controls) { // 'field' is a string
-
+if (this.task && this.task[field]){
    this.taskForm.get(field).patchValue(this.task[field], { emitEvent: false }); // 'control' is a FormControl  
-  
+}
   }
 }
 }

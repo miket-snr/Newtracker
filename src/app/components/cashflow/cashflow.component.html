@@ -54,7 +54,8 @@
                                                     style="font-weight: bold;">Capex</small></th>
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">EOL</small></th>
-
+                                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                        style="font-weight: bold;">PO Number</small></th>
 
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">Budget</small></th>
@@ -91,6 +92,7 @@
                                     <td ><small>{{budgetview.DATE10}}</small></td>
                                     <td class="text-center"><small>{{budgetview.CAPEX_OPEX}}</small></td>
                                     <td class="text-center"><small>{{budgetview.ENDOFLIFE}}</small></td>
+                                    <td class="text-center"><small>{{budgetview.PONUMBER}}</small></td>
 
                                     <td ><small>{{budgetview.LOADTYPE=='P'? 0:budgetview.CIPLINEBUDGET.toFixed(2)}}</small></td>
                                     <td ><small>{{budgetview.LOADTYPE=='P'? 0:budgetview.BUDGETDIF.toFixed(2)}}</small></td>

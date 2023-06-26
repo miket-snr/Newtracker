@@ -84,4 +84,6 @@ th small {
   }
   .odd {
     background-color: lightgray;
+    padding-left: 6px;
+    padding-right: 6px;
   }

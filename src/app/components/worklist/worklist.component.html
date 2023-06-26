@@ -1,3 +1,7 @@
+<!-- <ng-container *ngIf="isHandset$ | async">
+    <app-progress></app-progress>
+</ng-container> -->
+<ng-container>
 <div class="mycontainer">
 
 
@@ -98,6 +102,8 @@
                                 <th class="text-center"><small>Commitments <br> Incl</small></th>
                                 <th class="text-center"><small>Revenue <br> Incl</small></th>
                                 <th class="text-center"><small>M-Fee <br> Incl</small></th>
+                                <th class="text-center"><small>Total Revenue
+                                     <br> Incl</small></th>
                             </ng-container>
                         </tr>
                     </thead>
@@ -154,15 +160,16 @@
                                         {{item.PROG10}}</td>
                                 </ng-container>
                                 <ng-container *ngIf="sections">
-                                    <td class="text-right odd">{{item.CIPBUDGET}}</td>
-                                    <td class="text-right odd">{{item.BASELINEBUDGET}}</td>
-                                    <td class="text-right odd">{{item.POVALUE}}</td>
-                                    <td class="text-right odd">{{item.BUDGET}}</td>
-                                    <td class="text-right even">{{item.COSTS}}</td>
-                                    <td class="text-right odd">{{item.TRAVEL}}</td>
-                                    <td class="text-right even">{{item.COMMITMENT}}</td>
-                                    <td class="text-right odd">{{item.REVENUE}}</td>
-                                    <td class="text-right even">{{item.M_FEE}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CIPBUDGET)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.BASELINEBUDGET)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.POVALUE)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.BUDGET)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.COSTS)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.TRAVEL )}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.COMMITMENT )}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.REVENUE)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.M_FEE)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.REVENUE + item.M_FEE)}}</td>
                                 </ng-container>
 
                                 <!-- <ng-container *ngIf="item.PHASE > 'PHASE02'">
@@ -251,3 +258,4 @@
         </div>
     </div>
 </div>
+</ng-container>

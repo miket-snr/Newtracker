@@ -1,6 +1,32 @@
-<input type = number [(ngModel)]="fromno">
-<input type = number [(ngModel)]="tono">
+<input type=number [(ngModel)]="fromno">
+<input type=number [(ngModel)]="tono">
 <button type="button" (click)="goForIt()">Test Get_Bigview</button>
 <button type="button" (click)="goForProj()">Test Get_Projlist</button>
 <button type="button" (click)="goForReq()">Test Get_Projlist</button>
 
+<div class="container">
+    <select [(ngModel)]="phasex" (ngModelChange)="gotophase($event)" name="admin1">
+        <option *ngFor="let iphase of apiserv.phaseprog; let i = index;" [value]="i">{{iphase.phase}}</option>
+    </select>
+
+    <div class="row" *ngFor="let code of phase">
+        <div class="col-2">{{code.code}}</div>
+        <div class="col-8">{{code.text}}</div>
+        <div class="col-1"><img (click)="delete(code)" src="..\..\assets\delete_FILL0_wght400_GRAD0_opsz48.png"
+                style="width: 50%; height: 50%" /></div>
+        <div class="col-1"><img (click)="edit(code)" src="..\..\assets\edit_FILL0_wght400_GRAD0_opsz48.png"
+                style="width: 50%; height: 50%" /></div>
+    </div>
+
+    <ng-container *ngIf="show">
+        <div class="row">
+            <div class="col-2"><input class="form-control" type="text" [(ngModel)]="this.editcode.code"></div>
+            <div class="col-8"><input class="form-control" type="text"
+                    [(ngModel)]="this.editcode.text"></div>
+        </div>
+        <div class="row">
+            <button type="button" class="btn btn-sm btn-primary" (click)="updateSAP()">Update SAP</button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="cancel()">Cancel</button> 
+        </div>
+    </ng-container>
+</div>

@@ -120,7 +120,7 @@ export class MassimportComponent implements OnInit, OnDestroy {
           case 'ponumber': {
             if (/^[A-Z]{3}-[A-Z]{1}/.test(newobj[3])) {
               let newdate = {}
-              newdate['CIPLINE_ID'] = this.apiserv.mapWBS2Req(newobj[3]);
+                newdate['CIPLINE_ID'] = this.apiserv.mapWBS2Req(newobj[3]);
                 newdate['PROJLINK'] = (newobj[3]);
                 newdate['POSTINGDATE'] = this.formatDate(newobj[2]);
                 newdate['VALUEOF'] = (newobj[4]);

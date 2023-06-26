@@ -8,12 +8,13 @@
 New Comment
     </div>
     <div class="card-body">
-        <div [formGroup]="commentForm"> 
-            <textarea formControlName="commenttext" class = "w-100 " rows="10"></textarea>
+        <div > 
+            <textarea [(ngModel)]="commentForm" class = "w-100 " rows="10"></textarea>
       </div>
     </div>
     <div class="card-footer d-flex justify-content-around">
         <button
+        [disabled]="commentForm.length < 5"
         type="button" class="btn btn-sm btn-primary" (click)="saveComment()">Save </button>
         <button
         type="button" class="btn btn-sm btn-danger" (click)="cancelComment()">Cancel </button>   
@@ -34,6 +35,11 @@ New Comment
           </div>
           <div class="card-body">
          <pre> {{commentln.COMMENT_TEXT}}</pre>
+         <div class="row">
+          <div class="col-3 offset-8">
+            <button type="button" (click)="reply(commentln.COMMENTNO)" class="btn btn-sm btn-outline-warning">Reply</button>
+          </div>
+         </div>
         </div>
       </div>
       </div>

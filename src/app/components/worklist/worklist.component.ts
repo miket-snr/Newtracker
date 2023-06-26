@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -6,7 +6,13 @@ import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { ModalService } from 'src/app/_modal';
 import * as XLSX from 'xlsx';
-
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { FileSaverService } from 'ngx-filesaver';
+// import { NgxCaptureService } from 'ngx-capture';
 @Component({
   selector: 'app-worklist',
   templateUrl: './worklist.component.html',
@@ -14,6 +20,7 @@ import * as XLSX from 'xlsx';
 })
 export class WorklistComponent implements OnInit, OnDestroy {
   @Input() reference = 0;
+  @ViewChild('progress', { static: true }) screen: any;
   searchlist = [];
   searchlistnew = [];
   sections = false;
@@ -35,10 +42,17 @@ export class WorklistComponent implements OnInit, OnDestroy {
     status: new FormControl(),
     site: new FormControl()
   })
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  .pipe(
+    map(result => result.matches),
+    shareReplay()
+  );
   constructor(public apiserv: ApidataService,
     private modalServicejw: ModalService,
     private authserv: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,public filesaver: FileSaverService,
+    ) { }
 
   ngOnInit() {
     this.pmanager = this.apiserv.lclstate.pmanager
@@ -242,7 +256,26 @@ export class WorklistComponent implements OnInit, OnDestroy {
 
   exportexcel(): void {
     /* pass the table id */
+    // this.captureService.getImage(this.screen.nativeElement, true).subscribe(img=>{
+    //   console.log(img);
+    // })
     let element = document.getElementById('progress');
+  //   htmlToImage.toPng(element)
+  // .then(function (dataUrl) {
+  //   var img = new Image();
+  //   img.src = dataUrl;
+  //   document.body.appendChild(img);
+  // })
+  // .catch(function (error) {
+  //   console.error('oops, something went wrong!', error);
+  // });
+  // //   let filesaver = this.filesaver ;
+  // //   let apiserv = this.apiserv;
+  // //   htmlToImage.toPng(element)
+  // // .then(function (dataUrl) {
+    
+  // //   filesaver.save(apiserv.b64toBlob(dataUrl.split(',')[1], 'image/png', 512), 'my-node.png');
+  // // });
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
 
     /* generate workbook and add the worksheet */
@@ -277,5 +310,19 @@ export class WorklistComponent implements OnInit, OnDestroy {
 
   }
 
+  formatNumber(numberin){
+   return this.formatString((Math.round((numberin + Number.EPSILON) * 100) / 100).toLocaleString())
+  }
+  formatString(strin = '') {
+    if (strin.substring(strin.length - 2).includes('.')) {
+      strin = strin + '0';
+    }
+    if (!strin.substring(strin.length - 3).includes('.')) {
+      strin = strin + '.00'
+    }
+    strin = strin.replace(/,/g," ");
+    let tempstr = (strin.includes("-")) ? '    (' + strin.substring(1) + ')' : '       ' + strin;
+    return tempstr.substring(tempstr.length - 14)
+  }
 }
 

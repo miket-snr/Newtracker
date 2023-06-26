@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApidataService } from 'src/app/_services/apidata.service';
 
 @Component({
@@ -8,13 +10,46 @@ import { ApidataService } from 'src/app/_services/apidata.service';
 })
 export class ProgressComponent implements OnInit {
 searchlistnew = [];
-item = this.initdata();
+searchlist=[];
+searchbox = '';
+item={};
+subs: Subscription;
+//item = this.initdata();
 
-  constructor(public apiserv: ApidataService) { }
+  constructor(public apiserv: ApidataService, private router: Router) { }
 
   ngOnInit(): void {
-  }
+    this.subs = this.apiserv.progressBS.subscribe(reply => {
+      this.searchlist = [];
+      if (reply) {
+        reply.forEach(element => {
+          let tempobj = { tag: '' };
+          tempobj.tag = Object.values(element).join('-');
+          // element['PROG06'] = element['PROG06'] > 100 ? 0 : element['PROG06'];
+          let prog = { progress: this.progressCalc(element) }
+          this.searchlist.push({ ...element, ...tempobj, ...prog });
+          this.searchlistnew = this.searchlist;
+         
+        });
+ 
+      }
 
+      this.searchlistnew = [...this.searchlist];
+
+    })
+  }
+  progressCalc(item) {
+    let numberans = (item.PROG02) * 5 +
+      (item.PROG03) * 2.5 +
+      (item.PROG04) * 2.5 +
+      (item.PROG05) * 5 +
+      (item.PROG06) * 5 +
+      (item.PROG07) * 65 +
+      (item.PROG08) * 5 +
+      (item.PROG09) * 5 +
+      (item.PROG10) * 5;
+    return Math.round(numberans / 100);
+  }
   initdata(){
     return      {
       REFERENCE: '',
@@ -48,5 +83,8 @@ item = this.initdata();
     // if (this.changelist.indexOf(item.ABSAREQNO) === -1) {
     //   this.changelist.push(item.ABSAREQNO);
     // }
+  }
+  gotoItem(item:any){
+    this.item = {...item};
   }
 }

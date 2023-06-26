@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row banner">
+        <div class="col-12 text-right pr-0">
+            <button type="button" class="btn btn-sm btn-success" (click)="showHelp()">{{hlptxt}}</button>
+        </div>
+        
+    </div>
+    <ng-container *ngIf="helper">
+      <app-help [edit]="false"  [content]="PSDOCS"></app-help>
+    </ng-container>
+    <table class="table">
+      <thead>
+        <th>Document Name</th>
+        <th>Loaded by </th>
+        <th>Loaded on</th>
+        <th>Downloader</th>
+      <ng-container *ngIf="authaserv.currentUserValue && authaserv.currentUserValue['DATABAG']?.includes('ADMIN')">  <th>Delete</th> </ng-container>
+  
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of docs ; let i = index" >
+          <td>{{doc.ORIGINALNAME}}</td>
+          <td>{{doc.LOADEDBY}}</td>
+          <td>{{doc.DATELOADED}}</td>
+          <td><button type="button" (click)="getdoc(doc)">Download</button></td>
+          <ng-container *ngIf="authaserv.currentUserValue && authaserv.currentUserValue['DATABAG']?.includes('ADMIN')"> 
+              <td><button type="button" class="btn btn-sm btn-primary"  (click)="deletedoc(doc)">Delete</button></td>
+          </ng-container>
+        </tr>
+   
+      </tbody>
+    </table>
+    <ng-container *ngIf="authaserv.currentUserValue && authaserv.currentUserValue['DATABAG']?.includes('ADMIN')"> 
+      <div class="row">
+        <div class="col-lg-6 col-md-12 colsm-12">
+          <div mat-dialog-title>
+            <div class="form-group">
+              <div class="text-center" style="background-color:lightsteelblue">
+                <label for="file-upload" class="custom-file-upload">
+                 <small>Click here to load a File </small>
+                 </label> 
+              </div>
+              <input type="file" id="file-upload" (change)="handleFileInput($event)">
+            </div>
+          </div>
+        </div>
+      </div>
+      </ng-container>
+  </div>

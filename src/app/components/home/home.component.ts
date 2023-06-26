@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     if(this.apiserv.progressBS.value.length == 0)
     {
-      this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager);
+    this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager);
+      // this.apiserv.getProgresslist('','','70000016');
     }
     
     setTimeout(() => {
@@ -42,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
  
   worker(){
-    this.router.navigate(['worklist']) 
+   this.router.navigate(['worklist']) 
   }
 
  async importSites() {

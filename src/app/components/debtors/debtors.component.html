@@ -1,0 +1,80 @@
+
+<div class="mycontainer">
+    <div class="row">
+     
+            <div class="col-12">
+
+<div class="row">
+                
+                                  
+                                    <div class="col-1 text-right pr-2">
+                                            <small>Free search</small>
+                                    </div>
+                                    <div class="col-5">
+                                            <input class="form-control  form-control-sm " type="text" id="searchbox"
+                                                    [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                                    </div>
+
+                                    <div class="col-1">
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                    (click)="exportexcel()">
+                                                    Export to Excel
+                                            </button>
+                                    </div>
+                                </div>
+           
+   
+
+                    <table class="table table-bordered" id="doclist">
+                            <tr>
+
+                                    <th class="text-center"><small style="font-weight: bold;">Project</small></th>
+                                    <!-- <th class="text-center"><small style="font-weight: bold;">Region</small></th> -->
+                                    <th class="text-center"><small style="font-weight: bold;">Post Date</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Doc Date</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Clear Date</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Doc No</small></th>
+
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Value</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">PO Number</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Text</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Type</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">T-Code</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Ref Doc</small></th>
+                                   
+
+                            </tr>
+
+
+                            <tr *ngFor="let budgetview of searchlistnew  | searchpipe: [searchbox, 'tag']">
+                                    <td ><small>{{budgetview.PROJLINK}}</small></td>
+                                    <td ><small>{{budgetview.BUDAT}}</small></td>
+                                    <td ><small>{{budgetview.BLDAT}}</small></td>
+                                    <td ><small>{{budgetview.AUGDT}}</small></td>
+                                    <td ><small>{{budgetview.BELNR}}</small></td>
+                                    <td ><small>{{budgetview.DMBTR}}</small></td>
+                                    <td ><small>{{budgetview.XBLNR}}</small></td>
+                                    <td ><small>{{budgetview.SGTXT}}</small></td>
+                                    <td ><small>{{budgetview.BLART}}</small></td>
+                                    <td ><small>{{budgetview.TCODE}}</small></td>
+                                    <td ><small>{{budgetview.STBLG}}</small></td>
+                        
+                                   
+                                  
+                                    
+                            </tr>
+                    </table>
+            </div>
+            </div>
+    </div>
+

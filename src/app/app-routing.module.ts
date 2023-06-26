@@ -19,6 +19,10 @@ import { MvtdocsListComponent } from './components/mvtdocs-list/mvtdocs-list.com
 import { CashflowComponent } from './components/cashflow/cashflow.component';
 import { FundingmasseditComponent } from './components/funding/fundingmassedit/fundingmassedit.component';
 import { TriangleComponent } from './components/cflow/triangle/triangle.component';
+import { DocumentsComponent } from './components/documents/documents.component';
+import { VideosComponent } from './components/videos/videos.component';
+import { ImportsComponent } from './components/imports/imports.component';
+import { DebtorsComponent } from './components/debtors/debtors.component';
 
 
 const routes: Routes = [
@@ -29,10 +33,13 @@ const routes: Routes = [
   {path: 'budgetedit',component:BudgetlineEditComponent},
   {path: 'cashflow',component:CashflowComponent},
   {path: 'cipfund',component:FundciplineComponent},
+  {path: 'debtors',component:DebtorsComponent},
   {path: 'dashboard',component:DashboardComponent},
+  {path: 'docs',component:DocumentsComponent},
   {path: 'massfund',component:FundingmasseditComponent},
   { path: 'home', component: HomeComponent},
   { path: 'help', component: HelpComponent},
+  { path: 'import/:importtype', component: ImportsComponent},
   { path: 'imports', component: MassimportComponent},
   { path: 'login', component: LoginComponent},
   { path: 'mvtdocs', component: MvtdocsListComponent},
@@ -41,6 +48,7 @@ const routes: Routes = [
   { path: 'requestedit/:id', component:AbsarequestComponent},
   { path: 'relink/:newpath', component:RelinkComponent},
   { path: 'transfers', component:TransfersComponent},
+  { path: 'videos', component:VideosComponent},
   { path: 'worklist', component:WorklistComponent},
 
    // otherwise redirect to home

@@ -1,106 +1,194 @@
-<table class="table table-striped ">
-    
-     <tbody> 
-            <tr> <td  class="text-center" style="background-color:azure;"><small>Project_WBS</small></td >
-                <td [ngClass]="item.multisite  ? 'multisite' : 'readonly'" >
-                    <small>{{item.PROJLINK > 'A' ? item.PROJLINK:item.ABSAREQNO}}</small>
-                </td></tr>             
-            <tr> <td  class="text-left" style="width:275px;background-color:azure;"><small>Known As</small></td >
-                <td ><small>{{item.KNOWNAS}}</small></td>
-            </tr>
-            <tr> <td  class="text-left" style="width:275px;background-color:azure;"><small>Title</small></td >
-                <td ><small>{{item.TITLE}}</small></td></tr>
-            <tr> <td  class="text-center" style="width:50px;background-color:azure;" >
-                <small>Status</small></td >
-                <td ><small>{{item.STATUS}}</small></td></tr>
-            <tr> <td  class="text-center"><small>Forecast Start</small></td >
-                <td ><input type="date" class="smallinput"
-                    name="forecaststart" (change)="newValue($event, item)"
-                    [(ngModel)]="item.FORECAST_START"></td></tr>
-            <tr> <td  class="text-center"><small>Forecast End</small></td >
-                <td ><input type="date" class="smallinput"
-                    name="forecastend" (change)="newValue($event, item)" [(ngModel)]="item.FORECAST_END">
-            </td> </tr>
-            <tr> <td  class="text-center" ><small>Due_Date</small></td >
-                <td style="background-color:rgb(104, 248, 46);"><small>{{item.DUEDATE}}</small></td></tr>
-            <tr> <td  class="text-left"><small>Register</small></td >
-                <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                    (change)="newValue($event, item)" [(ngModel)]="item.PROG01"    >
-                    <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                </select></td></tr>
-            <tr> <td  class="text-center"><small>Initiate</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_1'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG02"
-                            [disabled]="item.phase!=='PHASE_2'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>Costing</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_2'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG03"
-                            [disabled]="item.phase!=='PHASE_3'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container> </tr>
-            <tr> <td  class="text-center"><small>Approval Prep</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_3'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG04"
-                            [disabled]="item.phase!=='PHASE_4'">
-                            <option *ngFor="let perc of apiserv.approvals" [value]="perc.code">{{ perc.text }}
-                            </option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>Approval Board</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_4'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG05"
-                            [disabled]="item.phase!=='PHASE_5'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>Leadin</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_5'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG06"
-                            [disabled]="item.phase!=='PHASE_6'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>On Site</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_6'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG07"
-                            [disabled]="item.phase!=='PHASE_7'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>Proof of Completion</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_7'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG08"
-                            [disabled]="item.phase!=='PHASE_8'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container> </tr>
-            <tr> <td  class="text-center"><small>Billing</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_8'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG09"
-                            [disabled]="item.phase!=='PHASE_9'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
-            <tr> <td  class="text-center"><small>CashFlow</small></td >
-                <ng-container *ngIf="item.phase > 'PHASE_9'">
-                    <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
-                            (change)="newValue($event, item)" [(ngModel)]="item.PROG10"
-                            [disabled]="item.phase!=='PHASE10'">
-                            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
-                        </select></td>
-                </ng-container></tr>
+<ng-container *ngIf="item && item['TITLE']">
 
-    </tbody>
-</table>
+   
+    <div class="row underline mb-2" >
+        <div class="col-1" >
+            <span class="badge badge-success badge-pill">{{item.progress}}</span>
+        </div>
+        <div class="col-11">
+            <div class="row">
+                <div class="col-8">
+                    <b>{{item.PROJLINK}}</b>
+                </div>
+           <div class="col-4 text-right">2023-06-01</div>
+            </div>
+            <div class="row">
+                <div class="col-10 smalltxt">
+                    <small>{{item.KNOWNAS.substring(0,40)}}</small>
+                </div>
+            </div> 
+             <div class="row">
+                <div class="col-10 smalltxt">
+                 {{item.TITLE}}
+                </div>
+            </div>
+        </div>
+        
+     </div> 
+     <div class="row d-flex justify-content-around">
+        <button type="button" class="btn btn-sm btn-outline-secondary">Progress</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Comments</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Requirements</button>
+    </div>
+
+     <div class="row">
+        <div class="col-3">
+            <small>Forecast Start</small>
+        </div>
+        <div class="col-4">
+            <input type="date" class="smallinput"
+            name="forecaststart" (change)="newValue($event, item)"
+            [(ngModel)]="item.FORECAST_START">
+        </div>
+        <div class="col-5">
+            <select class="smallinput" name="scope"
+            (change)="newValue($event, item)" [(ngModel)]="item.PROG02"
+           >
+            <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+        </select>
+        </div>
+     </div>
+
+    <table class="table table-striped ">
+       
+        <tbody> 
+               <!-- <tr> <td  class="text-center" style="background-color:azure;"><small>Project_WBS</small></td >
+                   <td [ngClass]="item.multisite  ? 'multisite' : 'readonly'" >
+                       <small>{{item.PROJLINK > 'A' ? item.PROJLINK:item.ABSAREQNO}}</small>
+                   </td></tr>             
+               <tr> <td  class="text-left" style="width:275px;background-color:azure;"><small>Known As</small></td >
+                   <td ><small>{{item.KNOWNAS.substring(0,40)}}</small></td>
+               </tr>
+               <tr> <td  class="text-left" style="width:275px;background-color:azure;"><small>Title</small></td >
+                   <td ><small>{{item.TITLE}}</small></td></tr>
+               <tr> <td  class="text-center" style="width:50px;background-color:azure;" >
+                   <small>Status</small></td >
+                   <td ><small>{{item.STATUS}}</small></td></tr> -->
+               <tr> <td  class="text-center"><small>Forecast Start</small></td >
+                   <td ><input type="date" class="smallinput"
+                       name="forecaststart" (change)="newValue($event, item)"
+                       [(ngModel)]="item.FORECAST_START"></td></tr>
+               <tr> <td  class="text-center"><small>Forecast End</small></td >
+                   <td ><input type="date" class="smallinput"
+                       name="forecastend" (change)="newValue($event, item)" [(ngModel)]="item.FORECAST_END">
+               </td> </tr>
+               <!-- <tr> <td  class="text-center" ><small>Due_Date</small></td >
+                   <td style="background-color:rgb(104, 248, 46);"><small>{{item.DUEDATE}}</small></td></tr>
+               <tr> <td  class="text-left"><small>Register</small></td >
+                   <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                       (change)="newValue($event, item)" [(ngModel)]="item.PROG01"    >
+                       <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                   </select></td></tr> -->
+               <tr> <td  class="text-center"><small>Initiate {{item.PHASE}}</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE01'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG02"
+                               [disabled]="item.PHASE!=='PHASE02'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>Costing</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE02'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG03"
+                               [disabled]="item.PHASE!=='PHASE03'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container> </tr>
+               <tr> <td  class="text-center"><small>Approval Prep</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE03'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG04"
+                               [disabled]="item.PHASE!=='PHASE04'">
+                               <option *ngFor="let perc of apiserv.approvals" [value]="perc.code">{{ perc.text }}
+                               </option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>Approval Board</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE04'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG05"
+                               [disabled]="item.PHASE!=='PHASE05'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>Leadin</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE05'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG06"
+                               [disabled]="item.PHASE!=='PHASE06'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>On Site</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE06'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG07"
+                               [disabled]="item.PHASE!=='PHASE07'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>Proof of Completion</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE07'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG08"
+                               [disabled]="item.PHASE!=='PHASE08'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container> </tr>
+               <tr> <td  class="text-center"><small>Billing</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE08'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG09"
+                               [disabled]="item.PHASE!=='PHASE09'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+               <tr> <td  class="text-center"><small>CashFlow</small></td >
+                   <ng-container *ngIf="item.PHASE > 'PHASE09'">
+                       <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
+                               (change)="newValue($event, item)" [(ngModel)]="item.PROG10"
+                               [disabled]="item.PHASE!=='PHASE10'">
+                               <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
+                           </select></td>
+                   </ng-container></tr>
+   
+       </tbody>
+   </table> 
+   <app-comments [reference]="item.ABSAREQNO"></app-comments>
+   </ng-container>
+<div class="container">
+<div class="row mb-3">
+    <div class="col-8 offset-3"><input type="text" class="form-control"></div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+</div>
+
+         <div class="row underline" *ngFor="let litem of searchlistnew | searchpipe: [searchbox, 'tag']; let i = index;">
+            <div class="col-1" (click)="gotoItem(litem)">
+                <span class="badge badge-success badge-pill">{{litem.progress}}</span>
+            </div>
+            <div class="col-11">
+                <div class="row">
+                    <div class="col-8">
+                        <b>{{litem.PROJLINK}}</b>
+                    </div>
+               <div class="col-4 text-right">2023-06-01</div>
+                </div>
+                <div class="row">
+                    <div class="col-10 smalltxt">
+                        <small>{{litem.KNOWNAS.substring(0,40)}}</small>
+                    </div>
+                </div> 
+                 <div class="row">
+                    <div class="col-10 smalltxt">
+                     {{litem.TITLE}}
+                    </div>
+                </div>
+            </div>
+            
+         </div> 
+          
+       
+</div>
+

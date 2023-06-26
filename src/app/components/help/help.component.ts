@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ApidataService } from 'src/app/_services/apidata.service';
 
 @Component({
@@ -7,7 +7,8 @@ import { ApidataService } from 'src/app/_services/apidata.service';
   styleUrls: ['./help.component.css']
 })
 export class HelpComponent implements OnInit {
-  helper= {CONTRACTCODE:'PSPT', KEYCODE:"PSFUNDING", TITLE:'',QUESTION:'',
+  @Input() edit = true;
+  @Input() helper = {CONTRACTCODE:'PSPT', KEYCODE:"PSFUNDING", TITLE:'',QUESTION:'',
   LINE1: ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
   <p> the other fields will get populated when you save as they are read off the Cipline table.</p>
   <h4><strong>What is a Cipline number?</strong></h4>
@@ -30,10 +31,25 @@ export class HelpComponent implements OnInit {
   <li>Select the relevant Cip-Group, Cipcode(*important), Workstream, and Amount(*important)</li>
   <li>Contact the Regional Manager or the Central Fund manager for assistance, as a new line may have to be created from other lines via savings, surrenders, or Reallocations.</li></ul>`
  , LINE2:''}
+ texts = [
+  {code:"PSFUNDING",TEXT:"Funding"},
+  {code:"PSPROJDATES",TEXT:"Progress"},
+  {code:"PSREQ",TEXT:"Requirement"},
+  {code:"PSLOCATION",TEXT:"Location"},
+  {code:"APPROVAL",TEXT:"Approval"},
+  {code:"PSCOMMENT",TEXT:"Comments"},
+  {code:"PSTASKS",TEXT:"Tasks"},
+  {code:"PSDOCS",TEXT:"Documents"},
+  {code:"PSVIDEOS",TEXT:"Videos"},
+ ]
+
 
   constructor(private apiserv: ApidataService) { }
 
   ngOnInit(): void {
+    if(this.apiserv.helptexts.length < 1){
+    this.apiserv.getHelptexts();
+    }
   }
   pushToSap(){
     let temp = { ...this.helper}
@@ -41,6 +57,10 @@ export class HelpComponent implements OnInit {
  this.apiserv.postGEN(temp, 'PUT_HELPTEXTS','PROJECTS').subscribe( lt=>{
     this.apiserv.messagesBS.next('SAP Updated')
  })
+  }
+  onChange(){
+    this.helper = this.apiserv.getHelptexts(this.helper.KEYCODE)
+    
   }
 }
  

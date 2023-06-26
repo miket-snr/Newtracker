@@ -56,6 +56,7 @@ export class AppComponent {
         }
       });
       this.apiserv.getProgLookups();
+      this.apiserv.getHelptexts();
     // this.apiserv.getSearchList(); // THis will download Projects and then Absa Requests
     if (this.authserv.currentUserValue.SAPUSER.length < 2) {
       // this.dialog.open(LoginComponent);
@@ -90,6 +91,7 @@ export class AppComponent {
 
     let temp = this.findGetParameter('r');
     if (temp) {
+      this.apiserv.getReqView(temp);
       this.router.navigate(['/requestedit/' + temp])
     }
   }

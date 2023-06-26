@@ -1,0 +1,18 @@
+
+<h3>Material List</h3>
+<mat-selection-list color="primary" (selectionChange)="onListSelectionChange($event)" [multiple]="1 >= 2">
+  <mat-list-option>Murdeshwar</mat-list-option>
+  <mat-list-option [selected]="isSelected">Varanasi</mat-list-option>
+  <mat-list-option disabled="true">Noida</mat-list-option>
+  <mat-list-option>Bhopal</mat-list-option>
+</mat-selection-list>
+
+<h3>Material List with Reactive Form</h3>
+<form [formGroup]="techForm" (ngSubmit)="onFormSubmit()">
+  <mat-selection-list formControlName="selectedTech">
+    <mat-list-option *ngFor="let tech of techList" [value]="tech">
+      {{tech.lang}}
+    </mat-list-option>
+  </mat-selection-list>
+  <button mat-raised-button color="warn">Submit</button>
+</form> 

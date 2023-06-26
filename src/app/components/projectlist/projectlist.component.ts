@@ -71,8 +71,7 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
       { name: 'Basic', selected: true },
       { name: 'Approval Info', selected: true },
       { name: 'Funding', selected: true },
-      { name: 'Date Schedules', selected: true },
-      { name: 'Progress', selected: true },
+      { name: 'Date Progress', selected: true },
 
     ]
 
@@ -349,5 +348,19 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
     this.selectedAll = totalSelected === this.sections.length;
 
     return true;
+  }
+  formatNumber(numberin){
+    return this.formatString((Math.round((numberin + Number.EPSILON) * 100) / 100).toLocaleString())
+   }
+   formatString(strin = '') {
+    if (strin.substring(strin.length - 2).includes('.')) {
+      strin = strin + '0';
+    }
+    if (!strin.substring(strin.length - 3).includes('.')) {
+      strin = strin + '.00'
+    }
+    strin = strin.replace(/,/g," ");
+    let tempstr = (strin.includes("-")) ? '    (' + strin.substring(1) + ')' : '       ' + strin;
+    return tempstr.substring(tempstr.length - 14)
   }
 }

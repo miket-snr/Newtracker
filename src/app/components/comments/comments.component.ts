@@ -18,9 +18,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   newcomment = false;
   username = 'Mike Thomson';
   comments = [ ]
-  commentForm = new FormGroup({
-    commenttext: new FormControl()
-  })
+  commentForm = '';
   constructor(private apiserv: ApidataService) { }
 
   ngOnInit(): void {
@@ -48,7 +46,7 @@ this.newcomment = true;
 }
 cancelComment(){
   this.newcomment = false;
-  this.commentForm.setValue({commenttext:''});
+  this.commentForm = '';
 }
 saveComment(reference = this.reference,level_2 = this.level_2,level_3 = this.level_3){
 const nc =  {REFERENCE: reference , 
@@ -56,14 +54,16 @@ const nc =  {REFERENCE: reference ,
   LEVEL_3: level_3,
   DATEOF: new Date().toLocaleDateString('sv').replace( /\./g, ''),
 COMMENTBY: this.username,
-COMMENT_TEXT: this.commentForm.value.commenttext,COMMENTNO:0}
+COMMENT_TEXT: this.commentForm,COMMENTNO:0}
 this.comments.unshift({ ...nc});
 this.newcommenttxt.emit(nc.COMMENT_TEXT);
-nc.COMMENT_TEXT = btoa(nc.COMMENT_TEXT);
+nc.COMMENT_TEXT = this.apiserv.xtdbtoa(nc.COMMENT_TEXT);
 this.apiserv.putComment(nc);
 this.newcomment = false;
-this.commentForm.setValue({commenttext:''});
+this.commentForm = '';
 }
-
+reply(commentnoin){
+  
+}
 
 }

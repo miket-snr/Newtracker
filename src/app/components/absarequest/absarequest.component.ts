@@ -10,6 +10,7 @@ import { ModalService } from 'src/app/_modal/modal.service';
 import { dateset } from 'src/app/_classes/dateset';
 import { GenPdfService } from 'src/app/_services/gen-pdf.service';
 import { absareq } from 'src/app/_classes/absareq';
+import { DialogService } from 'src/app/_services/dialog.service';
 
 @Component({
   selector: 'app-absarequest',
@@ -25,9 +26,12 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   //  edit = true;
   editdetail = false;
   replytext = '';
-
+  hlptxt = 'Show help';
+  helper=false;
+  helpline = this.apiserv.getHelptexts('REQUIRMENTS');
   taskedit = false;
   vm = {}
+ 
   requestForm = new FormGroup({
   
 
@@ -92,7 +96,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     // private dateserv: DatePlanningService,
     // private modalService: NgbModal,
     private location: Location,
-    private modalServicejw: ModalService) { }
+    private modalServicejw: ModalService, 
+    private helper2: DialogService) { }
 
   ngOnInit(): void {
     // this.requestForm.disable();
@@ -192,6 +197,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     this.taskedit = false;
   }
   tabChanged(event) {
+    this.helper = false;
     // tbil - useful for - do you want to save
    // this.requestForm.get('title').disable();
   //  if (event.index == 7){
@@ -337,6 +343,9 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
         return this.vm['TITLE'] && this.vm['TITLE'].length > 10 && 
         this.vm['DETAILS'].length > 15 ;
         break;
+      }
+      default: {
+        return false;
       }
     }
 
@@ -582,6 +591,7 @@ savePhases() {
   }
   onChange(){
         // let siteArr = <FormArray>this.requestForm.controls["sites"];
+
       if (this.vm['ONEVIEW'].length === 6 && this.vm['ONEVIEW'].substring(5, 6) == 'X') {
         this.apiserv.postGEN({ a: '', B: this.vm['ONEVIEW'], C: '', D: 'site' }, 'GET_LOOKUPS').subscribe(reply => {
           this.vm['KNOWNAS']=reply.RESULT[0].B
@@ -612,4 +622,10 @@ savePhases() {
   
     return '';
   }
+  showHelp(textsin){
+    this.helpline = this.apiserv.getHelptexts(textsin);
+    this.helper2.helpopen({title:'Requirements', helptext:this.helpline.LINE1}) 
+    // = !this.helper;
+    // this.hlptxt = this.helper? 'Hide Help' : "Show Help";
+    }
 }

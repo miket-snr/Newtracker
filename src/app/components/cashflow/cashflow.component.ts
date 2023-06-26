@@ -29,6 +29,14 @@ export class CashflowComponent implements OnInit, OnDestroy {
             this.searchlistnew = this.searchlist;
           });
         }
+        this.searchlist.sort((a, b)=> {
+          if (a.INITIATIVE === b.INITIATIVE){
+            return a.LOADTYPE < b.LOADTYPE ? -1 : 1
+          } else {
+            return a.INITIATIVE < b.INITIATIVE ? -1 : 1
+          }
+        })
+        this.searchlistnew = this.searchlist;
       }));
   }
   exportexcel(): void {

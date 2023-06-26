@@ -7,6 +7,7 @@ import { absareq } from 'src/app/_classes/absareq';
 import { dateset } from 'src/app/_classes/dateset';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { DialogService } from 'src/app/_services/dialog.service';
 //import { DatePlanningService } from 'src/app/_services/date-planning.service';
 
 @Component({
@@ -32,6 +33,9 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   scopes = [];
   rows = [];
   overdue = false;
+  hlptxt = 'Show help';
+helper=false;
+helpline = this.apiserv.getHelptexts('APPROVAL');
   boqs = [];
   costs = [];
   pos = [];
@@ -86,7 +90,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
     { OPT: 1, OPTVALUE: 'Choice 3' }
   ]
   constructor(public apiserv: ApidataService, private authserv: AuthService,
-    private rootFormGroup: FormGroupDirective) { }
+    private rootFormGroup: FormGroupDirective	, private helper2: DialogService) { }
 
   ngOnInit(): void {
     this.setup()
@@ -367,8 +371,10 @@ updateProgress(blankdate, change){
     }
     return weeknum;
   };
-  showHelp(){
-    this.help = !this.help;
-    this.helptext = this.help? "Hide Help": "Show Help";
-  }
+  showHelp(textsin){
+    this.helpline = this.apiserv.getHelptexts(textsin); 
+    this.helper2.helpopen({title:'Progress', helptext:this.helpline.LINE1}) 
+    // = !this.helper;
+    // this.hlptxt = this.helper? 'Hide Help' : "Show Help";
+    }
 }

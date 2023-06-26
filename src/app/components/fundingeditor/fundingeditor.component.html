@@ -101,13 +101,13 @@
             </td>
             <td>Workstream</td>
             <td colspan="2">
-              <input type="text" class="form-control" formControlName="workstream" [disabled]="true">
-              <!-- <select formControlName="workstream" placeholder="Select a Line" class="form-control">
+              <!-- <input type="text" class="form-control" formControlName="workstream" [disabled]="true"> -->
+              <select formControlName="workstream" placeholder="Select a Line" class="form-control">
                 <option [value]="''">Select an Option</option>
                 <option *ngFor="let groupline of apiserv.workstreams" [value]="groupline.code">
                   {{groupline.text }}
                 </option>
-              </select> -->
+              </select> 
             </td>
           </tr>
           <tr>
