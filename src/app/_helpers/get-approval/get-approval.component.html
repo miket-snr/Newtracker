@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>{{'Approval ' + vm?.PROJLINK}}</h2>
+
+<mat-dialog-content>
+  <div class="container">
+
+      <form #approvalForm="ngForm">
+        <div style="height:100%;">
+            <div class="row" style="background-color:rgb(240,240,240)">
+              <div class="col-12 text-center" style="background-color: lightblue;">
+                <span><b>Approval</b>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Approval Motivation </div>
+              <div class="col-8"><textarea rows="4" class="form-control" name="APPROVAL_MOTIVATE"
+                  [(ngModel)]="vm.APPROVAL_MOTIVATE"></textarea></div>
+            </div>
+            <div class="row" >
+              <div class="col-3" style="background-color:rgb(240,240,240)">Submit for Approval Date</div>
+              <div class="col-3">
+                <input type="date" class="form-control" name="APPROVAL_SUBMITDATE" [(ngModel)]="vm.APPROVAL_SUBMITDATE">
+              </div>
+
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Req Amount(incl VAT) </div>
+              <div class="col-3" >
+                <input type="number" class="form-control" name="BASELINEBUDGET" [(ngModel)]="vm.BASELINEBUDGET">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Approval Date</div>
+              <div class="col-3"><input type="date" class="form-control" name="APPROVAL_DATE"
+                  [(ngModel)]="vm.APPROVAL_DATE"></div>
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Approval Amount (incl VAT) </div>
+              <div class="col-3"><input type="number" class="form-control" name="APPROVED_AMT"
+                  [(ngModel)]="vm.APPROVED_AMT"></div>
+            </div>
+
+            <div class="row" >
+              <div class="col-3" style="background-color:rgb(240,240,240)">Submitted to Absa legal</div>
+              <div class="col-3"><input type="date" class="form-control" name="APPROVALTOLEGAL"
+                  [(ngModel)]="vm.APPROVALTOLEGAL"></div>
+              <div class="col-3" style="background-color:rgb(240,240,240)">Approved by Absa legal</div>
+              <div class="col-3"><input type="date" class="form-control" name="APPROVEDBYLEGAL"
+                  [(ngModel)]="vm.APPROVEDBYLEGAL"></div>
+          
+            </div>
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Submitted to BFM legal</div>
+              <div class="col-3"><input type="date" class="form-control" name="APPTOBFMLEGAL"
+                  [(ngModel)]="vm.APPTOBFMLEGAL"></div>
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Approved by BFM legal</div>
+              <div class="col-3"><input type="date" class="form-control" name="APPBYBFMLEGAL"
+                  [(ngModel)]="vm.APPBYBFMLEGAL"></div>
+          
+            </div>
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">PO Date</div>
+              <div class="col-3"><input type="date" class="form-control" name="PO_DATE" [(ngModel)]="vm.PODATE"></div>
+              <div class="col-3"  style="background-color:rgb(240,240,240)">PO Amount (incl VAT) </div>
+              <div class="col-3" class="form-contr mt-1 ml-2 mr-2 pt-2">{{(vm.POVALUE * 1.15 ).toFixed(2)}}</div>
+              <!-- <div class="col-3"  ><input type="number" class="form-control" name="POVALUE" [(ngModel)]="vm.POVALUE"></div  > -->
+            </div>
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Purchase Order</div>
+              <div class="col-3"><input class="form-control" name="PONUMBER" [(ngModel)]="vm.PONUMBER"></div>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-3"  style="background-color:rgb(240,240,240)">Approval Status </div>
+              <div class="col-3" >
+                <select class="form-control" name="APPROVAL_STATUS" [(ngModel)]="vm.APPROVAL_STATUS">
+                  <option *ngFor="let approval of apiserv.approvals" [ngValue]="approval['code']">
+                    {{approval.text}}</option>
+                </select>
+              </div>
+
+            </div>
+
+      </form>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="row">
+    <div class="col-12 d-flex justify-content-around">
+      <button class="mat-raised-button " (click)="close()">Close</button>
+      <!-- <span class="text-danger"> Save is not enabled - Under Construction</span> -->
+       <button class="mat-raised-button mat-primary " (click)="saveApproval()">Save</button>  
+    </div>
+  </div>
+ 
+</mat-dialog-actions>

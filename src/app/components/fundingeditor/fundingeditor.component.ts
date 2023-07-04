@@ -38,6 +38,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     estimatedbudget: '',
     baselinebudget: '',
     quotation: '',
+    trackercode: '',
     quoteamt: '',
     approvedamt: '',
     invoicedamt: '',

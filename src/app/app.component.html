@@ -15,28 +15,42 @@
     </mat-list-item>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
          <mat-expansion-panel-header>
-          <mat-icon>dashboard</mat-icon>- Focus Lists
+          <mat-icon>dashboard</mat-icon>- Mass Edit
         </mat-expansion-panel-header>
         <mat-nav-list>
-          <a mat-list-item [routerLink]="['approvals']">
-            <mat-icon>create</mat-icon><span>Approval Crosscheck</span>
-        </a>
-        <a mat-list-item [routerLink]="['cashflow']">
-          <mat-icon>create</mat-icon><span>Cashflow Base</span>
+         
+        <!-- <a mat-list-item [routerLink]="['massprogress']">
+          <mat-icon>create</mat-icon><span>Mass Edit Progress</span>
       </a>    
-        <a mat-list-item [routerLink]="['debtors']">
-          <mat-icon>create</mat-icon><span>Debtors</span>
-      </a>    
-    <a mat-list-item [routerLink]="['mvtdocs']">
-      <mat-icon>create</mat-icon><span>View Movements</span>
-  </a>
+    <a mat-list-item [routerLink]="['massapprovals']">
+      <mat-icon>create</mat-icon><span>Mass Approvals</span>
+  </a> -->
   <mat-list-item [routerLink]="['massfund']">
     <mat-icon>create</mat-icon><span>Mass Edit Funding</span>
 </mat-list-item>
  
         </mat-nav-list>
     </mat-expansion-panel>
-   
+    <mat-expansion-panel [class.mat-elevation-z0]="true">
+      <mat-expansion-panel-header>
+       <mat-icon>dashboard</mat-icon>- Focus Lists
+     </mat-expansion-panel-header>
+     <mat-nav-list>
+       <a mat-list-item [routerLink]="['approvals']">
+         <mat-icon>create</mat-icon><span>Approval Crosscheck</span>
+     </a>
+     <a mat-list-item [routerLink]="['cashflow']">
+       <mat-icon>create</mat-icon><span>Cashflow Base</span>
+   </a>    
+     <a mat-list-item [routerLink]="['debtors']">
+       <mat-icon>create</mat-icon><span>Debtors</span>
+   </a>    
+ <a mat-list-item [routerLink]="['mvtdocs']">
+   <mat-icon>create</mat-icon><span>View Movements</span>
+</a>
+
+     </mat-nav-list>
+ </mat-expansion-panel>
       <mat-expansion-panel [class.mat-elevation-z0]="true">
         <mat-expansion-panel-header>
             Budget

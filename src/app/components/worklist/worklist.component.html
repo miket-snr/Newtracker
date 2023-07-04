@@ -73,7 +73,9 @@
                             </th>
                             <th class="text-center"><small>Initiative</small></th>
                             <th class="text-center"><small>Budget <br> Group</small></th>
+                            <th class="text-center"><small>Tracker <br> Code</small></th>
                             <th class="text-center"><small>CipCode</small></th>
+                            <th class="text-center"><small>Approval <br> Status</small></th>
                             <th class="text-center"><small>Forecast <br> Start</small></th>
                             <th class="text-center"><small>Forecast <br>End</small></th>
                             <ng-container *ngIf="sections">
@@ -121,7 +123,10 @@
                                 <td><small>{{item.STATUS}}</small></td>
                                 <td><small>{{item.INITIATIVE}}</small></td>
                                 <td><small>{{item.BUDGETGROUP}}</small></td>
+                                <td  [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
+                                    <small>{{item.TRACKERCODE}}</small></td>
                                 <td><small>{{item.CIPCODE}}</small></td>
+                                <td><small  (click)="showApproval(item)">{{item.APPROVAL_STATUS}}</small></td>
                                 <td>{{item.DATE06}}</td>
                                 <td>{{item.DATE07}}</td>
                                 <ng-container *ngIf="sections">
@@ -131,8 +136,8 @@
                                 <td [ngClass]="item.PHASE < 'PHASE11'&& item.DATE10 < todaydate? 'text-center late':
                                  item.PHASE == 'PHASE11'? 'text-center done' : 'text-center todo'"> {{item.DATE10}}
                                 </td>
-                                <td class="text-center" style="background-color:rgb(155, 219, 251);">
-                                    <small>{{progressCalc(item)+ '%'}}</small></td>
+                                <td> <button class="btn btn-sm btn-primary btn-block" type="button" (click)="showProgress(item)">
+                                    <small>{{progressCalc(item)+ '%'}}</small></button></td>
                                 <ng-container *ngIf="!sections">
                                     <td
                                         [ngClass]="item.PROG02==100 ? 'text-center done' : item.PROG02==0  ?'text-center todo': 'text-center busy'">

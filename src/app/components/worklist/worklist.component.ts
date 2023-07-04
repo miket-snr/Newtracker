@@ -12,6 +12,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { FileSaverService } from 'ngx-filesaver';
+import { DialogService } from 'src/app/_services/dialog.service';
 // import { NgxCaptureService } from 'ngx-capture';
 @Component({
   selector: 'app-worklist',
@@ -47,12 +48,13 @@ export class WorklistComponent implements OnInit, OnDestroy {
     map(result => result.matches),
     shareReplay()
   );
+  
   constructor(public apiserv: ApidataService,
     private modalServicejw: ModalService,
     private authserv: AuthService,
     private router: Router,
-    private breakpointObserver: BreakpointObserver,public filesaver: FileSaverService,
-    ) { }
+    private breakpointObserver: BreakpointObserver,public filesaver: FileSaverService,private progress2: DialogService 
+        ) { }
 
   ngOnInit() {
     this.pmanager = this.apiserv.lclstate.pmanager
@@ -322,7 +324,21 @@ export class WorklistComponent implements OnInit, OnDestroy {
     }
     strin = strin.replace(/,/g," ");
     let tempstr = (strin.includes("-")) ? '    (' + strin.substring(1) + ')' : '       ' + strin;
-    return tempstr.substring(tempstr.length - 14)
+    return tempstr.substring(tempstr.length - 16)
+  }
+  showProgress(item) {  
+    this.progress2.progressopen({PROG01:item.PROG01,PROG02:item.PROG02,PROG03:item.PROG03,
+                                 PROG04:item.PROG04,PROG05:item.PROG05,PROG06:item.PROG06,
+                                 PROG07:item.PROG07,PROG08:item.PROG08,PROG09:item.PROG09,PROG10:item.PROG10,
+                                 DATE01:item.DATE01,DATE02:item.DATE02,DATE03:item.DATE03,
+                                 DATE04:item.DATE04,DATE05:item.DATE05,DATE06:item.DATE06,
+                                 DATE07:item.DATE07,DATE08:item.DATE08,DATE09:item.DATE09,DATE10:item.DATE10,
+                                 multisite:'NO',REFERENCE:item.ABSAREQNO, })
+
+  }
+  showApproval(item) {  
+    this.progress2.approvalopen({ABSAREQNO:item.ABSAREQNO, })
+
   }
 }
 

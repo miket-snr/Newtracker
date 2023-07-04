@@ -1,0 +1,107 @@
+<h2 mat-dialog-title>Progress</h2>
+<mat-dialog-content>
+
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE01'">
+        <div class="col-2 text-right"><small>Initiation</small></div>
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG02"
+                [disabled]="item.multisite >='PHASE02'">
+                <option *ngFor="let perc of codes[1].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE02"></div>
+    </div>
+
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE03'">
+        <div class="col-2 text-right"><small>Costing</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG03"
+                [disabled]="item.multisite>='PHASE03'">
+                <option *ngFor="let perc of codes[2].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE03"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE04'">
+        <div class="col-2 text-right"><small>Approval Prep</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG04"
+                [disabled]="item.multisite>='PHASE04'">
+                <option *ngFor="let perc of codes[3].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE04"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE05'">
+        <div class="col-2 text-right"><small>Approval Board</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG05"
+                [disabled]="item.multisite>='PHASE05'">
+                <option *ngFor="let perc of codes[4].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE05"></div>
+    </div>
+
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE06'">
+        <div class="col-2 text-right"><small>Leadin</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG06"
+                [disabled]="item.multisite>='PHASE06'">
+                <option *ngFor="let perc of codes[5].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE06"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE07'">
+        <div class="col-2 text-right"><small>On Site</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG07"
+                [disabled]="item.multisite>='PHASE07'">
+                <option *ngFor="let perc of codes[6].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE07"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE07'">
+        <div class="col-2 text-right"><small>P.o.C.</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG08"
+                [disabled]="item.multisite>='PHASE08'">
+                <option *ngFor="let perc of codes[7].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE08"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE08'">
+        <div class="col-2 text-right"><small>Billing</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG09"
+                [disabled]="item.multisite>='PHASE09'">
+                <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE09"></div>
+    </div>
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE09'">
+        <div class="col-2 text-right"><small>CashFlow</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG10"
+                [disabled]="item.multisite>='PHASE10'">
+                <option *ngFor="let perc of codes[9].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE10"></div>
+    </div>
+    <div class="row  mb-2">
+        <div class="col-2 text-right">Note</div>
+
+        <div class="col-8"><textarea class="form-control smallinput" [(ngModel)]="item.TRACKNOTE"></textarea></div>
+    </div>
+    <!-- <p>{{apiserv.lclstate.dates | json}}</p> -->
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button mr-4" (click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary ml-4"(click)="savePhases()">Save</button> 
+</mat-dialog-actions>

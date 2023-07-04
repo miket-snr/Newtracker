@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Approval } from '../_classes/approval';
+import { ApprovalClass } from '../_classes/approvalclass';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +67,9 @@ budgetgroups = ['* All','CIP2023',
 'UNKNOWN',
 ]
   public loadingBS = new BehaviorSubject<boolean>(false)
+  public approvalBS = new BehaviorSubject<Approval>(new ApprovalClass().approval)
+  public approval$ = this.approvalBS.asObservable();
+
   public ciplineadjBS = new BehaviorSubject([]);
   public helptextsBS = new BehaviorSubject([]);
 
@@ -109,7 +114,7 @@ budgetgroups = ['* All','CIP2023',
   public pmlist$ = this.pmlistBS.asObservable();
 
   public progressBS = new BehaviorSubject([]);
-  public ptogress$ = this.currentprojBS.asObservable();
+  public progress$ = this.currentprojBS.asObservable();
 
   public proglookupsBS = new BehaviorSubject([]);
   public proglookups$ = this.proglookupsBS.asObservable();
@@ -493,7 +498,9 @@ locateFunds(region,cipgroup,cipcode){
             KNOWNAS: this.xtdatob(line.SKNOWNAS),
             BASELINEBUDGET: line.BASELINEBUDGET,
             POVALUE: line.POVALUE,
+            TRACKERCODE: line.TRACKERCODE,
             CIPBUDGET: line.CIPBUDGET,
+            APPROVAL_STATUS: this.getApprovalText(line.APPROVAL_STATUS),
             INITIATIVE: line.INITIATIVE,
             CIPCODE: line.CIPCODE,
             BUDGETGROUP: line.CIPGROUP,
@@ -511,6 +518,11 @@ locateFunds(region,cipgroup,cipcode){
             PROG08: innerline[0].PROG08,
             PROG09: innerline[0].PROG09,
             PROG10: innerline[0].PROG10,
+            DATE01: innerline[0].DATE01,
+            DATE02: innerline[0].DATE02,
+            DATE03: innerline[0].DATE03,
+            DATE04: innerline[0].DATE04,
+            DATE05: innerline[0].DATE05,
             DATE06: innerline[0].DATE06,
             DATE07: innerline[0].DATE07,
             COMMENT: line.LASTCOMMENT,
@@ -652,58 +664,15 @@ locateFunds(region,cipgroup,cipcode){
           )
       }
 
-
-
-
-    // const BASE_POST = 'https://io.bidvestfm.co.za/BIDVESTFM_API_GEN_PROD/genpost';
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json',
-    //     Authorization: 'Basic dXNlcm5hbWU6cGFzc3dvcmQ='
-    //   })
-    // };
-    // const uploadvar = {
-    //   callType: 'post',
-    //   chContext: {
-    //     CLASS: classname,
-    //     METHOD: methodname,
-    //     TOKEN: "BK175mqMN0"
-    //   },
-    //   chData: lclobj
-    // };
-    // return this.http
-    //   .post<any>(BASE_POST, uploadvar, httpOptions).pipe(
-    //     map(data => {
-    //       this.loading = false;
-    //       this.loadingBS.next(false);
-    //       try {
-    //         let represult = (data && data.d && data.d.exResult) ? JSON.parse(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g,""))) : data
-    //         if (!represult || !represult.RESULT) {
-    //           throw 'Error unknown '
-    //         } else {
-    //           if (!Array.isArray(represult.RESULT) && typeof represult.RESULT === 'string' && represult.RESULT.includes('ERR')) {
-    //             try {
-    //               let errormsg = JSON.parse(represult.RESULT)
-    //               this.messagesBS.next(errormsg['ERR']);
-    //               throw errormsg['ERR']
-    //             }
-    //             catch (e) {
-    //               throw 'Error message unknown '
-    //             }
-    //           }
-    //           return represult
-    //         }
-    //       } catch (e) {
-    //         this.messagesBS.next('Bad Json Reply');
-    //         console.log(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g,"")))
-    //         throw 'Bad Json reply'
-    //       }
-
-    //     })
-    //   )
-
   }
-
+getSingleApproval(reqno){
+  this.postGEN({ ABSAREQNO: reqno }, "GET_APPROVAL", "PSTRACKER").subscribe(reply => {
+    if (!reply || reply.RESULT.length == 0) {
+      return
+    }
+    this.approvalBS.next(JSON.parse(reply.RESULT));
+     })
+}
   getCommentList(Projref = '', area = '', specific = '') {
     this.commentlistBS.next([]);
     if (Projref.length < 5) {
@@ -847,6 +816,24 @@ locateFunds(region,cipgroup,cipcode){
       this.pmlistBS.next(list.RESULT);
       localStorage.setItem('pmlist', JSON.stringify(list.RESULT))
     })
+
+  }
+  getApprovalText(APPROVAL_STATUS = ''){
+    if (APPROVAL_STATUS === '' || this.approvals.length === 0 ) {
+      return 'Unknown'
+    }
+    let re = /pprov|100/g; 
+
+if (APPROVAL_STATUS.search(re) != -1 ) return 'Approved';
+
+let temp =  this.approvals.find(line => {
+    return line.code === APPROVAL_STATUS.replace(/%/g, '');
+  })
+  if (temp && temp.text) {
+    return temp.text;
+  } else {
+    return 'Unknown'
+  }
 
   }
   pushFeedback() {

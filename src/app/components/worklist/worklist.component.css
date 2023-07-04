@@ -87,3 +87,10 @@ th small {
     padding-left: 6px;
     padding-right: 6px;
   }
+  .focus{
+    background-color: rgb(236, 148, 15);
+  }
+  .btn-sm{
+    padding: 1px 1px 1px 1px;
+    font-size: 0.8rem;
+  }

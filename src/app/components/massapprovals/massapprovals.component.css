@@ -1,4 +1,4 @@
-.tableFixHead          { overflow: auto; height: 700px; width: 100vw; }
+.tableFixHead          { overflow: auto; height: 640px; width: 100vw; }
 .tableFixHead thead th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
 .tableFixHead tbody th { position: sticky; left: 0; }
 .smallinput {
@@ -17,6 +17,7 @@ td {
     padding:2px;
     border-bottom: 1px solid rgb(159, 159, 160);
     min-width:80px;
+    text-overflow: ellipsis;
 }
 th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
 
@@ -41,12 +42,12 @@ th small {
   }
   .mycontainer {
     padding: 20px;
-    height: 600px;
+    height: 740px;
     display: block;
     max-width: -moz-fit-content;
     max-width: fit-content;
     margin: 0 auto;
-    overflow-x: auto;
+    overflow: auto;
     white-space: nowrap;
   }
   .multisite{
@@ -61,30 +62,7 @@ th small {
     max-width: -moz-fit-content;
     max-width: fit-content;
     margin: 0 auto;
-    overflow-x: auto;
-    white-space: nowrap;
-    
-  }
-  .focus{
-    background-color: rgb(241, 187, 8);
-  }
-  .busy {
-    background-color: orange;
-  }
-  .done {
-    background-color: rgb(111, 255, 111);
-  }
-  .todo {
-    background-color: white;
-  }
 
-  .late {
-    background-color: red;
-    color: white ;
-  }
-  .even {
-    background-color: lightblue;
-  }
-  .odd {
-    background-color: lightgray;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }

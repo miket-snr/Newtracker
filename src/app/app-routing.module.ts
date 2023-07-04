@@ -23,6 +23,8 @@ import { DocumentsComponent } from './components/documents/documents.component';
 import { VideosComponent } from './components/videos/videos.component';
 import { ImportsComponent } from './components/imports/imports.component';
 import { DebtorsComponent } from './components/debtors/debtors.component';
+import { MassapprovalsComponent } from './components/massapprovals/massapprovals.component';
+import { MassprogressComponent } from './components/massprogress/massprogress.component';
 
 
 const routes: Routes = [
@@ -36,7 +38,9 @@ const routes: Routes = [
   {path: 'debtors',component:DebtorsComponent},
   {path: 'dashboard',component:DashboardComponent},
   {path: 'docs',component:DocumentsComponent},
+  {path: 'massapprovals',component:MassapprovalsComponent},
   {path: 'massfund',component:FundingmasseditComponent},
+  {path: 'massprogress',component:MassprogressComponent},
   { path: 'home', component: HomeComponent},
   { path: 'help', component: HelpComponent},
   { path: 'import/:importtype', component: ImportsComponent},

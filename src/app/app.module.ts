@@ -53,6 +53,11 @@ import { ImportsComponent } from './components/imports/imports.component';
 import { DebtorsComponent } from './components/debtors/debtors.component';
 import { SelectionlistComponent } from './_helpers/selectionlist/selectionlist.component';
 import { ShowhelpComponent } from './_helpers/showhelp/showhelp.component';
+import { MassapprovalsComponent } from './components/massapprovals/massapprovals.component';
+import { MassprogressComponent } from './components/massprogress/massprogress.component';
+import { GetProgressComponent } from './_helpers/get-progress/get-progress.component';
+import { GetApprovalComponent } from './_helpers/get-approval/get-approval.component';
+import { CommentsModule } from './comments/comments.module';
 
 @NgModule({
   declarations: [
@@ -94,13 +99,18 @@ import { ShowhelpComponent } from './_helpers/showhelp/showhelp.component';
     ImportsComponent,
     DebtorsComponent,
     SelectionlistComponent,
-    ShowhelpComponent
+    ShowhelpComponent,
+    MassapprovalsComponent,
+    MassprogressComponent,
+    GetProgressComponent,
+    GetApprovalComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     MaterialModule,
+    CommentsModule,
     FormsModule,
     ModalModule,
     ReactiveFormsModule,

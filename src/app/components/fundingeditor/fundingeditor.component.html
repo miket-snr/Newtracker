@@ -117,9 +117,16 @@
             <td colspan="2"><input type="number" class="form-control" formControlName="estimatedbudget"></td>
 
             <td>
-              Quotation
+              Tracker Code
             </td>
-            <td colspan="2"><input type="number" class="form-control" formControlName="quotation"></td>
+            <td colspan="2">
+              <select formControlName="trackercode" placeholder="Select a Line" class="form-control">
+                <option [value]="''">Not Tracked</option>
+                <option  value="CIP2023XP">
+                  CIP2023XP
+                </option>
+              </select> 
+              <!-- <input type="number" class="form-control" formControlName="trackercode"></td> -->
           </tr>
 
         </table>

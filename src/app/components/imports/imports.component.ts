@@ -121,7 +121,8 @@ export class ImportsComponent implements OnInit, OnDestroy {
           newdate['NOTE'] = this.apiserv.xtdbtoa(newobj['REFERENCE']);
           newdate['VALUEOF'] = (newobj['VALUEOF(EX-VAT)']);
           newdate['ENTRYCODE'] = 'PONUMBER';
-
+          newdate['SHORTCOMMENT']  = newdate['SHORTCOMMENT'] .replaceAll(/[^a-zA-Z0-9]/gi, '');
+          newdate['PROJLINK']  = newdate['PROJLINK'] .replaceAll(/\s/gi, '');
           if (/^[A-Z]{3}-[A-Z][A-Z0-9]{5}$/.test(newobj['PROJLINK']) && this.apiserv.mapWBS2Req(newobj['PROJLINK']) > 0 ) {
             newdate['ENTRYTYPE'] = 'IMPORT';
             this.importlines.push(JSON.parse(JSON.stringify(newdate)))

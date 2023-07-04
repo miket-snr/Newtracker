@@ -39,6 +39,8 @@
                                                     style="font-weight: bold;">Title</small></th>
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">Budget Group</small></th>
+                                    <th style="background-color:rgb(114, 251, 137);" class="text-center"><small
+                                                    style="font-weight: bold;">Tracker Group</small></th>
 
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">Cipgroup</small></th>
@@ -85,6 +87,8 @@
                                     <td ><small>{{budgetview.KNOWNAS.substring(0,40)}}</small></td>
                                     <td ><small>{{budgetview.TITLE}}</small></td>
                                     <td ><small>{{budgetview.BUDGETGROUP}}</small></td>
+                                    <td  [ngClass]="budgetview.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
+                                        <small>{{budgetview.TRACKERCODE}}</small></td>
                                     <td ><small>{{budgetview.CIPCODE.substring(0,4)}}</small></td>
                                     <td ><small>{{budgetview.CIPCODE}}</small></td>
                                     <td ><small>{{budgetview.DATE06}}</small></td>
