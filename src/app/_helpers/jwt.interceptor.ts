@@ -18,7 +18,17 @@ export class JwtInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    if (request.method === 'POST' && request.body.chContext.CLASS !== "USER") {
+    if (request.method === 'POST' &&  request.body.context ){
+    
+    let mytoken = JSON.parse(localStorage.getItem('BFMUser')).TOKEN
+   let mynewcontext = {... request.body.context}
+   mynewcontext.TOKEN = mytoken;
+  let alteredtoken = {context:mynewcontext}
+      request = request.clone({ 
+        body: {...request.body , ...alteredtoken}});
+      return next.handle(request);
+    }
+     if (request.method === 'POST' &&  request.body.chContext.CLASS !== "USER") {
       // allow the generic token when calling USER class
    let mytoken = JSON.parse(localStorage.getItem('BFMUser')).TOKEN
    let mynewcontext = {... request.body.chContext}
@@ -26,8 +36,6 @@ export class JwtInterceptor implements HttpInterceptor {
   let alteredtoken = {chContext:mynewcontext}
       request = request.clone({ 
         body: {...request.body , ...alteredtoken}});
-
-
       return next.handle(request);
     } else {
       return next.handle(request);

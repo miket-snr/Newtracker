@@ -98,7 +98,11 @@
         <div class="col-8"><textarea class="form-control smallinput" [(ngModel)]="item.TRACKNOTE"></textarea></div>
     </div>
     <!-- <p>{{apiserv.lclstate.dates | json}}</p> -->
-
+    <comments currentUserId="1"
+    apikey = "PSTRACKER" 
+    [reference] = "item.REFERENCE" 
+    commentArea = "PROGRESS"
+    ></comments>
 </mat-dialog-content>
 
 <mat-dialog-actions>

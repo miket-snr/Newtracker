@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { CommentInterface } from '../types/comment.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -41,19 +42,19 @@ export class CommentsService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        token: 'BK175mqMN0',
+        token: JSON.parse(localStorage.getItem('BFMUser')).TOKEN,
       })
     };
     const call2 = {
       context: {
         CLASS: classname,
-        TOKEN: 'BK175mqMN0',
+        TOKEN: JSON.parse(localStorage.getItem('BFMUser')).TOKEN,
         METHOD: methodname
       },
       data: lclobj
 
     };
-    let mypost = this.httpClient.post<any>('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=dev',
+    let mypost = this.httpClient.post<any>('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=prod',
     call2, httpOptions);
     return  mypost.pipe(
       map(data => {

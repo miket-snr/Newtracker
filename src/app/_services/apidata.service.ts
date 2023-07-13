@@ -810,10 +810,14 @@ getSingleApproval(reqno){
       }
       this.pms = [];
       list.RESULT.forEach(a=>{
-        if (a.A < '99999') {this.pms.push(a.B)}
-      })
-      this.pmlist = list.RESULT;
-      this.pmlistBS.next(list.RESULT);
+        a.D = a.D.replace(/\s\s+/g, ' ');
+         //check for duplicate of a.D in array this.pms if not push a to pms
+          if(this.pms.findIndex(b=>b.D === a.D ) === -1){
+            this.pms.push(a);
+      }
+    })
+      this.pmlist = [...this.pms];
+      this.pmlistBS.next(this.pmlist);
       localStorage.setItem('pmlist', JSON.stringify(list.RESULT))
     })
 

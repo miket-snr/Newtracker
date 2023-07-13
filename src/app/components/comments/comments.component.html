@@ -1,6 +1,6 @@
-<div class="container mb-5">
-    <div class="d-flex justify-content-around row mb-4">
-              <h2>{{listheading}}</h2> <button
+<div class="container mb-5 pt-2">
+    <div class="d-flex justify-content-between row mb-4 mt-2">
+              <b>{{listheading}}</b> <button
                   type="button" class="btn btn-sm btn-primary" (click)="addComment()">Add Comment </button>
             </div>
   <div *ngIf="newcomment" class="card borderon">
@@ -11,17 +11,38 @@ New Comment
         <div > 
             <textarea [(ngModel)]="commentForm" class = "w-100 " rows="10"></textarea>
       </div>
+    <div class="row">
+      <div class="col-2 form-control badnews" >Delegate to
+    </div> 
+    <div class="class-8">
+      <select class="form-control" name="DELEGATENAME" [(ngModel)]="commentDelegate">
+        <option *ngFor="let pm of apiserv.pmlist$ | async" [value]="pm.C"> {{pm.D}}</option>
+      </select>
     </div>
+     </div></div>
     <div class="card-footer d-flex justify-content-around">
         <button
         [disabled]="commentForm.length < 5"
         type="button" class="btn btn-sm btn-primary" (click)="saveComment()">Save </button>
+       
         <button
         type="button" class="btn btn-sm btn-danger" (click)="cancelComment()">Cancel </button>   
     </div>
   </div>
-        <div *ngFor="let commentln of comments ; let i = index" class="card">
-          <div class="card-header">
+        <div *ngFor="let commentln of comments ; let i = index" class="card plain mt-2">
+          <div class="row ">
+            <div class="col-12  text-left cursive">
+                <span> <b>{{commentln.DATEOF}}</b> </span><span class="ml-4">{{commentln.LEVEL_2}}</span>
+                <span class="ml-4 text-primary" ><b>{{commentln.COMMENTBY}}</b>  
+                  <button [hidden]="commentln.COMMENTNO === 0" 
+                          type="button" (click)="reply(commentln.COMMENTNO)" 
+                          class="ml-4 btn btn-sm btn-outline-success">
+                          Reply
+                  </button> 
+                </span>
+             </div> 
+         </div> 
+          <!-- <div class="card-header">
            <div class="row">
            <div class="col-3 text-left">
                {{commentln.DATEOF}}
@@ -29,17 +50,57 @@ New Comment
               {{commentln.LEVEL_1}}{{commentln.LEVEL_2}}
            </div>
             <div class="col-4 text-right">
-               {{commentln.COMMENTBY}}
+               {{commentln.COMMENTBY}} 
+               <button [hidden]="commentln.COMMENTNO === 0" type="button" (click)="reply(commentln.COMMENTNO)" class="ml-2 btn btn-sm btn-outline-success">Reply</button>
             </div>
         </div> 
-          </div>
+          </div> -->
           <div class="card-body">
          <pre> {{commentln.COMMENT_TEXT}}</pre>
-         <div class="row">
-          <div class="col-3 offset-8">
-            <button type="button" (click)="reply(commentln.COMMENTNO)" class="btn btn-sm btn-outline-warning">Reply</button>
+         <div *ngIf="newcommentreply == commentln.COMMENTNO" class="card borderon">
+          <div class="bg-primary card-header text-center headingnc">
+      Reply
           </div>
-         </div>
+          <div >
+              <div > 
+                  <textarea [(ngModel)]="commentreplyForm" class = "w-100 " rows="10"></textarea>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-around">
+              <button
+              [disabled]="commentreplyForm.length < 5"
+              type="button" class="btn btn-sm btn-primary" (click)="saveReply()">Save </button>
+              <button
+              type="button" class="btn btn-sm btn-danger" (click)="cancelReply()">Cancel </button>   
+          </div>
         </div>
+        <!-- <div class="row">
+          <div class="col-10 offset-2">
+           <b>Replies:</b>
+          </div>
+        </div> -->
+        <div *ngFor="let commentreply of commentln.REPLIES ; let i = index" >
+    
+           <div class="row pl-4">
+           <div class="col-12 offset-1 text-left cursive">
+               <span> {{commentreply.DATEOF}} </span><span class="ml-4"> {{commentreply.COMMENTBY}} </span>
+            </div> 
+        </div> 
+        <!-- <div class="row pl-4">
+          <div class="col-2 offset-1 text-left cursive">
+              {{commentreply.DATEOF}}
+           </div> <div class="col-4 text-right cursive">
+             {{commentreply.LEVEL_1}}{{commentreply.LEVEL_2}}
+          </div>
+           <div class="col-4 text-right cursive">
+              {{commentreply.COMMENTBY}}
+           </div>
+       </div>  -->
+        <div class="row">
+          <div class="col-10 offset-2">
+            <pre> {{commentreply.COMMENT_TEXT}}</pre>
+          </div>
+        </div>
+
       </div>
       </div>

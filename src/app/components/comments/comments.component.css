@@ -6,3 +6,15 @@
 .borderon{
     border: 2px blue solid;
 }
+
+.cursive {
+    font-style: italic;
+}
+bodytext {
+    font-size: 0.8rem;
+    
+}
+.plain  {
+    border:none;
+    
+}

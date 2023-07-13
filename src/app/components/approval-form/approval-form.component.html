@@ -27,7 +27,7 @@
                   <td colspan="2" style="font-size:0.8rem;">
                     <!-- <input class="form-control" name="pmanager" [(ngModel)]="vm.PMANAGER"> -->
                    <select class="form-control" name="pmanager" [(ngModel)]="vm.PMANAGER">
-                      <option *ngFor="let perc of apiserv.pms" >{{ perc }}</option>
+                      <option *ngFor="let pm of apiserv.pmlist$ | async" [value]="pm.C"> {{pm.D}}</option>
                     </select> 
                   </td>
                   <td colspan="3">
