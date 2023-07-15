@@ -118,7 +118,7 @@ this.buildDurations() ;
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+      // console.log(datein);
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();
@@ -212,7 +212,7 @@ updateDates(blankdate, changer){
   let lastperiod = 'DATE' + ('0'+ (changer-1)).slice(-2);
   this.durations[changer-1] = this.datecount(this.datedata[lastperiod],this.datedata[period]);
  this.updatePlans(this.datedata)
-  console.log(changer);
+  // console.log(changer);
   return blankdate
 }
 
@@ -240,7 +240,7 @@ updateProgress(blankdate, change){
     let out = '';
     let adate = new Date(a);
     adate.setHours(0, 0, 0, 0)
-    console.log(adate);
+    // console.log(adate);
     try {
       // const slicedArray = this.calcsstart.slice(0, b);
       // let  sum = slicedArray.reduce((sum, v) => sum + v);
@@ -252,12 +252,12 @@ updateProgress(blankdate, change){
         adate = new Date(adate.setDate(adate.getDate() + parseInt(b)));
       }
     } catch (e) {
-      console.log(adate);
+      // console.log(adate);
     }
     try {
       out = this.formatDate(adate);
     } catch (e) {
-      console.log(adate)
+      // console.log(adate)
       out = '';
     }
 
@@ -299,7 +299,7 @@ updateProgress(blankdate, change){
     })
   }
   onSubmit() {
-    console.log(this.trackerForm.value);
+    // console.log(this.trackerForm.value);
   }
 
   savePhases(){

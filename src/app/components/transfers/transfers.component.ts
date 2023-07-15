@@ -156,7 +156,7 @@ for (const p in this.docheader){
       this.closejw('cipline')
     })
 
-    console.log(this.docheader);
+    // console.log(this.docheader);
   }
   initLists() {
     let ims = [];

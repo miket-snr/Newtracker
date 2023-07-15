@@ -26,6 +26,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
   searchlistnew = [];
   sections = false;
   filtercip = false;
+  filteropen = false;
   btntitle = 'Show Finview';
   searchbox = '';
   pmlist = [];
@@ -173,7 +174,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+      // console.log(datein);
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();
@@ -259,7 +260,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
   exportexcel(): void {
     /* pass the table id */
     // this.captureService.getImage(this.screen.nativeElement, true).subscribe(img=>{
-    //   console.log(img);
+    //   // console.log(img);
     // })
     let element = document.getElementById('progress');
   //   htmlToImage.toPng(element)
@@ -293,15 +294,25 @@ export class WorklistComponent implements OnInit, OnDestroy {
     this.apiserv.lclstate.filtercip = this.filtercip;
     this.filterList();
   }
-
+  selectOpen() {
+    this.filteropen = !this.filteropen;
+    this.apiserv.lclstate.filteropen = this.filteropen;
+    this.filterList();
+  }
   filterList(){
     this.searchlistnew = [];
-  
-    if (this.filtercip) {
+    if (this.filteropen) {
       this.searchlistnew = this.searchlist.filter(lt => {
-        return lt.INITIATIVE < '10000000' && lt.INITIATIVE < 1000000 ;
+        let tfilt = (lt.STATUS.includes('CLSD') ||  lt.STATUS.includes('DLFL') || lt.STATUS.includes('CNCL') || lt.STATUS.includes('REJT')) ;
+        return !tfilt;
       } ) } else {
         this.searchlistnew = [...this.searchlist];
+      } 
+    if (this.filtercip) {
+      this.searchlistnew = this.searchlistnew.filter(lt => {
+        return lt.INITIATIVE < '10000000' && lt.INITIATIVE < 1000000 ;
+      } ) } else {
+        this.searchlistnew = [...this.searchlistnew];
       } 
     if (this.apiserv.lclstate.pmanager > ' ' && this.apiserv.lclstate.pmanager != '* Show all') {
       let temp = this.searchlistnew.filter(lt => {

@@ -10,7 +10,7 @@ import { ApidataService } from 'src/app/_services/apidata.service';
 })
 export class TaskEditComponent implements OnInit, OnDestroy {
   @Input() task : any
-  @Input() events: Observable<void>;
+  @Input() events: Observable<any>;
   @Output() someChange = new EventEmitter<string>();
   private eventsSubscription: Subscription;
   pmlist = [];
@@ -28,7 +28,8 @@ export class TaskEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pmlist = this.apiserv.pmlist;
-    this.eventsSubscription = this.events.subscribe(() => {
+    this.eventsSubscription = this.events.subscribe((tasker) => {
+      this.task = tasker;
       this.doUpdatefromParent();
   })
   this.doUpdatefromParent();
@@ -79,17 +80,33 @@ formChanges(){
    }
    this.task['DELEGATENAME'] = this.task['DELEGATENAME'] > ' ' ? this.task['DELEGATENAME']: this.task['SENTBY'];
    if (!this.task['INSTRUCTION']) {
-    this.task['INSTRUCTION']  = lcob['instruction']
-    this.taskForm.get('INSTRUCTION').patchValue(lcob['instruction'], { emitEvent: false });
+    this.task['INSTRUCTION']  =  ' ';
+    this.taskForm.get('INSTRUCTION').patchValue(' ', { emitEvent: false });
    }  
   // this.someChange.emit(this.task)
   })
 }
 doUpdatefromParent(){
   for (const field in this.taskForm.controls) { // 'field' is a string
+    if (this.task && this.task['DUEDATE'] && !(this.task['DUEDATE'].includes('-') > 0)){
+      this.task['DUEDATE'] = this.task['DUEDATE'].substring(0,4) + '-' + this.task['DUEDATE'].substring(4,6) + '-' + this.task['DUEDATE'].substring(6,8)
+    }
+    if (this.task && this.task['DUETIME'] && !(this.task['DUETIME'].includes(':') > 0)){
+      this.task['DUETIME'] = this.task['DUETIME'].substring(0,2) + ':' + this.task['DUETIME'].substring(2,4) 
+    }
 if (this.task && this.task[field]){
-   this.taskForm.get(field).patchValue(this.task[field], { emitEvent: false }); // 'control' is a FormControl  
+  console.log(field + this.task[field])
+   this.taskForm.get(field).patchValue(this.task[field],{ emitEvent: false}); // 'control' is a FormControl  
 }
   }
+  // if (this.taskForm.value.DUEDATE.index('-') < 0){
+  //   this.taskForm.get('DUEDATE').setValue('2021-01-01' ,{ emitEvent: false});
+  // }
+  // if (this.taskForm.value.DUETIME.substring(':') <  0){
+  //   this.taskForm.get('DUETIME').setValue('18:00:00' ,{ emitEvent: false});
+  // }
+  console.log(this.taskForm.value.DUETIME)
+  console.log(this.taskForm.value.DUEDATE)
 }
+
 }

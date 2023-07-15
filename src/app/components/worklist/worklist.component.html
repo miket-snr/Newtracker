@@ -48,6 +48,12 @@
                         No Ciplines
                     </label>
                 </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" (change)="selectOpen()" [checked]="filteropen">
+                    <label class="form-check-label">
+                        Hide Closed
+                    </label>
+                </div>
             </div>
             <div class="col-2 d-flex justify-content-around">
                 <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button>
@@ -107,6 +113,8 @@
                                 <th class="text-center"><small>Total Revenue
                                      <br> Incl</small></th>
                             </ng-container>
+                            <th class="text-center"><small>Region</small></th>
+                                <th class="text-center"><small>PM</small></th>  
                         </tr>
                     </thead>
                     <tbody>
@@ -256,6 +264,8 @@
                                         </select></td>
                                 </ng-container> -->
                             </ng-container>
+                            <td class="text-center"><small>{{item.REGION}}</small></td>
+                            <td class="text-center"><small>{{item.PMANAGER}}</small></td>  
                         </tr>
                     </tbody>
                 </table>

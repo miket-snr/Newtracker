@@ -251,7 +251,7 @@ export class MassimportComponent implements OnInit, OnDestroy {
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+      // console.log(datein);
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();

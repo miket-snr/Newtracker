@@ -251,12 +251,12 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
       this.filterByRegion(this.pmForm.value.region);
       this.filterCipgroup('No')
     }
-    console.log(this.searchlistnew);
-    console.log('after')
+    // console.log(this.searchlistnew);
+    // console.log('after')
     this.searchlistnew = this.searchlistnew.filter(obj => {
       return obj['CIPCODE'] == cipline || cipline == '*'
     });
-    console.log(this.searchlistnew);
+    // console.log(this.searchlistnew);
   }
   exportexcel(): void {
     /* pass the table id */

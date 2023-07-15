@@ -42,7 +42,7 @@ export class GetApprovalComponent implements OnInit, OnDestroy {
     let lclobj = { ... this.vm }
     if ( lclobj['APPROVAL_MOTIVATE'].length > 0) lclobj['APPROVAL_MOTIVATE'] = this.apiserv.xtdbtoa(this.vm['APPROVAL_MOTIVATE']);
     let lclobjout = JSON.stringify(lclobj);
-    console.log(lclobjout);
+    // console.log(lclobjout);
     this.apiserv.postGEN(lclobj, 'PUT_APPROVAL').subscribe(item => {
             this.apiserv.messagesBS.next('All Done')
             this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager, lclobj['REFERENCE']);

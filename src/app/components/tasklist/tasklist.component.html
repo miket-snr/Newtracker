@@ -1,6 +1,21 @@
      <!-- <h3>Task planning is not activated for this phase</h3>
         (click)="goPlan()"  -->
-        <div class="row">
+        <div class="mycontainer">
+          <ul class="list-group">
+
+            <li *ngFor="let task of tasks" href="#" class="list-group-item list-group-item-action">
+             <div class="row">
+              <div class="col-2">{{task.ACTIONTYPE}}</div>
+              <div class="col-6">{{task.INSTRUCTION}}</div>
+              <div class="col-2">{{task.DUEDATE}}</div>
+              <div class="col-2"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span></div>
+             </div>
+            </li>
+           
+          </ul>
+        </div>
+
+        <!-- <div class="row">
             <div class="col-1">Action Type</div>
             <div class="col-3">Delegate</div>
             <div class="col-3">Instruction</div>
@@ -20,11 +35,56 @@
               <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
               <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
             </div>
-          </div>
+          </div> -->
            <div class="row d-flex justify-content-between">
           <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addTask()">+ Add task</button>
         </div>
         <div [hidden]="!taskedit">
           <app-task-edit [events]="eventsSubject.asObservable()" [task]="currenttask"
             (someChange)="taskClose($event)"></app-task-edit>
+        </div> 
+        <div [hidden]="!editdetail" class="mycontainer">
+          <div class="row">
+            <div class="col-3">
+              Action Type
+            </div>
+            <div class="col-6"> 
+              {{currenttask.ACTIONTYPE}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              Instruction
+            </div>
+            <div class="col-6"> 
+              {{currenttask.INSTRUCTION}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              Date Due
+            </div>
+            <div class="col-6"> 
+              {{currenttask.DUEDATE}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              Reply
+            </div>
+            <div class="col-6"> 
+              {{currenttask.COMMENT}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              Decision
+            </div>
+            <div class="col-6"> 
+              {{currenttask.DECISION}}
+            </div>
+          <!-- <div class="col-1"><span (click)="replyTask(currenttask)"><mat-icon matTooltip="Edit">edit</mat-icon></span>
+            <span><mat-icon matTooltip="Delete">delete_forever</mat-icon></span>
+            <span><mat-icon matTooltip="Send Mail">email</mat-icon></span>
+          </div> -->
         </div> 

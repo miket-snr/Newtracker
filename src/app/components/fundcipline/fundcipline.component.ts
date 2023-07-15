@@ -344,7 +344,7 @@ return ans;
   createNew(item){
       this.apiserv.postGEN({ABSAREQNO: item ['reference']},'COPY_CIPLINE').subscribe( rep=> {
       if (rep.RESULT.TYPE == 'E'){
-        console.log('Error')
+        // console.log('Error')
       } else {
         this.router.navigate(['/requestedit/' + rep.RESULT.MESSAGE])
       }

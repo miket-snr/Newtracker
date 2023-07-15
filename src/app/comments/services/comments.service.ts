@@ -74,7 +74,7 @@ export class CommentsService {
         //   }
         // } catch (e) {
         //   this.messagesBS.next('Bad Json Reply');
-        //   console.log(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g,"")))
+        //   // console.log(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g,"")))
         //   throw 'Bad Json reply'
         // }
 
