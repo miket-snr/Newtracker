@@ -333,7 +333,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
                                  DATE01:item.DATE01,DATE02:item.DATE02,DATE03:item.DATE03,
                                  DATE04:item.DATE04,DATE05:item.DATE05,DATE06:item.DATE06,
                                  DATE07:item.DATE07,DATE08:item.DATE08,DATE09:item.DATE09,DATE10:item.DATE10,
-                                 multisite:'NO',REFERENCE:item.ABSAREQNO, })
+                                 multisite:'NO',REFERENCE:item.ABSAREQNO,TRACKNOTE:item.TRACKNOTE })
 
   }
   showApproval(item) {  
