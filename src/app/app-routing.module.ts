@@ -25,6 +25,7 @@ import { ImportsComponent } from './components/imports/imports.component';
 import { DebtorsComponent } from './components/debtors/debtors.component';
 import { MassapprovalsComponent } from './components/massapprovals/massapprovals.component';
 import { MassprogressComponent } from './components/massprogress/massprogress.component';
+import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,7 @@ const routes: Routes = [
   { path: 'projectlist', component:ProjectlistComponent},
   { path: 'requestedit/:id', component:AbsarequestComponent},
   { path: 'relink/:newpath', component:RelinkComponent},
+  { path: 'sapcheck', component:SapcheckComponent},
   { path: 'transfers', component:TransfersComponent},
   { path: 'videos', component:VideosComponent},
   { path: 'worklist', component:WorklistComponent},

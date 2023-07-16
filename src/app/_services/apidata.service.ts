@@ -16,6 +16,7 @@ export class ApidataService {
     region: '',
     pmanager: '',
     filtercip: false,
+    filteropen: false,
     dates: {},
     sites: '',
     currentreq: {},
@@ -45,7 +46,7 @@ export class ApidataService {
   approvals = [];
   workstreams = [];
   pmlist = [];
-  pms= [];
+  pms = [];
   scopes = [];
   costs = [];
   pos = [];
@@ -60,12 +61,12 @@ export class ApidataService {
   currentpspid = '00000000';
   currentcipline: any;
   helptexts = []
-budgetgroups = ['* All','CIP2023',
-'OPEX',
-'ROL2022',
-'RXL2022',
-'UNKNOWN',
-]
+  budgetgroups = ['* All', 'CIP2023',
+    'OPEX',
+    'ROL2022',
+    'RXL2022',
+    'UNKNOWN',
+  ]
   public loadingBS = new BehaviorSubject<boolean>(false)
   public approvalBS = new BehaviorSubject<Approval>(new ApprovalClass().approval)
   public approval$ = this.approvalBS.asObservable();
@@ -96,6 +97,9 @@ budgetgroups = ['* All','CIP2023',
 
   public debtorsBS = new BehaviorSubject([]);
   public debtors$ = this.debtorsBS.asObservable();
+
+  public saplistBS = new BehaviorSubject([]);
+  public saplist$ = this.saplistBS.asObservable();
 
   public triangleBS = new BehaviorSubject([]);
   public triangle$ = this.triangleBS.asObservable();
@@ -134,7 +138,7 @@ budgetgroups = ['* All','CIP2023',
       this.wbs2reqmapperBS.next(true)
     })
   }
-  getFunding(region = '*'){
+  getFunding(region = '*') {
     this.postGEN({ REGION: region }, 'GET_FUNDING').subscribe(reply => {
       reply.RESULT.forEach(line => {
         line.TITLE = this.xtdatob(line.TITLE);
@@ -147,11 +151,11 @@ budgetgroups = ['* All','CIP2023',
     })
   }
 
-  putFunding(lclobj: any){
+  putFunding(lclobj: any) {
     this.postGEN(lclobj, 'UPDATE_MASSFUNDING').subscribe(reply => {
-     console.log(reply.RESULT)
-      })
-    }
+      
+    })
+  }
   getCipline(cipid = '') {
     this.postGEN({ INITIATIVE: cipid }, 'GET_CIPLINE_MVTS').subscribe(reply => {
       reply.RESULT.forEach(line => {
@@ -173,8 +177,8 @@ budgetgroups = ['* All','CIP2023',
       this.mvtdocsBS.next(reply.RESULT)
     })
   }
-   /********************************************** */
-   b64toBlob(b64Data, contentType, sliceSize) {
+  /********************************************** */
+  b64toBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
     if (b64Data === 'undefined') {
@@ -206,19 +210,29 @@ budgetgroups = ['* All','CIP2023',
     })
   }
   getDebtors() {
-    this.postGEN({ BUKRS: "1000" }, 'GET_DEBTORDOCS','PROJECTS').subscribe(reply => {
+    this.postGEN({ BUKRS: "1000" }, 'GET_DEBTORDOCS', 'PROJECTS').subscribe(reply => {
       reply.RESULT.forEach(line => {
         line.SGTXT = this.xtdatob(line.SGTXT);
- 
+
       })
       this.debtorsBS.next(reply.RESULT)
     })
   }
 
-  getReqList(reqno = 0){
+  getSapcheck() {
+    this.postGEN({ ABSAREQNO: "1000" }, 'COMPARE_SAP_TRACKER', 'PSTRACKER').subscribe(reply => {
+      let xarray = JSON.parse(reply.RESULT)
+      xarray.forEach(line => {
+        line.POST1 = this.xtdatob(line.POST1);
+      })
+      this.saplistBS.next(xarray)
+    })
+  }
+
+  getReqList(reqno = 0) {
     let lclobj = {};
     if (reqno > 100000) {
-      lclobj = { ABSAREQNO: reqno, LOADTYPE: "A" } 
+      lclobj = { ABSAREQNO: reqno, LOADTYPE: "A" }
     } else {
       lclobj = { LOADTYPE: "A" }
     }
@@ -280,7 +294,7 @@ budgetgroups = ['* All','CIP2023',
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+     
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();
@@ -291,22 +305,24 @@ budgetgroups = ['* All','CIP2023',
   }
   getHelptexts(textname = '') {
 
-    if (textname){
-    let reply = this.helptextsBS.value.find(line=>{
-        return line.KEYCODE == textname ;
+    if (textname) {
+      let reply = this.helptextsBS.value.find(line => {
+        return line.KEYCODE == textname;
       })
-      if (reply){
+      if (reply) {
         return reply
       } else {
-        let reply = 
-          {CONTRACTCODE:'PSPT', KEYCODE:textname, TITLE:'',QUESTION:'',
-  LINE1: ` <p>Simply fill the correct information in </p>`
- , LINE2:''}
+        let reply =
+        {
+          CONTRACTCODE: 'PSPT', KEYCODE: textname, TITLE: '', QUESTION: '',
+          LINE1: ` <p>Simply fill the correct information in </p>`
+          , LINE2: ''
+        }
         return reply
       }
     }
     this.postGEN({ CONTRACTCODE: "PSPT" }, "GET_HELPTEXTS", "PROJECTS").subscribe(helps => {
-      helps?.RESULT?.forEach(liner=>{
+      helps?.RESULT?.forEach(liner => {
         liner['LINE1'] = this.xtdatob(liner['LINE1'])
       })
       this.helptextsBS.next(helps.RESULT);
@@ -361,7 +377,7 @@ budgetgroups = ['* All','CIP2023',
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
         this.lclstate.dates['LAST_COMMENT'] = this.xtdatob(this.lclstate.dates['LAST_COMMENT'])
         this.lclstate.phase = reply.RESULT[0].PHASE;
-        this.lclstate.closed = (this.lclstate.phase > 'PHASE' && this.lclstate.phase < 'PHASE11' ) ? false : true;
+        this.lclstate.closed = (this.lclstate.phase > 'PHASE' && this.lclstate.phase < 'PHASE11') ? false : true;
         this.lclstate.currentreq = reply.RESULT[0];
         this.currentreqBS.next(feedback[0]);
         this.getTasks({ LINKEDOBJNR: feedback[0].ABSAREQNO });
@@ -375,7 +391,7 @@ budgetgroups = ['* All','CIP2023',
       if (!reply || reply.RESULT.length == 0) {
         return
       }
-      reply.RESULT.forEach(line=>{
+      reply.RESULT.forEach(line => {
         line.INSTRUCTION = decodeURIComponent(line.INSTRUCTION)
       })
       this.tasklistBS.next(reply.RESULT)
@@ -405,36 +421,36 @@ budgetgroups = ['* All','CIP2023',
   }
 
   xtdbtoa(instring: string) {
-    if (instring){
-    try {
-      return btoa(encodeURIComponent(instring))
-    } catch (err) {
-      this.messagesBS.next('Conversion Failed')
+    if (instring) {
+      try {
+        return btoa(encodeURIComponent(instring))
+      } catch (err) {
+        this.messagesBS.next('Conversion Failed')
+      }
+      return '';
+    } else {
+      return '';
     }
-    return '';
-  } else {
-    return '';
-  }
   }
 
   xtdatob(instring: string) {
     if (instring) {
-    try {
-      return atob(decodeURIComponent(instring))
-    } catch (err) {
-      this.messagesBS.next('Conversion Failed')
+      try {
+        return atob(decodeURIComponent(instring))
+      } catch (err) {
+        this.messagesBS.next('Conversion Failed')
+      }
+      return '';
+    } else {
+      return '';
     }
-    return '';
-  } else {
-    return '';
-  }
   }
 
   async getone(reference) {
-    console.log(reference);
+    
     this.postGEN({ REGION: 'Region 2', MASK: '', REFERENCE: reference, ACTION: 'F' }, 'GET_PROJLIST').subscribe(list => {
       if (Array.isArray(list.RESULT) && list.RESULT.length > 0) {
-        console.log('ok' + list.RESULT[0].ABSAREQNO);
+       
         this.testcontainerBS.next(list.RESULT[0].ABSAREQNO)
         this.counter++;
       } else {
@@ -468,23 +484,23 @@ budgetgroups = ['* All','CIP2023',
     this.tasklinesBS.next(temp);
     this.reqdata = [...temp];
   }
-locateFunds(region,cipgroup,cipcode){
-  
-}
+  locateFunds(region, cipgroup, cipcode) {
+
+  }
   getProgresslist(region, pmanager, reference = '') {
-    if (reference.length > 1)  {
+    if (reference.length > 1) {
       region = '*';
       pmanager = '*'
-    }else {
-    if (this.progressBS.value.length == 0 || this.lclstate.region != region || this.lclstate.pmanager != pmanager) {
-      this.progressBS.next([]);
-      this.lclstate.region = region;
-      this.lclstate.pmanager = pmanager;
     } else {
-      region = this.lclstate.region;
-      pmanager = this.lclstate.pmanager;
+      if (this.progressBS.value.length == 0 || this.lclstate.region != region || this.lclstate.pmanager != pmanager) {
+        this.progressBS.next([]);
+        this.lclstate.region = region;
+        this.lclstate.pmanager = pmanager;
+      } else {
+        region = this.lclstate.region;
+        pmanager = this.lclstate.pmanager;
+      }
     }
-  }
     this.postGEN({ REGION: region, MASK: pmanager, REFERENCE: reference, ACTION: 'F' }, 'GET_PROJLIST').subscribe(list => {
       if (list.RESULT[0]?.STATUS != 'Error') {
 
@@ -495,6 +511,7 @@ locateFunds(region,cipgroup,cipcode){
             ABSAREQNO: line.ABSAREQNO,
             PROJLINK: line.PROJLINK,
             ONEVIEW: line.ONEVIEW,
+            REGION: line.REGION,
             KNOWNAS: this.xtdatob(line.SKNOWNAS),
             BASELINEBUDGET: line.BASELINEBUDGET,
             POVALUE: line.POVALUE,
@@ -562,36 +579,36 @@ locateFunds(region,cipgroup,cipcode){
 
   /*******postGen******************************************************* */
   postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER") {
-    // console.log(lclobj);
+    // // console.log(lclobj);
     this.loading = true;
     this.loadingBS.next(true);
-    let sys="PROD";
+    let sys = "PROD";
 
-    if (classname !=='USER' && sys != 'PROD'){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        token: 'BK175mqMN0',
-      })
-    };
-    const call2 = {
-      context: {
-        CLASS: classname,
-        TOKEN: 'BK175mqMN0',
-        METHOD: methodname
-      },
-      data: lclobj
+    if (classname !== 'USER' && sys != 'PROD') {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          token: 'BK175mqMN0',
+        })
+      };
+      const call2 = {
+        context: {
+          CLASS: classname,
+          TOKEN: 'BK175mqMN0',
+          METHOD: methodname
+        },
+        data: lclobj
 
-    };
-    let mypost = this.http.post('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=prod',
-      call2, httpOptions);
-      
-    return  mypost.pipe(
+      };
+      let mypost = this.http.post('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=prod',
+        call2, httpOptions);
+
+      return mypost.pipe(
         map(data => {
           this.loading = false;
           this.loadingBS.next(false);
           try {
-            let represult = (data && data['d'] && data['d'].exResult) ? JSON.parse(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g,""))) : data
+            let represult = (data && data['d'] && data['d'].exResult) ? JSON.parse(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g, ""))) : data
             if (!represult || !represult.RESULT) {
               throw 'Error unknown '
             } else {
@@ -609,70 +626,70 @@ locateFunds(region,cipgroup,cipcode){
             }
           } catch (e) {
             this.messagesBS.next('Bad Json Reply');
-            console.log(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g,"")))
+            // console.log(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g, "")))
             throw 'Bad Json reply'
           }
 
         })
       )
-      } else {
-        const BASE_POST = 'https://io.bidvestfm.co.za/BIDVESTFM_API_GEN_PROD/genpost';
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            Authorization: 'Basic dXNlcm5hbWU6cGFzc3dvcmQ='
-          })
-        };
-        const uploadvar = {
-          callType: 'post',
-          chContext: {
-            CLASS: classname,
-            METHOD: methodname,
-            TOKEN: "BK175mqMN0"
-          },
-          chData: lclobj
-        };
-        return this.http
-          .post<any>(BASE_POST, uploadvar, httpOptions).pipe(
-            map(data => {
-              this.loading = false;
-              this.loadingBS.next(false);
-              try {
-                let represult = (data && data.d && data.d.exResult) ? JSON.parse(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g,""))) : data
-                if (!represult || !represult.RESULT) {
-                  throw 'Error unknown '
-                } else {
-                  if (!Array.isArray(represult.RESULT) && typeof represult.RESULT === 'string' && represult.RESULT.includes('ERR')) {
-                    try {
-                      let errormsg = JSON.parse(represult.RESULT)
-                      this.messagesBS.next(errormsg['ERR']);
-                      throw errormsg['ERR']
-                    }
-                    catch (e) {
-                      throw 'Error message unknown '
-                    }
+    } else {
+      const BASE_POST = 'https://io.bidvestfm.co.za/BIDVESTFM_API_GEN_PROD/genpost';
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: 'Basic dXNlcm5hbWU6cGFzc3dvcmQ='
+        })
+      };
+      const uploadvar = {
+        callType: 'post',
+        chContext: {
+          CLASS: classname,
+          METHOD: methodname,
+          TOKEN: "BK175mqMN0"
+        },
+        chData: lclobj
+      };
+      return this.http
+        .post<any>(BASE_POST, uploadvar, httpOptions).pipe(
+          map(data => {
+            this.loading = false;
+            this.loadingBS.next(false);
+            try {
+              let represult = (data && data.d && data.d.exResult) ? JSON.parse(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g, ""))) : data
+              if (!represult || !represult.RESULT) {
+                throw 'Error unknown '
+              } else {
+                if (!Array.isArray(represult.RESULT) && typeof represult.RESULT === 'string' && represult.RESULT.includes('ERR')) {
+                  try {
+                    let errormsg = JSON.parse(represult.RESULT)
+                    this.messagesBS.next(errormsg['ERR']);
+                    throw errormsg['ERR']
                   }
-                  return represult
+                  catch (e) {
+                    throw 'Error message unknown '
+                  }
                 }
-              } catch (e) {
-                this.messagesBS.next('Bad Json Reply');
-                console.log(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g,"")))
-                throw 'Bad Json reply'
+                return represult
               }
-    
-            })
-          )
-      }
+            } catch (e) {
+              this.messagesBS.next('Bad Json Reply');
+              // console.log(JSON.parse(data.d.exResult.replace(/[^\x00-\x7F]/g, "")))
+              throw 'Bad Json reply'
+            }
+
+          })
+        )
+    }
 
   }
-getSingleApproval(reqno){
-  this.postGEN({ ABSAREQNO: reqno }, "GET_APPROVAL", "PSTRACKER").subscribe(reply => {
-    if (!reply || reply.RESULT.length == 0) {
-      return
-    }
-    this.approvalBS.next(JSON.parse(reply.RESULT));
-     })
-}
+  getSingleApproval(reqno) {
+    this.postGEN({ ABSAREQNO: reqno }, "GET_APPROVAL", "PSTRACKER").subscribe(reply => {
+      if (!reply || reply.RESULT.length == 0) {
+        return
+      }
+      this.approvalBS.next(JSON.parse(reply.RESULT));
+    })
+  }
   getCommentList(Projref = '', area = '', specific = '') {
     this.commentlistBS.next([]);
     if (Projref.length < 5) {
@@ -688,7 +705,7 @@ getSingleApproval(reqno){
   }
   putComment(projCOMMENT: any) {
     this.postGEN(projCOMMENT, "PUT_COMMENT", "PROJECTS").subscribe(reply => {
-      // console.log(reply.RESULT);
+      // // console.log(reply.RESULT);
       // this.getCommentList(projcomment.PSPID);
     })
   }
@@ -790,8 +807,8 @@ getSingleApproval(reqno){
       }
 
       if (this.cipgroups.length > 0) {
-        this.cipcodes.sort((a,b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0))
-        this.cipgroups.sort((a,b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0))
+        this.cipcodes.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0))
+        this.cipgroups.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0))
         if (this.regions.length > 1) {
           const index = this.regions.findIndex(object => object.code === 'ALL');
           if (index === -1) {
@@ -809,35 +826,35 @@ getSingleApproval(reqno){
         return
       }
       this.pms = [];
-      list.RESULT.forEach(a=>{
+      list.RESULT.forEach(a => {
         a.D = a.D.replace(/\s\s+/g, ' ');
-         //check for duplicate of a.D in array this.pms if not push a to pms
-          if(this.pms.findIndex(b=>b.D === a.D ) === -1){
-            this.pms.push(a);
-      }
-    })
+        //check for duplicate of a.D in array this.pms if not push a to pms
+        if (this.pms.findIndex(b => b.D === a.D) === -1) {
+          this.pms.push(a);
+        }
+      })
       this.pmlist = [...this.pms];
       this.pmlistBS.next(this.pmlist);
       localStorage.setItem('pmlist', JSON.stringify(list.RESULT))
     })
 
   }
-  getApprovalText(APPROVAL_STATUS = ''){
-    if (APPROVAL_STATUS === '' || this.approvals.length === 0 ) {
+  getApprovalText(APPROVAL_STATUS = '') {
+    if (APPROVAL_STATUS === '' || this.approvals.length === 0) {
       return 'Unknown'
     }
-    let re = /pprov|100/g; 
+    let re = /pprov|100/g;
 
-if (APPROVAL_STATUS.search(re) != -1 ) return 'Approved';
+    if (APPROVAL_STATUS.search(re) != -1) return 'Approved';
 
-let temp =  this.approvals.find(line => {
-    return line.code === APPROVAL_STATUS.replace(/%/g, '');
-  })
-  if (temp && temp.text) {
-    return temp.text;
-  } else {
-    return 'Unknown'
-  }
+    let temp = this.approvals.find(line => {
+      return line.code === APPROVAL_STATUS.replace(/%/g, '');
+    })
+    if (temp && temp.text) {
+      return temp.text;
+    } else {
+      return 'Unknown'
+    }
 
   }
   pushFeedback() {
@@ -900,7 +917,7 @@ let temp =  this.approvals.find(line => {
     if (!strin.substring(strin.length - 3).includes('.')) {
       strin = strin + '.00'
     }
-    strin = strin.replace(/,/g," ");
+    strin = strin.replace(/,/g, " ");
     let tempstr = (strin.includes("-")) ? '    (' + strin.substring(1) + ')' : '       ' + strin;
     return tempstr.substring(tempstr.length - 14)
   }

@@ -102,7 +102,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.requestForm.disable();
     this.formChangesSubscription = this.ngForm.form.valueChanges.subscribe(x => {
-      console.log(x);
+      // console.log(x);
     })
     this.addFunder();
     this.reqno = this.route.snapshot.paramMap.get('id');
@@ -260,7 +260,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
       this.modalServicejw.open("multisite");
     } else {
       if(confirm("Are you sure to delete ")) {
-        console.log("Implement delete functionality here");
+        // console.log("Implement delete functionality here");
       }
     }
   }
@@ -554,7 +554,7 @@ savePhases() {
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+      // console.log(datein);
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();

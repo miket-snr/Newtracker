@@ -47,7 +47,7 @@ export class DatePlanningService {
     let out = '';
     let adate = new Date(a);
     adate.setHours(0, 0, 0, 0)
-    console.log(adate);
+
     try {
       // const slicedArray = this.calcsstart.slice(0, b);
       // let  sum = slicedArray.reduce((sum, v) => sum + v);
@@ -59,12 +59,12 @@ export class DatePlanningService {
         adate = new Date(adate.setDate(adate.getDate() + parseInt(b)));
       }
     } catch (e) {
-      console.log(adate);
+   
     }
     try {
       out = this.formatDate(adate);
     } catch (e) {
-      console.log(adate)
+   
       out = '';
     }
 
@@ -85,7 +85,7 @@ export class DatePlanningService {
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-      console.log(datein);
+      // console.log(datein);
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();

@@ -58,6 +58,7 @@ import { MassprogressComponent } from './components/massprogress/massprogress.co
 import { GetProgressComponent } from './_helpers/get-progress/get-progress.component';
 import { GetApprovalComponent } from './_helpers/get-approval/get-approval.component';
 import { CommentsModule } from './comments/comments.module';
+import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { CommentsModule } from './comments/comments.module';
     MassapprovalsComponent,
     MassprogressComponent,
     GetProgressComponent,
-    GetApprovalComponent
+    GetApprovalComponent,
+    SapcheckComponent
   ],
   imports: [
     BrowserModule,

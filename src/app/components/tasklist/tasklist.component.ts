@@ -9,26 +9,46 @@ import { AuthService } from 'src/app/_services/auth.service';
   styleUrls: ['./tasklist.component.css']
 })
 export class TasklistComponent implements OnInit, OnDestroy {
-@Input() reference: any;
-tasksub: Subscription;
-eventsSubject: Subject<void> = new Subject<void>();
-tasks = [];
-currenttask: any;
-taskedit = false;
-editdetail = false;
+  @Input() reference: any;
+  tasksub: Subscription;
+  eventsSubject: Subject<void> = new Subject<void>();
+  tasks = [];
+  currenttask = {
+    ACTIONTYPE: '',
+    DECISION: '',
+    DUEDATE: '',
+    DUETIME: '180000',
+    INSTRUCTION: '',
+    DATESENT: '',
+    DELEGATENAME: '',
+    COMMENT: ''
+  };
+  taskedit = false;
+  editdetail = false;
 
   constructor(private authserv: AuthService, private apiserv: ApidataService) { }
 
   ngOnInit(): void {
-    this.tasksub = this.apiserv.tasklist$.subscribe(lines=>{
+    this.tasksub = this.apiserv.tasklist$.subscribe(lines => {
       this.tasks = lines;
-     })
+    })
   }
   ngOnDestroy() {
     if (this.tasksub) { this.tasksub.unsubscribe() };
-   
+
   }
   addTask() {
+    this.currenttask = {
+      ACTIONTYPE: '',
+      DECISION: '',
+      DUEDATE: '',
+      DUETIME: '18:00',
+      INSTRUCTION: '',
+      DATESENT: '',
+      DELEGATENAME: '',
+      COMMENT: ''
+    }
+    this.editdetail = false;
     let lclobj = {
       LINKEDTYPE: 'BT',
       SENTBY: this.authserv.currentUserValue.EMAIL.toLocaleUpperCase(),
@@ -36,16 +56,17 @@ editdetail = false;
     }
     this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').subscribe(reply => {
       const lctask = JSON.parse(JSON.stringify(reply.RESULT));
+      lctask['DUETIME'] = '18:00';
       this.tasks.push(lctask)
       // this.editTask(lctask);
-    
+
       this.currenttask = lctask;
       this.taskedit = true;
-      this.emitEventToChild();
+      this.emitEventToChild(this.currenttask);
     })
   }
-  emitEventToChild() {
-    this.eventsSubject.next();
+  emitEventToChild(task:any) {
+    this.eventsSubject.next(task);
   }
   editTask(task: any) {
     this.currenttask = task;
@@ -56,11 +77,12 @@ editdetail = false;
     // this.taskForm.get('DELEGATENAME').patchValue(task.DELEGATENAME, { emitEvent: false });
     // this.taskForm.get('COMMENT').patchValue(task.COMMENT, { emitEvent: false });
     this.editdetail = true;
+    this.emitEventToChild(task);
   }
-  taskClose(reply){
-    if  (reply =='cancel'){
-     let metemp = this.tasks.pop();
-      
+  taskClose(reply) {
+    if (reply == 'cancel') {
+      let metemp = this.tasks.pop();
+
     }
     this.taskedit = false;
   }

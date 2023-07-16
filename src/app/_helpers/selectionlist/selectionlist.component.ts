@@ -13,7 +13,7 @@ export class SelectionlistComponent implements OnInit {
 
   isSelected = true;
   onListSelectionChange(ob: MatSelectionListChange) {
-     console.log("Selected Item: " + ob.source.selectedOptions.selected.length);
+     // console.log("Selected Item: " + ob.source.selectedOptions.selected.length);
   }
   techList = [
     {id: 101, lang: 'Java'},
@@ -28,6 +28,6 @@ export class SelectionlistComponent implements OnInit {
     selectedTech: ''
   });
   onFormSubmit() {
-    console.log(this.techForm.get('selectedTech').value);
+    // console.log(this.techForm.get('selectedTech').value);
   }
 } 
