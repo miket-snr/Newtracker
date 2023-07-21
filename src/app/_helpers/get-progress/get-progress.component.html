@@ -5,7 +5,7 @@
         <div class="col-2 text-right"><small>Initiation</small></div>
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG02"
-                [disabled]="item.multisite >='PHASE02'">
+                [disabled]="item.multisite >='PHASE02' &&  blockback">
                 <option *ngFor="let perc of codes[1].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE02"></div>
@@ -16,7 +16,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG03"
-                [disabled]="item.multisite>='PHASE03'">
+                [disabled]="item.multisite>='PHASE03'  &&  blockback">
                 <option *ngFor="let perc of codes[2].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE03"></div>
@@ -26,7 +26,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG04"
-                [disabled]="item.multisite>='PHASE04'">
+                [disabled]="item.multisite>='PHASE04'  &&  blockback">
                 <option *ngFor="let perc of codes[3].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE04"></div>
@@ -36,7 +36,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG05"
-                [disabled]="item.multisite>='PHASE05'">
+                [disabled]="item.multisite>='PHASE05'  &&  blockback">
                 <option *ngFor="let perc of codes[4].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE05"></div>
@@ -47,7 +47,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG06"
-                [disabled]="item.multisite>='PHASE06'">
+                [disabled]="item.multisite>='PHASE06'  &&  blockback">
                 <option *ngFor="let perc of codes[5].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE06"></div>
@@ -57,7 +57,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG07"
-                [disabled]="item.multisite>='PHASE07'">
+                [disabled]="item.multisite>='PHASE07'  &&  blockback">
                 <option *ngFor="let perc of codes[6].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE07"></div>
@@ -67,7 +67,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG08"
-                [disabled]="item.multisite>='PHASE08'">
+                [disabled]="item.multisite>='PHASE08'  &&  blockback">
                 <option *ngFor="let perc of codes[7].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE08"></div>
@@ -77,7 +77,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG09"
-                [disabled]="item.multisite>='PHASE09'">
+                [disabled]="item.multisite>='PHASE09'  &&  blockback">
                 <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE09"></div>
@@ -87,7 +87,7 @@
 
         <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
                 name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG10"
-                [disabled]="item.multisite>='PHASE10'">
+                [disabled]="item.multisite>='PHASE10' &&  blockback">
                 <option *ngFor="let perc of codes[9].codes" [value]="perc.code">{{ perc.text }}</option>
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE10"></div>

@@ -1,14 +1,14 @@
 <div class="comment">
   <div class="comment-image-container">
-  <ng-container *ngIf="comment.parentId=='0'"><img width="100%" src= "/assets/Task.png" /> </ng-container>  
-  <ng-container *ngIf="comment.parentId!='0'"><img  width="100%"  src= "/assets/Reply.png" /> </ng-container> 
+  <ng-container *ngIf="comment.parentId=='0'"><img width="100%" src= "./assets/Task.png" /> </ng-container>  
+  <ng-container *ngIf="comment.parentId!='0'"><img  width="100%"  src= "./assets/Reply.png" /> </ng-container> 
   </div>
   <div class="comment-right-part">
     <div class="comment-content">
       <div class="comment-author">{{ comment.username }}</div>
       <div>{{ createdAt }}</div>
     </div>
-    <div class="comment-text" *ngIf="!isEditing()">{{ comment.body }}</div>
+    <div class="comment-text" *ngIf="!isEditing()"><pre>{{ comment.body }}</pre></div>
     <comment-form
       *ngIf="isEditing()"
       submitLabel="Update"

@@ -52,6 +52,7 @@ export interface absareq {
     APPROVAL_SUBMITDATE:string ,
     APPROVED_AMT:string ,
     APPROVAL_NOTE:string ,
+    CONTINGENCY: string ,
     IMPLEMENT: string ,
     PPRACT_COMPLETE: string ,
     OHSRISK: string ,

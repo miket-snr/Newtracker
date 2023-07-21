@@ -1,4 +1,4 @@
-.tableFixHead          { overflow: auto; height: 700px; width: 100vw; }
+.tableFixHead          { overflow: auto; height: 5500px; width: 100vw; }
 .tableFixHead thead th { position: sticky; top: 0; z-index: 1; background-color: lightgrey; }
 .tableFixHead tbody th { position: sticky; left: 0; }
 .smallinput {
@@ -41,12 +41,21 @@ th small {
   }
   .mycontainer {
     padding: 20px;
-    height: 900px;
+    height: 85vh;
     display: block;
     max-width: -moz-fit-content;
     max-width: fit-content;
     margin: 0 auto;
-    overflow-x: auto;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  .mytopcontainer {
+    padding: 20px;
+    height: 65px;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: none;
     white-space: nowrap;
   }
   .multisite{
@@ -61,9 +70,8 @@ th small {
     max-width: -moz-fit-content;
     max-width: fit-content;
     margin: 0 auto;
-    overflow-x: auto;
     white-space: nowrap;
-    
+    text-overflow: ellipsis;
   }
   .busy {
     background-color: orange;

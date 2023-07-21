@@ -3,6 +3,7 @@ import { CommentsService } from '../../services/comments.service';
 import { ActiveCommentInterface } from '../../types/activeComment.interface';
 import { CommentInterface } from '../../types/comment.interface';
 import { Subscription } from 'rxjs';
+import { by } from 'protractor';
 
 @Component({
   selector: 'comments',
@@ -23,9 +24,18 @@ export class CommentsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     let lsub =   this.commentsService.getComments({APIKEY:this.apikey, REFERENCE: this.reference,COMMENT_AREA:this.commentArea}).subscribe((comments) => {
       this.comments = comments;
+//sort this.comments by id descending
+      this.comments.sort((a,b) => {
 
+        if (a.id < b.id) {
+          return 1;
+        }
+        if (a.id > b.id) {
+          return -1;
+        }
+        return 0;
+      } );
     });
-    this.subs.add(lsub);
   }
 ngOnDestroy(): void {
   this.subs.unsubscribe();

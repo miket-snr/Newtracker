@@ -11,7 +11,8 @@ import { ApidataService } from 'src/app/_services/apidata.service';
 export class GetProgressComponent implements OnInit {
 item = this.initdata();
 phaseprog: any;
-codes = this.buildcodes();
+blockback = false;
+codes = this.apiserv.buildcodes();
   constructor(@Inject(MAT_DIALOG_DATA) public data: Progress, private progressDialog: MatDialogRef<GetProgressComponent>, private apiserv: ApidataService) { }
 
   ngOnInit(): void {
@@ -74,9 +75,9 @@ buildcodes() {
       { code: 80, text: 'Advanced Progress' },
       { code: 100, text: 'Completed' }]
   })
-  this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 100, text: 'Completed' }] })
-  this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-  this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' },{ code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' },{ code: 100, text: 'Completed' }] })
   return this.phaseprog;
 }
 savePhases() {

@@ -26,6 +26,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   @Input() vm: absareq;
   site = '';
   knownas = '';
+  blockback = false;
   sub: Subscription;
   phase = 'PHASE01'
   fact2 = '';

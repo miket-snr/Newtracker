@@ -118,7 +118,7 @@ export class ApidataService {
   public pmlist$ = this.pmlistBS.asObservable();
 
   public progressBS = new BehaviorSubject([]);
-  public progress$ = this.currentprojBS.asObservable();
+  public progress$ = this.progressBS.asObservable();
 
   public proglookupsBS = new BehaviorSubject([]);
   public proglookups$ = this.proglookupsBS.asObservable();
@@ -272,7 +272,8 @@ export class ApidataService {
       ele.SITES = this.xtdatob(ele.SITES)
       ele.KNOWNAS = this.xtdatob(ele.SKNOWNAS)
       ele.TITLE = this.xtdatob(ele.STITLE)
-      ele.LAST_COMMENT = this.xtdatob(ele.LAST_COMMENT)
+      ele.TRACKNOTE = this.xtdatob(ele.TRACKNOTE)
+      ele.LAST_COMMENT = ele.LAST_COMMENT? this.xtdatob(ele.LAST_COMMENT): ele.TRACKNOTE.substring(0,250);
       ele.DATES = ele.DATES ? ele.DATES : ''
       if (ele.DATES.includes('PROG')) {
         try {
@@ -375,7 +376,7 @@ export class ApidataService {
         let feedback = this.processBigview(reply.RESULT)
         this.lclstate.dates = JSON.parse(reply.RESULT[0].DATES)
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
-        this.lclstate.dates['LAST_COMMENT'] = this.xtdatob(this.lclstate.dates['LAST_COMMENT'])
+        this.lclstate.dates['LAST_COMMENT'] =  this.lclstate.dates['TRACKNOTE'].substring(0,250);
         this.lclstate.phase = reply.RESULT[0].PHASE;
         this.lclstate.closed = (this.lclstate.phase > 'PHASE' && this.lclstate.phase < 'PHASE11') ? false : true;
         this.lclstate.currentreq = reply.RESULT[0];
@@ -518,6 +519,7 @@ export class ApidataService {
             TRACKERCODE: line.TRACKERCODE,
             CIPBUDGET: line.CIPBUDGET,
             APPROVAL_STATUS: this.getApprovalText(line.APPROVAL_STATUS),
+            CONTINGENCY: line.CONTINGENCY,
             INITIATIVE: line.INITIATIVE,
             CIPCODE: line.CIPCODE,
             BUDGETGROUP: line.CIPGROUP,
@@ -546,6 +548,7 @@ export class ApidataService {
             DATE08: innerline[0].DATE08,
             DATE09: innerline[0].DATE09,
             DATE10: innerline[0].DATE10,
+            TRACKNOTE: this.xtdatob(innerline[0].TRACKNOTE),
             PHASE: line.PHASE,
             BUDGET: line.BUDGET,
             COSTS: line.COSTS,
@@ -905,9 +908,9 @@ export class ApidataService {
         { code: 80, text: 'Advanced Progress' },
         { code: 100, text: 'Completed' }]
     })
-    this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 100, text: 'Completed' }] })
-    this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-    this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' },{ code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' },{ code: 100, text: 'Completed' }] })
     return this.phaseprog;
   }
   formatString(strin = '') {

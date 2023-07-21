@@ -86,7 +86,7 @@
 <mat-dialog-actions>
   <div class="row">
     <div class="col-12 d-flex justify-content-around">
-      <button class="mat-raised-button " (click)="close()">Close</button>
+      <button class="mat-raised-button " (click)="close()" [disabled]="saving">Close</button>
       <!-- <span class="text-danger"> Save is not enabled - Under Construction</span> -->
        <button class="mat-raised-button mat-primary " (click)="saveApproval()">Save</button>  
     </div>

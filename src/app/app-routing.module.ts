@@ -26,6 +26,7 @@ import { DebtorsComponent } from './components/debtors/debtors.component';
 import { MassapprovalsComponent } from './components/massapprovals/massapprovals.component';
 import { MassprogressComponent } from './components/massprogress/massprogress.component';
 import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
+import { IssuesComponent } from './components/issues/issues.component';
 
 
 const routes: Routes = [
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path: 'debtors',component:DebtorsComponent},
   {path: 'dashboard',component:DashboardComponent},
   {path: 'docs',component:DocumentsComponent},
+  {path: 'issues',component:IssuesComponent},
   {path: 'massapprovals',component:MassapprovalsComponent},
   {path: 'massfund',component:FundingmasseditComponent},
   {path: 'massprogress',component:MassprogressComponent},

@@ -27,8 +27,8 @@ export class CommentsService {
    this.PostGen(filter,"GET_COMMENT","COMMENTS").subscribe((data) => {
     let outarray: any[] = [];
     data.forEach((temp: any) => {
-    let out = {id:temp['ID'].toLocaleString() ,body: this.xtdatob(temp.COMMENT_TEXT), username:temp.DISPLAYNAME , 
-    parentId:temp.PARENT_ID == 0? '0': temp.PARENT_ID.toLocaleString(), createdAt: temp.DATEOF , userId:temp.COMMENTBY}
+    let out = {id:('00'+temp['ID'].toLocaleString()).slice(-3) ,body: this.xtdatob(temp.COMMENT_TEXT), username:temp.DISPLAYNAME , 
+    parentId:temp.PARENT_ID == 0? '0': ('00'+temp['PARENT_ID'].toLocaleString()).slice(-3), createdAt: temp.DATEOF , userId:temp.COMMENTBY}
    outarray.push(out);
     });
      

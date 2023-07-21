@@ -361,6 +361,26 @@
         </div>
        
       </mat-tab>
+      <mat-tab *ngIf="greaterThan(reqno,'0')" label="OHS" class="tabber">
+
+        <div class="d-flex justify-content-left">
+
+          <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
+
+
+            <div *ngIf="sectionid[4]" style="height:100%;">
+
+              <div class="card">
+
+<h2>Under Construction</h2>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+       
+      </mat-tab>
       <mat-tab *ngIf="greaterThan(reqno,'0') && stable" label="Funding" class="tabber">
         <app-fundingeditor [vm]="vm"></app-fundingeditor>
       </mat-tab>

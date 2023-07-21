@@ -29,6 +29,8 @@ export class WorklistComponent implements OnInit, OnDestroy {
   filteropen = false;
   btntitle = 'Show Finview';
   searchbox = '';
+  narrow = false;
+  tracked = false;
   pmlist = [];
   fileName = 'Feedback.xlsx';
   changelist = [];
@@ -68,6 +70,9 @@ export class WorklistComponent implements OnInit, OnDestroy {
       this.searchlist = [];
       if (reply) {
         reply.forEach(element => {
+          if (!element['CONTINGENCY']) {
+            element['CONTINGENCY'] = 0;
+          }
           let tempobj = { tag: '' };
           tempobj.tag = Object.values(element).join('-');
           // element['PROG06'] = element['PROG06'] > 100 ? 0 : element['PROG06'];
@@ -294,6 +299,15 @@ export class WorklistComponent implements OnInit, OnDestroy {
     this.apiserv.lclstate.filtercip = this.filtercip;
     this.filterList();
   }
+  narrowDisplay() {
+    this.narrow = !this.narrow;
+   // this.apiserv.lclstate.narrow = this.narrow;
+  }
+  selectTracked() {
+    this.tracked = !this.tracked;
+    //this.apiserv.lclstate.filtercip = this.filtercip;
+    this.filterList();
+  }
   selectOpen() {
     this.filteropen = !this.filteropen;
     this.apiserv.lclstate.filteropen = this.filteropen;
@@ -308,6 +322,11 @@ export class WorklistComponent implements OnInit, OnDestroy {
       } ) } else {
         this.searchlistnew = [...this.searchlist];
       } 
+    if (this.tracked) {
+      this.searchlistnew = this.searchlistnew.filter(lt => {
+        return lt.TRACKERCODE > 'A' } ) } else {
+        this.searchlistnew = [...this.searchlistnew];
+      }
     if (this.filtercip) {
       this.searchlistnew = this.searchlistnew.filter(lt => {
         return lt.INITIATIVE < '10000000' && lt.INITIATIVE < 1000000 ;

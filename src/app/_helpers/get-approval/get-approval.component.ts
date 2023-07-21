@@ -15,6 +15,7 @@ export class GetApprovalComponent implements OnInit, OnDestroy {
   vm: Approval = new ApprovalClass().approval;
   sub: Subscription ;
   phaseprog: any;
+  saving = false;
  
     constructor(@Inject(MAT_DIALOG_DATA) public data: {ABSAREQNO:string}, private approvalDialog: MatDialogRef<GetApprovalComponent>, public apiserv: ApidataService) { }
   
@@ -40,6 +41,7 @@ export class GetApprovalComponent implements OnInit, OnDestroy {
   }
   saveApproval() {
     let lclobj = { ... this.vm }
+    this.saving = true;
     if ( lclobj['APPROVAL_MOTIVATE'].length > 0) lclobj['APPROVAL_MOTIVATE'] = this.apiserv.xtdbtoa(this.vm['APPROVAL_MOTIVATE']);
     let lclobjout = JSON.stringify(lclobj);
     // console.log(lclobjout);

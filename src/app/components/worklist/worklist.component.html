@@ -2,7 +2,7 @@
     <app-progress></app-progress>
 </ng-container> -->
 <ng-container>
-<div class="mycontainer">
+<div class="mytopcontainer">
 
 
     <!-- <div class="form-check">
@@ -24,13 +24,14 @@
             <div class="col-1 text-right">
                 Select Region
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <select name="pm" class="form-control  form-control-sm" formControlName="region">
                     <option *ngFor="let reg of apiserv.regions " [value]="reg.code"><small>{{ reg.text }}</small>
                     </option>
                 </select>
             </div>
-            <div class="col-1 text-right">Select Project Mgr</div>
+            <div class="col-1 text-right">Select Project Mgr
+            </div>
             <div class="col-1">
                 <select name="pm" class="form-control  form-control-sm" formControlName="pm">
                     <option *ngFor="let perc of pmlist" [value]="perc"><small>{{ perc }}</small></option>
@@ -43,17 +44,33 @@
             </div>
             <div class="col-1">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" (change)="selectUnlinked()" [checked]="filtercip">
-                    <label class="form-check-label">
-                        No Ciplines
-                    </label>
-                </div>
-                <div class="form-check">
                     <input class="form-check-input" type="checkbox" (change)="selectOpen()" [checked]="filteropen">
                     <label class="form-check-label">
                         Hide Closed
                     </label>
                 </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" (change)="narrowDisplay()" [checked]="narrow">
+                    <label class="form-check-label">
+                        Narrow Display
+                    </label>
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" (change)="selectTracked()" [checked]="tracked">
+                    <label class="form-check-label">
+                        Tracked Only
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" (change)="selectUnlinked()" [checked]="filtercip">
+                    <label class="form-check-label">
+                        No Ciplines
+                    </label>
+                </div>
+                
+
             </div>
             <div class="col-2 d-flex justify-content-around">
                 <button type="button" class="btn btn-sm btn-success" (click)="exportexcel()">Export to Excel</button>
@@ -62,7 +79,8 @@
             </div>
         </div>
     </form>
-
+</div>
+<div class="mycontainer">
     <div class="row">
         <div class="col-12">
             <ng-container>
@@ -70,13 +88,16 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="background-color:azure;"><small>Project_WBS</small></th>
-                            <th class="text-left" style="width:65px;background-color:azure;"><small>Oneview</small>
+                            <th class="text-left" style="width:65px;background-color:azure;"><small>Oneview</small></th>
+                            <ng-container *ngIf="!narrow">   
                             <th class="text-left" style="background-color:azure;"><small>Known As</small>
                             </th>
                             <th class="text-left" style="background-color:azure;"><small>Title</small></th>
+                            </ng-container>
                             <th class="text-center" style="width:50px;background-color:azure;">
                                 <small>SAP Status</small>
                             </th>
+                            <th class="text-center"><small>Phase</small></th>
                             <th class="text-center"><small>Initiative</small></th>
                             <th class="text-center"><small>Budget <br> Group</small></th>
                             <th class="text-center"><small>Tracker <br> Code</small></th>
@@ -91,6 +112,7 @@
                             <th class="text-center"><small>Cashflow <br>End</small></th>
                             <th class="text-center"><small>Progress</small></th>
                             <ng-container *ngIf="!sections">
+                              
                                 <th class="text-center"><small>Initiate</small></th>
                                 <th class="text-center"><small>Scope</small></th>
                                 <th class="text-center"><small>PO <br> Approval</small></th>
@@ -105,6 +127,7 @@
                                 <th class="text-center"><small>Approved <br>Amt Incl</small></th>
                                 <th class="text-center"><small>PO Value <br> Incl</small></th>
                                 <th class="text-center"><small>SAP Incl<br> Budget</small></th>
+                                <th class="text-center"><small>Contingency<br>Vat Incl</small></th>
                                 <th class="text-center"><small>Costs <br> Incl</small></th>
                                 <th class="text-center"><small>Travel <br> Incl</small></th>
                                 <th class="text-center"><small>Commitments <br> Incl</small></th>
@@ -115,6 +138,7 @@
                             </ng-container>
                             <th class="text-center"><small>Region</small></th>
                                 <th class="text-center"><small>PM</small></th>  
+                                <th class="text-center"><small>Last Progress Tracker Comment</small></th>  
                         </tr>
                     </thead>
                     <tbody>
@@ -125,13 +149,16 @@
                                 <td [ngClass]="item.multisite  ? 'multisite' : 'readonly'" (click)="goTo(item)">
                                     <small>{{item.PROJLINK > 'A' ? item.PROJLINK:item.ABSAREQNO}}</small>
                                 </td>
-                                <td><small>{{item.ONEVIEW}}</small></td>
-                                <td style="background-color:azure;"><small>{{item.KNOWNAS.substring(0,60)}}</small></td>
-                                <td><small>{{item.TITLE}}</small></td>
-                                <td><small>{{item.STATUS}}</small></td>
+                                <td><small  (click)="goTo(item)">{{item.ONEVIEW}}</small></td>
+                                <ng-container *ngIf="!narrow">  
+                                <td  (click)="goTo(item)" style="background-color:azure;"><small>{{item.KNOWNAS.substring(0,60)}}</small></td>
+                                <td  (click)="goTo(item)"><small>{{item.TITLE}}</small></td>
+                                </ng-container>
+                                <td  (click)="goTo(item)"><small>{{item.STATUS}}</small></td>
+                                <td  (click)="goTo(item)"><small>{{item.PHASE}}</small></td>
                                 <td><small>{{item.INITIATIVE}}</small></td>
                                 <td><small>{{item.BUDGETGROUP}}</small></td>
-                                <td  [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
+                                <td  (click)="goTo(item)" [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
                                     <small>{{item.TRACKERCODE}}</small></td>
                                 <td><small>{{item.CIPCODE}}</small></td>
                                 <td><small  (click)="showApproval(item)">{{item.APPROVAL_STATUS}}</small></td>
@@ -142,7 +169,7 @@
                                     <td>{{item.DATE09}}</td>
                                 </ng-container>
                                 <td [ngClass]="item.PHASE < 'PHASE11'&& item.DATE10 < todaydate? 'text-center late':
-                                 item.PHASE == 'PHASE11'? 'text-center done' : 'text-center todo'"> {{item.DATE10}}
+                                 item.PHASE > 'PHASE10'? 'text-center done' : 'text-center todo'"> {{item.DATE10}}
                                 </td>
                                 <td> <button class="btn btn-sm btn-primary btn-block" type="button" (click)="showProgress(item)">
                                     <small>{{progressCalc(item)+ '%'}}</small></button></td>
@@ -177,6 +204,7 @@
                                     <td class="text-right odd">{{formatNumber(item.BASELINEBUDGET)}}</td>
                                     <td class="text-right odd">{{formatNumber(item.POVALUE)}}</td>
                                     <td class="text-right odd">{{formatNumber(item.BUDGET)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CONTINGENCY)}}</td>
                                     <td class="text-right odd">{{formatNumber(item.COSTS)}}</td>
                                     <td class="text-right odd">{{formatNumber(item.TRAVEL )}}</td>
                                     <td class="text-right odd">{{formatNumber(item.COMMITMENT )}}</td>
@@ -266,6 +294,7 @@
                             </ng-container>
                             <td class="text-center"><small>{{item.REGION}}</small></td>
                             <td class="text-center"><small>{{item.PMANAGER}}</small></td>  
+                            <td class="text-center"><small>{{item.TRACKNOTE.substring(0,60)}}</small></td>  
                         </tr>
                     </tbody>
                 </table>

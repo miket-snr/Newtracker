@@ -526,6 +526,7 @@ savePhases() {
       APPROVAL_SUBMITDATE: '',
       APPROVAL_DATE: '',
       APPROVED_AMT: '',
+      CONTINGENCY:'',
       APPROVAL_NOTE: '',
       DATES: '',
       APPRO_REQUEST: '',
