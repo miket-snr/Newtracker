@@ -387,6 +387,7 @@ export class ApidataService {
   }
   getTasks(task: any) {
     this.tasklistBS.next([]);
+    this.tasklinesBS.next([]);
     this.reqdata = [];
     this.postGEN(task, 'TASKLIST').subscribe(reply => {
       if (!reply || reply.RESULT.length == 0) {
@@ -463,7 +464,16 @@ export class ApidataService {
     let temp = [];
     tasks.forEach((st, index) => {
       var match = st.ACTIONTYPE.match(/\d+/);
+   
+        if (st['NEXTSTATUS'] == 'PHASES') {
+      let today = new Date();
+      let ptarget = new Date(st.DUEDATE);
+      console.log(ptarget);
+      console.log(today)
+      //turn string 'yyyy-mm-dd' into date
 
+
+      let slate = st.TASK_STATUS == 100 ?  "gtaskblue" : today < ptarget?"gtaskgreen": "gtaskred";
       let lineout = {
         pID: st.TASKNO,
         pName: st.SHORT_INSTRUCTION,
@@ -471,16 +481,17 @@ export class ApidataService {
         pDuration: 45,
         pEnd: st.DUEDATE,
         pRes: st.DELEGATENAME,
-        pClass: st.ACTIONTYPE == "PHASE01" ? "ggroupblack" : "gtaskgreen",
+        pClass: slate,
         pWeight: 10,
+        pComp: st.TASK_STATUS ,
         pParent: st.ACTIONTYPE == "PHASE01" ? st.ACTIONTYPE : 101,
         pGroup: 1,
-        pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, pComp: '',
+        pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, 
         pReference: st.LINKEDOBJNR,
         ACTIONTYPE: st.ACTIONTYPE
       }
       temp.push(lineout)
-
+    }
     })
     this.tasklinesBS.next(temp);
     this.reqdata = [...temp];
@@ -628,7 +639,7 @@ export class ApidataService {
               return represult
             }
           } catch (e) {
-            this.messagesBS.next('Bad Json Reply');
+            this.messagesBS.next('Bad Json Reply -' + call2.context.METHOD);
             // console.log(JSON.parse(data['d'].exResult.replace(/[^\x00-\x7F]/g, "")))
             throw 'Bad Json reply'
           }

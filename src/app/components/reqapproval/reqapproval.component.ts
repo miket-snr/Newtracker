@@ -24,6 +24,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   }
   @Input() planner = 'progress';
   @Input() vm: absareq;
+  @Input() edit = true;
   site = '';
   knownas = '';
   blockback = false;
@@ -304,6 +305,7 @@ updateProgress(blankdate, change){
   }
 
   savePhases(){
+    if (this.edit == false) { return };
     this.datedata.FORECAST_START = this.datedata.DATE06;
     this.datedata.FORECAST_END = this.datedata.DATE07;
     this.newdates = { ...this.apiserv.lclstate.dates, ...this.datedata} ;

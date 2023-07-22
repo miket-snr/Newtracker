@@ -24,9 +24,10 @@
   <div class="mt-3">
     <div class="container">
     <div class="row d-flex justify-content-between">
-      <button type="button"  class="btn btn-sm btn-secondary" (click)="changeData()">Add Task!</button>  
+      <!-- <button type="button"  class="btn btn-sm btn-secondary" (click)="changeData()">Add Task!</button>   -->
       <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('progress')">Update Progress!</button>  
-      <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('reschedule')">Re-Schedule!</button>  
+      <!-- <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('reschedule')">Re-Schedule!</button>   -->
+      <button type="button"  class="btn btn-sm btn-danger" (click)="backToWorklist()">Back to Worklist!</button>  
     </div>
     
     <!-- <app-requesteditor></app-requesteditor> -->
@@ -124,7 +125,7 @@
 <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('reschedule')">Close</button>  
   </div>
   <div *ngIf="progress">
-    <app-reqapproval [dates]="dates" [planner]="'progress'"></app-reqapproval>
+    <app-reqapproval [dates]="dates" [planner]="'progress'" [edit]="false"></app-reqapproval>
     <button type="button"  class="btn btn-sm btn-secondary" (click)="progressUpdate('progress')">Close</button>  
       </div>
       </div>

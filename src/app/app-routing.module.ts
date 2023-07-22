@@ -50,7 +50,6 @@ const routes: Routes = [
   { path: 'imports', component: MassimportComponent},
   { path: 'login', component: LoginComponent},
   { path: 'mvtdocs', component: MvtdocsListComponent},
-  { path: 'planner', component: GanttComponent},
   { path: 'projectlist', component:ProjectlistComponent},
   { path: 'requestedit/:id', component:AbsarequestComponent},
   { path: 'relink/:newpath', component:RelinkComponent},

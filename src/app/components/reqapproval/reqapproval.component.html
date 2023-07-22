@@ -4,6 +4,9 @@
 <div class="card w-100">
   <div class="card-header">
     <div class="row">
+      <ng-container *ngIf="!edit">
+        <h2 class="text-danger">Changes are not saved here - View only for Now</h2>
+      </ng-container>
       <div class="col-8">
         Target Planned Dates
       </div>
@@ -293,7 +296,7 @@
   
 </div>
 
-    <div class="card-footer">
+    <div *ngIf="edit" class="card-footer">
       <div class="row d-flex justify-content-around">
         <button type="button" (click)="savePhases()"> Update SAP</button>
         <!-- <button type="button" class="btn btn-sm btn-danger" (click)="comment()"> Comment</button> -->

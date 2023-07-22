@@ -5,12 +5,12 @@
       <span aria-hidden="true">×</span>
     </button>
   </div>
-  <div class="modal-body">
+  <!-- <div class="modal-body">
     <app-dateplanner [events]="eventsSubject.asObservable()" [blankdate]="reqdates" (someChange)="someDateChange(msg)"
       datetype="PRABSAP" [edit]="request.edit.dates">
     </app-dateplanner>
 
-  </div>
+  </div> -->
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">Ok</button>
   </div>
@@ -430,9 +430,9 @@
    <app-tasklist [reference]="reqno"></app-tasklist>
 
       </mat-tab>
-      <!-- <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Cashflows" class="tabber">
-        <app-cashflow></app-cashflow>
-      </mat-tab> -->
+       <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Gantt Chart" class="tabber">
+        <app-gantt></app-gantt>
+      </mat-tab> 
       
     </mat-tab-group>
   </form>

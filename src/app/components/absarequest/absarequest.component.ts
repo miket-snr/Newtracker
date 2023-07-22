@@ -149,7 +149,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   }
 
   goPlan(){
-    this.router.navigate(['relink/planner'])
+   // this.router.navigate(['relink/planner'])
   }
   ngOnDestroy() {
     if (this.tasksub) { this.tasksub.unsubscribe() };

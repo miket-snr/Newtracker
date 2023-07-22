@@ -17,8 +17,8 @@ export class GanttComponent implements  OnInit {
   rlink = '';
   hide = true;
   reschedule = false;
-  progress = false;
-  subs: Subscription;
+  progress = true;
+  subs: Subscription[] = [];
   insert = true;
   dates: any;
   found = 0 ; phaselist = [];
@@ -33,35 +33,39 @@ export class GanttComponent implements  OnInit {
   //  if( this.rlink > '9' || this.rlink < '8' ){
   //   this.apiserv.getSingle(this.rlink)
   //  }
-   this.apiserv.currentprojBS.subscribe(val => {
+   this.subs.push(this.apiserv.currentprojBS.subscribe(val => {
     this.project = val
     this.dates = this.apiserv.lclstate.dates 
-   })
+   }))
 
    this.data = this.initialData();
-   this.subs = this.apiserv.tasklinesBS.subscribe(lines=>{
+   this.subs.push( this.apiserv.tasklinesBS.subscribe(lines=>{
      if (lines.length > 1 && this.data.length < 1){
-       this.router.navigate(['relink/planner'])
-     }})
-       this.phaselist = this.data.filter( tline=> {
-        return tline.ACTIONTYPE >= 'PHASE01' && tline.ACTIONTYPE < 'PHASE12'
-       });
-         this.phaselist.sort( (a,b) => a.ACTIONTYPE.localeCompare(b.ACTIONTYPE))
-           this.editorOptions = {
-             vFormat: "month",
-             vEditable: true,
-             vEventsChange: {
-               taskname: () => {
-                 let x = 1;
-               }
-             },
-             vEvents:
-             {
-                 taskname: this.handler.bind(this)
-               }
-           };   
+      this.data = lines
+       
+       this.initGantt();
+     }}))
+     this.editorOptions = {
+      vFormat: "month",
+      vEditable: false,
+      vEventsChange: {
+        taskname: () => {
+          let x = 1;
+        }
+      },
+      vEvents:
+      {
+          taskname: this.handler.bind(this)
+        }
+    };   
   }
-
+initGantt(){
+  this.phaselist = this.data.filter( tline=> {
+    return tline.ACTIONTYPE >= 'PHASE01' && tline.ACTIONTYPE < 'PHASE12'
+   });
+     this.phaselist.sort( (a,b) => a.ACTIONTYPE.localeCompare(b.ACTIONTYPE))
+      
+}
   onChanges(): void {
     let tt = {}
     this.taskForm.get('pParent').valueChanges.subscribe(val => {
@@ -73,7 +77,9 @@ export class GanttComponent implements  OnInit {
     });
   }
 ngOnDestroy(){
-  this.subs.unsubscribe();
+  this.subs.forEach(li=> {
+    li.unsubscribe();
+  })
 }
 progressUpdate(sortof){
   switch (sortof){
@@ -553,5 +559,8 @@ deleteTask(){
     //     pNotes: ""
     //   }
     // ];
+  }
+  backToWorklist(){
+    this.router.navigate(['relink/worklist'])
   }
 }
