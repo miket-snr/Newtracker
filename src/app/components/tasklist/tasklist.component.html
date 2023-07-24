@@ -8,7 +8,8 @@
               <div class="col-2">{{task.ACTIONTYPE}}</div>
               <div class="col-6">{{task.INSTRUCTION}}</div>
               <div class="col-2">{{task.DUEDATE}}</div>
-              <div class="col-2"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span></div>
+              <div class="col-1 text-primary">{{task.TASK_STATUS}}%</div>
+              <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span></div>
              </div>
             </li>
            

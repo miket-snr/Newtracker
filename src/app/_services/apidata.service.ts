@@ -18,6 +18,7 @@ export class ApidataService {
     filtercip: false,
     filteropen: false,
     dates: {},
+    ohs:{},
     sites: '',
     currentreq: {},
     phase: '',
@@ -283,6 +284,7 @@ export class ApidataService {
           ele['PROGRESS'] = {};
         }
       }
+      ele['OHS'] = JSON.parse(this.xtdatob(ele.FUNDING_SOURCES))
       ele.FUNDING = this.xtdatob(ele.FUNDING)
       ele.APPROVAL_MOTIVATE = this.xtdatob(ele.APPROVAL_MOTIVATE)
       ele.APPROVAL_NOTE = this.xtdatob(ele.APPROVAL_NOTE)
@@ -375,6 +377,7 @@ export class ApidataService {
 
         let feedback = this.processBigview(reply.RESULT)
         this.lclstate.dates = JSON.parse(reply.RESULT[0].DATES)
+        this.lclstate.ohs = JSON.parse(this.xtdatob(reply.RESULT[0].FUNDING_SOURCES))
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
         this.lclstate.dates['LAST_COMMENT'] =  this.lclstate.dates['TRACKNOTE'].substring(0,250);
         this.lclstate.phase = reply.RESULT[0].PHASE;

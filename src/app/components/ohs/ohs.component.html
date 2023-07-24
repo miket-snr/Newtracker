@@ -1,0 +1,126 @@
+<div class="mycontainer pt-4">
+    <div class="row mt-4">
+        <div class="col-4 text-right pt-2">
+            OHS Risk Assessment
+        </div>
+        <div class="col-4">
+            <select  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+<option value="">Not Assesed</option>
+<option value="0">High</option>
+<option value="1">Medium</option>
+<option value="2">Low</option>
+            </select>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right pt-2">
+            Agreed Risk Assessment
+        </div>
+        <div class="col-4">
+            <select  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+                <option value="">Not Assesed</option>
+                <option value="0">High</option>
+                <option value="1">Medium</option>
+                <option value="2">Low</option>
+                            </select>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right pt-2">
+            Project Screening
+        </div>
+        <div class="col-4">
+            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE02">
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right pt-2">
+            Vendor Vetted
+        </div>
+        <div class="col-4">
+            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+      <div class="row mt-2">
+        <div class="col-4 text-right pt-2">
+            SWMS/OHS Submitted
+        </div>
+        <div class="col-4">
+            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-4 text-right pt-2">
+            SWMS/OHS Approved
+        </div>
+        <div class="col-4">
+            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <label class="form-check-label">
+                    Not Applicable
+                </label>
+            </div>
+        </div>
+    </div>
+<div class="row mt-2">
+    <div class="col-4 text-right pt-2">
+        OHS Contact
+    </div>
+    <div class="col-4">
+        <input class="form-control smallinput" type="text"  > 
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-4 text-right pt-2">
+        Note
+    </div>
+    <div class="col-6">
+        <textarea class="form-control smallinput"  > 
+            </textarea>
+    </div>
+</div>
+
+</div>
