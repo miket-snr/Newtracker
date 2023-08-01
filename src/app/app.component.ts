@@ -1,9 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { LoginComponent } from './components/login/login.component';
 import { ApidataService } from './_services/apidata.service';
@@ -14,13 +14,14 @@ import { AuthService } from './_services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy,  AfterViewInit{
   title = 'Newtracker';
   subscriptions: Subscription[] = [];
   opened = true;
   showpanel= "0";
   showtext='';
-  sectionName = 'home';
+  sectionNameBS = new BehaviorSubject<any>('home');
+public sectionName$ = this.sectionNameBS.asObservable();
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
@@ -47,10 +48,10 @@ export class AppComponent {
           }
           if (str1) {
             str1 = str1.replace(/\//g, ' ');
-            this.sectionName = ' ' + str1.charAt(0).toUpperCase() + str1.slice(1);
-            this.sectionName = this.sectionName.split('?')[0];
+           let temp = ' ' + str1.charAt(0).toUpperCase() + str1.slice(1);
+            this.sectionNameBS.next(temp.split('?')[0]);
           } else {
-            this.sectionName = 'Home';
+            this.sectionNameBS.next('Home');
           }
          
         }
@@ -75,9 +76,12 @@ export class AppComponent {
     // Screen heading
     this.subscriptions.push(
       this.apiserv.currentprojBS.subscribe ( wbs => {
-        this.sectionName = 'Project ' + wbs['PROJLINK'];
-      }
-    ))
+        setTimeout(() => {
+        this.sectionNameBS.next('Project ' + wbs['PROJLINK']);
+      },1000)
+      })
+    )
+
     this.subscriptions.push(
       this.apiserv.messages$.subscribe(item => {
         if (item.length > 1) {
@@ -94,6 +98,9 @@ export class AppComponent {
       this.apiserv.getReqView(temp);
       this.router.navigate(['/requestedit/' + temp])
     }
+  }
+  ngAfterViewInit(): void {
+ 
   }
   login(){
     this.router.navigate(['login']);

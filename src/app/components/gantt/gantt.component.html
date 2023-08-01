@@ -15,10 +15,30 @@
         </div> 
   </div> -->
   <div class="container-fluid">
-    <div>
-      <ng-gantt [options]="editorOptions" [data]="data" #editor></ng-gantt>
+    <div >
+      <ng-container *ngIf="!(apiserv.reqdata.length > 0)">
+        <div class="alert alert-warning" role="alert">
+          <strong>Warning!</strong> Please wait while data is loading...
+        </div>
+      </ng-container>
+      <ng-container *ngIf="apiserv.reqdata.length > 0">
+      <ng-gantt [options]="editorOptions" [data]="apiserv.reqdata" #editor ></ng-gantt>
+      </ng-container>
     </div>
-    
+  </div>
+  <div class="mycontainer">
+    <ul class="list-group">
+
+      <li *ngFor="let task of apiserv.reqdata" href="#" class="list-group-item list-group-item-action">
+       <div class="row">
+        <div class="col-2">{{task.ACTIONTYPE}}</div>
+        <div class="col-6">{{task.pName}}</div>
+        <div class="col-2">{{task.pEndDate}}</div>
+        <div class="col-1"><span (click)="editTask(task)"><mat-icon matTooltip="Edit">edit</mat-icon></span></div>
+       </div>
+      </li>
+     
+    </ul>
   </div>
   
   <div class="mt-3">

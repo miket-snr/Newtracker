@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray, NgForm } from '@angular/forms'
 import { ActivatedRoute, PreloadingStrategy, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { formatDate, Location } from '@angular/common';
@@ -21,7 +21,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   @Input() edit: boolean = true;
   @ViewChild('reqForm', { static: true }) ngForm: NgForm;
 
-  formChangesSubscription: Subscription;
+
   varioussites = false;
   //  edit = true;
   editdetail = false;
@@ -51,8 +51,9 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   regions = [];
   pmlist = [];
   stable = false;
-  tasksub: Subscription;
-  curreqsub: Subscription;
+  // tasksub: Subscription;
+  // curreqsub: Subscription;
+  // formChangesSubscription: Subscription;
   tabindex = 0;
   tasks = [];
   task = {};
@@ -87,6 +88,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     { A: 'type 3', B: 'APPCREATE', C: 'Create Appropriation Request' },
     { A: 'type 4', B: 'FUNDING', C: 'Funding Allocation' }
   ]
+
+  private destroy$ = new Subject();
   constructor(public apiserv: ApidataService,
     private authserv: AuthService,
     private route: ActivatedRoute,
@@ -101,7 +104,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.requestForm.disable();
-    this.formChangesSubscription = this.ngForm.form.valueChanges.subscribe(x => {
+    //this.formChangesSubscription = 
+    this.ngForm.form.valueChanges.pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe(x => {
       // console.log(x);
     })
     this.addFunder();
@@ -152,9 +156,11 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
    // this.router.navigate(['relink/planner'])
   }
   ngOnDestroy() {
-    if (this.tasksub) { this.tasksub.unsubscribe() };
-    if (this.curreqsub) { this.curreqsub.unsubscribe(); }
-    this.formChangesSubscription.unsubscribe();
+    // if (this.tasksub) { this.tasksub.unsubscribe() };
+    // if (this.curreqsub) { this.curreqsub.unsubscribe(); }
+    // this.formChangesSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get funders(): FormArray {
@@ -170,7 +176,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
       SENTBY: this.authserv.currentUserValue.EMAIL.toLocaleUpperCase(),
       LINKEDOBJNR: this.request.request['ABSAREQNO']
     }
-    this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').subscribe(reply => {
+    this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').pipe(takeUntil(this.destroy$)).subscribe(reply => {
       const lctask = JSON.parse(JSON.stringify(reply.RESULT));
       this.tasks.push(lctask)
       this.editTask(lctask);
@@ -265,9 +271,11 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     }
   }
   existingReq(reqno) {
-    this.curreqsub = this.apiserv.currentreq$.subscribe(creq => {
-      if (creq['ABSAREQNO'] >= '60000000') {
+    this.apiserv.currentreq$.pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe(creq => {
+  
+      if (creq['ABSAREQNO'] >= '60000000' && creq['PROJLINK'].length > 0) {
         this.vm = { ...creq };
+       
         this.apiserv.currentprojBS.next(creq);
         // if (this.request.request['DATES'].length > 20) {
         //   this.apiserv.currentdates = JSON.parse(atob(this.request.request['DATES']))
@@ -281,8 +289,11 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
       //  this.putFormValues();
       //   this.requestForm.get('cipname').setValue(this.request.funding['CIPCODE'] + ':' + this.request.funding['CIPNAME'], { emitEvent: false });
         this.stable = true;
+      } else {
+        let x =1;
+        // this.router.navigate(['worklist']);
       }
-    });
+    } );
   }
   someDateChange(msg = '') {
     this.requestForm.get("propstartdate").setValue(this.reqdates.DATE06, { emitEvent: false });
@@ -316,7 +327,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     this.requestForm.get('clientapproval').setValue(this.formatDate(this.request.request['CLIENTAPPROVAL']) );
     // if( this.requestForm.value.oneview?.length < 3 && this.requestForm.value.buildingid?.length > 5 ){
       
-    //     this.apiserv.postGEN({ a: '', B: this.requestForm.value.buildingid, C: '', D: 'site' }, 'GET_LOOKUPS').subscribe(reply => {
+    //     this.apiserv.postGEN({ a: '', B: this.requestForm.value.buildingid, C: '', D: 'site' }, 'GET_LOOKUPS').pipe(takeUntil(this.destroy$)).subscribe(reply => {
     //       this.requestForm.get('knownas').patchValue(reply.RESULT[0].B, { emitEvent: false });
     //       this.requestForm.get('oneview').patchValue(reply.RESULT[0].A, { emitEvent: false });
     //     })
@@ -395,12 +406,12 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
   }
     const modeltosap =  (this.vm['ABSAREQNO'] > '10000000' ) ? this.mapFormtoSAP(): tempobj;
     if (this.vm['ABSAREQNO'] > '10000000' ) {
-    this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').subscribe(reply => {
+    this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').pipe(takeUntil(this.destroy$)).subscribe(reply => {
       this.apiserv.messagesBS.next(this.replytext + JSON.parse(reply.RESULT).ABSAREQNO);
       
     })
   } else {
-    this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').subscribe(reply => {
+    this.apiserv.postGEN(modeltosap, 'NEW_PROJREQUEST').pipe(takeUntil(this.destroy$)).subscribe(reply => {
       this.apiserv.messagesBS.next(this.replytext + JSON.parse(reply.RESULT).ABSAREQNO);
       this.redirectTo('/requestedit~'+JSON.parse(reply.RESULT).ABSAREQNO);
     })
@@ -565,7 +576,7 @@ savePhases() {
     return yyyy + '-' + mm + '-' + dd;
   }
   onChanges() {
-    this.requestForm.valueChanges.subscribe(val => {
+    this.requestForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(val => {
       // this.reqdates.DATE06 = this.formatDate(val.propstartdate);
       // this.reqdates.DATE07 = this.formatDate(val.propenddate)
       // let newdates = this.dateserv.updatePlans(this.reqdates);
@@ -573,7 +584,7 @@ savePhases() {
       this.emitEventToChild();
     })
    
-    this.taskForm.valueChanges.subscribe(val => {
+    this.taskForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(val => {
       let lcob = {};
       for (const key in val) {
         this.task[key] = val[key]
@@ -594,7 +605,7 @@ savePhases() {
         // let siteArr = <FormArray>this.requestForm.controls["sites"];
 
       if (this.vm['ONEVIEW'].length === 6 && this.vm['ONEVIEW'].substring(5, 6) == 'X') {
-        this.apiserv.postGEN({ a: '', B: this.vm['ONEVIEW'], C: '', D: 'site' }, 'GET_LOOKUPS').subscribe(reply => {
+        this.apiserv.postGEN({ a: '', B: this.vm['ONEVIEW'], C: '', D: 'site' }, 'GET_LOOKUPS').pipe(takeUntil(this.destroy$)).subscribe(reply => {
           this.vm['KNOWNAS']=reply.RESULT[0].B
           this.vm['BUILDINGID'] = reply.RESULT[0].C;
         })

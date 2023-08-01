@@ -6,8 +6,8 @@ import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { ModalService } from 'src/app/_modal';
 import * as XLSX from 'xlsx';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, shareReplay, takeUntil } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
@@ -32,6 +32,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
   narrow = false;
   tracked = false;
   pmlist = [];
+  acclist = [];
   fileName = 'Feedback.xlsx';
   changelist = [];
   pmanager = 'Unknown';
@@ -40,18 +41,36 @@ export class WorklistComponent implements OnInit, OnDestroy {
   subs: Subscription
   pmForm = new FormGroup({
     pm: new FormControl(''),
+    acc: new FormControl(''),
     region: new FormControl('*'),
     cipgroup: new FormControl(),
     cipcode: new FormControl(),
     status: new FormControl(),
-    site: new FormControl()
+    site: new FormControl(),
+    phase: new FormControl(),
   })
+  phaselist = [
+    { code: '* Show all', text: 'View All Phases' },
+    { code: 'PHASE00', text: 'Not Begun' },
+    { code: 'PHASE01', text: 'Kick Off' },
+    { code: 'PHASE02', text: 'Initiation' },
+    { code: 'PHASE03', text: 'Costing & Due Diligence' },
+    { code: 'PHASE04', text: 'OHS Clearance' },
+    { code: 'PHASE05', text: 'Approval and Await PO' },
+    { code: 'PHASE06', text: 'Lead in' },
+    { code: 'PHASE07', text: 'On Site Execution' },
+    { code: 'PHASE08', text: 'Proof of Completion' },
+    { code: 'PHASE09', text: 'Process of Billing' },
+    { code: 'PHASE10', text: 'Cashflow' },
+    { code: 'PHASE11', text: 'Complete' },
+    { code: 'PHASE12', text: 'Cancelled' },
+  ]
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
   .pipe(
     map(result => result.matches),
     shareReplay()
   );
-  
+  destroy$ = new Subject();
   constructor(public apiserv: ApidataService,
     private modalServicejw: ModalService,
     private authserv: AuthService,
@@ -64,9 +83,13 @@ export class WorklistComponent implements OnInit, OnDestroy {
     this.region = this.apiserv.lclstate.region
     this.filtercip = this.apiserv.lclstate.filtercip;
     this.pmForm.get('region').setValue(this.region, { emitEvent: false });
+    this.pmForm.get('phase').setValue('* Show all', { emitEvent: false });
+    this.pmForm.get('acc').setValue('* Show all', { emitEvent: false });
     this.pmForm.get('pm').setValue(this.pmanager, { emitEvent: false });
     this.pmlist = ['* Show all'];
+    this.acclist = ['* Show all'];
     this.subs = this.apiserv.progressBS.subscribe(reply => {
+
       this.searchlist = [];
       if (reply) {
         reply.forEach(element => {
@@ -81,6 +104,9 @@ export class WorklistComponent implements OnInit, OnDestroy {
           this.searchlistnew = this.searchlist;
           if (!this.pmlist.includes(element.PMANAGER)) {
             this.pmlist.push(element.PMANAGER)
+          }
+          if (!this.acclist.includes(element.ACCOUNTANT)) {
+            this.acclist.push(element.ACCOUNTANT)
           }
         });
         this.filterList();
@@ -100,9 +126,10 @@ export class WorklistComponent implements OnInit, OnDestroy {
       this.filterList();
     })
    // A Region change results in a new call to the API - 
-   this.pmForm.get('region').valueChanges.subscribe(value => {
+   this.pmForm.get('region').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
     this.searchlistnew = [];
     this.pmlist = ['* Show all'];
+    this.acclist = ['* Show all'];
     this.region = value;
     if (value == 'ALL') {
       value = '* Show all' ;
@@ -112,9 +139,10 @@ export class WorklistComponent implements OnInit, OnDestroy {
     this.filtercip = false;
     this.apiserv.lclstate.filtercip = false;
     this.apiserv.lclstate.pmanager = '* Show all'
+    this.apiserv.lclstate.accountant = '* Show all'
   })
     // A PM Change only filters the existing records
-    this.pmForm.get('pm').valueChanges.subscribe(value => {
+    this.pmForm.get('pm').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (value == '* Show all' || value.replace(/\s/g,'') < ' ') {
         this.apiserv.lclstate.pmanager = '* Show all';
         this.searchlistnew = [...this.searchlist]
@@ -122,15 +150,30 @@ export class WorklistComponent implements OnInit, OnDestroy {
       } else {
         this.apiserv.lclstate.pmanager = value ;
        this.filterList();
-        // let temp = this.searchlist.filter(lt => {
-        //   return lt.PMANAGER == value;
-        // });
-        // this.searchlistnew = [];
-
-        // this.searchlistnew = [...temp];
       }
     })
-
+        // Accountant change only filters the existing records
+        this.pmForm.get('acc').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+          if (value == '* Show all' || value.replace(/\s/g,'') < ' ') {
+            this.apiserv.lclstate.accountant = '* Show all';
+            this.searchlistnew = [...this.searchlist]
+            this.filterList();
+          } else {
+            this.apiserv.lclstate.accountant = value ;
+           this.filterList();
+          }
+        })
+    this.pmForm.get('phase').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      if (value == '* Show all' || value.replace(/\s/g,'') < ' ') {
+        this.searchlistnew = [...this.searchlist]
+        this.filterList();
+      } else {
+        let temp = this.searchlist.filter(lt => {
+          return lt.PHASE == value;
+        });
+       this.filterList();
+      }
+    })
   }
 
   toggleView() {
@@ -168,11 +211,15 @@ export class WorklistComponent implements OnInit, OnDestroy {
       LAST_COMMENT: '',
       TRACKNOTE:''
     }
+    // if (!localStorage.getItem('BFMUser') || JSON.parse(localStorage.getItem('BFMUser')).TOKEN.length < 6) {
+    //   return }
     this.apiserv.getReqView(item.ABSAREQNO);
-    this.router.navigate(['requestedit/' + item.ABSAREQNO])
+  
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   formatDate(datein): string {
     datein = new Date(datein);
@@ -244,7 +291,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
       });
     })
     let todo = { DATA: JSON.stringify(tosave) };
-    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
+    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').pipe(takeUntil(this.destroy$)).subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
       this.changelist = [];
     })
@@ -339,8 +386,19 @@ export class WorklistComponent implements OnInit, OnDestroy {
       });
       this.searchlistnew = [...temp]
     }
-
+    if (this.apiserv.lclstate.accountant > ' ' && this.apiserv.lclstate.accountant != '* Show all') {
+      let temp = this.searchlistnew.filter(lt => {
+        return ((lt.ACCOUNTANT == this.apiserv.lclstate.accountant));
+      });
+      this.searchlistnew = [...temp]
+    }
+    if (this.pmForm.get('phase').value != '* Show all' ) {
+      let temp = this.searchlistnew.filter(lt => {
+        return ((lt.PHASE == this.pmForm.get('phase').value));  
+      });
+      this.searchlistnew = [...temp]
   }
+}
 
   formatNumber(numberin){
    return this.formatString((Math.round((numberin + Number.EPSILON) * 100) / 100).toLocaleString())

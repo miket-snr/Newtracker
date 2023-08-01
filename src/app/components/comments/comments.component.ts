@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 
@@ -14,7 +15,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   @Input() level_2 = '';
   @Input() level_3 = '';
   @Output() newcommenttxt = new EventEmitter<string>();
-  subs: Subscription;
+  destroy$ = new Subject();
   listheading = 'Comments for Project';
   newcomment = false;
   newcommentreply = -1;
@@ -27,7 +28,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.apiserv.getCommentList(this.reference,this.level_2,this.level_3);
- this.subs = this.apiserv.commentlist$.subscribe( datain =>{
+  this.apiserv.commentlist$.pipe(takeUntil(this.destroy$)).subscribe( datain =>{
   let rootcomments = [];
   let childcomments = [];  
   let basecomments = datain.map(linein => {
@@ -57,7 +58,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
   })
   }
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   nestComments(rootcomments, childcomments) {

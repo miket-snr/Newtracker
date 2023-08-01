@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApidataService } from 'src/app/_services/apidata.service';
@@ -8,7 +8,7 @@ import { ApidataService } from 'src/app/_services/apidata.service';
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.css']
 })
-export class ProgressComponent implements OnInit {
+export class ProgressComponent implements OnInit, OnDestroy {
 searchlistnew = [];
 searchlist=[];
 searchbox = '';
@@ -38,6 +38,10 @@ subs: Subscription;
 
     })
   }
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+  
   progressCalc(item) {
     let numberans = (item.PROG02) * 5 +
       (item.PROG03) * 2.5 +

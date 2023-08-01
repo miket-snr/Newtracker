@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 })
 export class TasklistComponent implements OnInit, OnDestroy {
   @Input() reference: any;
-  tasksub: Subscription;
+  tasksub: Subscription[] = [];
   eventsSubject: Subject<void> = new Subject<void>();
   tasks = [];
   currenttask = {
@@ -29,13 +29,15 @@ export class TasklistComponent implements OnInit, OnDestroy {
   constructor(private authserv: AuthService, private apiserv: ApidataService) { }
 
   ngOnInit(): void {
-    this.tasksub = this.apiserv.tasklist$.subscribe(lines => {
-      this.tasks = lines;
+    this.tasksub.push(this.apiserv.tasklist$.subscribe(lines => {
+      this.tasks = lines.filter(line => line.NEXTSTATUS != 'PHASES');
     })
+    )
   }
   ngOnDestroy() {
-    if (this.tasksub) { this.tasksub.unsubscribe() };
-
+    if (this.tasksub) { this.tasksub.forEach(onesub=>{
+      onesub.unsubscribe()
+    }) }  
   }
   addTask() {
     this.currenttask = {

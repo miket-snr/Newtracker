@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Approval } from '../_classes/approval';
 import { ApprovalClass } from '../_classes/approvalclass';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class ApidataService {
     active: 0,
     region: '',
     pmanager: '',
+    accountant: '',
     filtercip: false,
     filteropen: false,
     dates: {},
@@ -131,7 +133,8 @@ export class ApidataService {
   public tasklinesBS = new BehaviorSubject([]);
   public wbs2reqmapperBS = new BehaviorSubject(false);
   public testcontainerBS = new BehaviorSubject('');
-  constructor(private http: HttpClient, @Inject(LOCALE_ID) public locale: string) { }
+  constructor(private http: HttpClient, private router: Router,
+              @Inject(LOCALE_ID) public locale: string) { }
 
   getWbs2Req() {
     this.postGEN({ A: '' }, 'GET_REQ2WBS').subscribe(reply => {
@@ -276,6 +279,7 @@ export class ApidataService {
       ele.TRACKNOTE = this.xtdatob(ele.TRACKNOTE)
       ele.LAST_COMMENT = ele.LAST_COMMENT? this.xtdatob(ele.LAST_COMMENT): ele.TRACKNOTE.substring(0,250);
       ele.DATES = ele.DATES ? ele.DATES : ''
+      ele.ABSAPHASE = ele.PHASE < 'PHASE05 '? 'Planning' : ele.PHASE < 'PHASE07 '? 'Implementation' : ele.PHASE < 'PHASE08 '? 'Execution' : 'Closing'
       if (ele.DATES.includes('PROG')) {
         try {
           let lclobj = JSON.parse(ele.DATES)
@@ -284,7 +288,7 @@ export class ApidataService {
           ele['PROGRESS'] = {};
         }
       }
-      ele['OHS'] = JSON.parse(this.xtdatob(ele.FUNDING_SOURCES))
+     ele['OHS'] = JSON.parse(this.xtdatob(ele.FUNDING_SOURCES))
       ele.FUNDING = this.xtdatob(ele.FUNDING)
       ele.APPROVAL_MOTIVATE = this.xtdatob(ele.APPROVAL_MOTIVATE)
       ele.APPROVAL_NOTE = this.xtdatob(ele.APPROVAL_NOTE)
@@ -385,6 +389,7 @@ export class ApidataService {
         this.lclstate.currentreq = reply.RESULT[0];
         this.currentreqBS.next(feedback[0]);
         this.getTasks({ LINKEDOBJNR: feedback[0].ABSAREQNO });
+        this.router.navigate(['requestedit/' + feedback[0].ABSAREQNO])
       }
     })
   }
@@ -464,11 +469,26 @@ export class ApidataService {
     })
   }
   mapSAPtoTasks(tasks = []) {
-    let temp = [];
+    let temp = [
+      {
+        pID: 101,
+        pName: this.currentprojBS.value['TITLE'],
+        pStart: "",
+        pEnd: "",
+        pClass: "ggroupblack",
+        pLink: "",
+        pMile: 0,
+        pRes: "Brian",
+        pComp: 0,
+        pGroup: 1,
+        pParent: 0,
+        pOpen: 1,
+        pDepend: "",
+        pCaption: "",
+        pNotes: "Some Notes text",
+      }];
     tasks.forEach((st, index) => {
-      var match = st.ACTIONTYPE.match(/\d+/);
-   
-        if (st['NEXTSTATUS'] == 'PHASES') {
+     if (st['NEXTSTATUS'] == 'PHASES') {
       let today = new Date();
       let ptarget = new Date(st.DUEDATE);
       console.log(ptarget);
@@ -481,20 +501,38 @@ export class ApidataService {
         pID: st.TASKNO,
         pName: st.SHORT_INSTRUCTION,
         pStart: st.STARTDATE,
-        pDuration: 45,
         pEnd: st.DUEDATE,
         pRes: st.DELEGATENAME,
         pClass: slate,
-        pWeight: 10,
-        pComp: st.TASK_STATUS ,
-        pParent: st.ACTIONTYPE == "PHASE01" ? st.ACTIONTYPE : 101,
+        pComp: 80 ,
+        pParent: 101,
+        pLink: "",
+        pMile: 0,
         pGroup: 1,
-        pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, 
-        pReference: st.LINKEDOBJNR,
-        ACTIONTYPE: st.ACTIONTYPE
-      }
-      temp.push(lineout)
-    }
+        pDepend: "",
+        pCaption: "",
+        pNotes: "Some Notes text",
+        pOpen: 0, 
+    
+     }
+    //   let linout2 = {
+    //     pID: st.TASKNO,
+    //     pName: st.SHORT_INSTRUCTION,
+    //     pStart: st.STARTDATE,
+    //     pDuration: 45,
+    //     pEnd: st.DUEDATE,
+    //     pRes: st.DELEGATENAME,
+    //     pClass: slate,
+    //     pWeight: 10,
+    //     pComp: parseInt(st.TASK_STATUS) ,
+    //     pParent: 0,
+    //     pGroup: 1,
+    //     pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, 
+    //     pReference: st.LINKEDOBJNR,
+    //     ACTIONTYPE: st.ACTIONTYPE
+   
+  temp.push(lineout)
+}
     })
     this.tasklinesBS.next(temp);
     this.reqdata = [...temp];
@@ -541,6 +579,7 @@ export class ApidataService {
             TITLE: this.xtdatob(line.STITLE),
             DUEDATE: line.DUEDATE,
             PMANAGER: line.PMANAGER,
+            ACCOUNTANT: line.ACCOUNTANT,
             PROG01: innerline[0].PROG01,
             PROG02: innerline[0].PROG02,
             PROG03: innerline[0].PROG03,
@@ -564,6 +603,7 @@ export class ApidataService {
             DATE10: innerline[0].DATE10,
             TRACKNOTE: this.xtdatob(innerline[0].TRACKNOTE),
             PHASE: line.PHASE,
+            ABSAPHASE : line.PHASE < 'PHASE05 '? 'Planning' : line.PHASE < 'PHASE07 '? 'Implementation' : line.PHASE < 'PHASE08 '? 'Execution' : 'Closing',
             BUDGET: line.BUDGET,
             COSTS: line.COSTS,
             TRAVEL: line.TRAVEL,
@@ -910,7 +950,10 @@ export class ApidataService {
       { code: 100, text: 'Completed' }
       ]
     })
-    this.phaseprog.push({ phase: 'Client Approval', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'In Progress' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'OHS Clearance', codes: [{ code: 0, text: 'Not started' },
+    { code: 10, text: 'Project Screening' }, { code: 20, text: 'Initial Risk' }, { code: 30, text: 'Agreed Risk' }, { code: 50, text: 'SWMS Submission' },
+     { code: 75, text: 'SWMS Approved' }, { code: 100, text: 'OHS Cleared' }] })
+ 
     this.phaseprog.push({ phase: 'Approval Board', codes: [{ code: 0, text: 'Not Started' }, { code: 40, text: 'Submitted' }, { code: 60, text: 'Awaiting' }, { code: 100, text: 'Approved' }] })
     this.phaseprog.push({ phase: 'Lead Time', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'In Progress' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { absareq } from 'src/app/_classes/absareq';
 import { ModalService } from 'src/app/_modal';
 import { ApidataService } from 'src/app/_services/apidata.service';
@@ -52,9 +53,10 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     initiative: '',
     budgetgroup: '',
     budgetprogram: '',
+    reallocation: false,
     funding: this.fb.array([])
   })
-  subs: Subscription;
+  destroy$ = new Subject();
 	helpline = this.apiserv.getHelptexts('PSFUNDING');
   mytext = ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
   <p> the other fields will get populated when you save as they are read off the Cipline table.</p>
@@ -86,22 +88,23 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //this.parentForm = this.rootFormGroup.control as FormGroup
-    this.subs = this.apiserv.postGEN({ REFERENCE: this.vm.ABSAREQNO }, 'GET_FUNDING').subscribe(line => {
+   this.apiserv.postGEN({ REFERENCE: this.vm.ABSAREQNO }, 'GET_FUNDING').pipe(takeUntil(this.destroy$)).subscribe(line => {
       for (let prop in this.fundingForm.value) {
         if (this.vm[prop.toUpperCase()]) {
           this.fundingForm.get(prop).setValue(this.vm[prop.toUpperCase()], { emitEvent: false })
         }
       }
-
+      this.fundingForm.get('reallocation').setValue(this.vm['REALLOCATION'] =='X'? true: false, { emitEvent: false })
       this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
     })
     this.onChanges();
   }
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   onChanges(): void {
-    this.fundingForm.valueChanges.subscribe(val => {
+    this.fundingForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(val => {
       this.onCodeSelect();
     });
   }
@@ -114,6 +117,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     tobj['FUND_COMMENT'] = this.apiserv.xtdbtoa(tobj['FUND_COMMENT']);
     tobj['FUNDING_SOURCES'] = this.apiserv.xtdbtoa(tobj['FUNDING_SOURCES']);
     tobj['REFERENCE'] = this.vm.ABSAREQNO;
+    tobj['REALLOCATION'] = tobj['REALLOCATION'] ? 'X' : '';
     this.apiserv.postGEN(tobj, 'UPDATE_FUNDING').subscribe(ans => {
       this.apiserv.messagesBS.next(ans.RESULT.MESSAGE);
     })
@@ -174,7 +178,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
       SENTBY: this.authserv.currentUserValue.EMAIL.toLocaleUpperCase(),
       LINKEDOBJNR: this.apiserv.lclstate.currentreq['ABSAREQNO']
     }
-    this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').subscribe(reply => {
+    this.apiserv.postGEN(lclobj, 'NEW_TASKREQUEST').pipe(takeUntil(this.destroy$)).subscribe(reply => {
       const lctask = JSON.parse(JSON.stringify(reply.RESULT));
       this.task = lctask;
       this.emitEventToChild();

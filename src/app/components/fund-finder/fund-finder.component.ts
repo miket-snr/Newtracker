@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { ModalService } from 'src/app/_modal/modal.service';
@@ -13,7 +13,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './fund-finder.component.html',
   styleUrls: ['./fund-finder.component.css']
 })
-export class FundFinderComponent implements OnInit {
+export class FundFinderComponent implements OnInit, OnDestroy {
   pmForm = new FormGroup({
     pmanager: new FormControl(''),
     region: new FormControl('*'),
@@ -64,9 +64,10 @@ export class FundFinderComponent implements OnInit {
   changelist = [];
   comments = false;
   item = {};
-  reply:Subscription;
+
   fileName =' tracklist.xlsx';
   todo = '';
+  destroy$ = new Subject();
   constructor(private authserv: AuthService,
      public apiserv: ApidataService,  public modalServicejw: ModalService) {
      
@@ -76,7 +77,7 @@ export class FundFinderComponent implements OnInit {
 
     this.resetFilters();
     
-    this.pmForm.get('pmanager').valueChanges.subscribe(value => {
+    this.pmForm.get('pmanager').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.searchlist = [];
      this.resetFilters();
       
@@ -84,11 +85,11 @@ export class FundFinderComponent implements OnInit {
       // this.apiserv.getSearchList(this.pmForm.value.pm);
       this.apiserv.getBIGList(' ', this.pmForm.value.pmanager.split(' (')[0]);
     })
-    this.reply = this.apiserv.biglistBS.subscribe(reply=>{
+    this.apiserv.biglistBS.pipe(takeUntil(this.destroy$)).subscribe(reply=>{
       this.resetSearchlist()
     })
     if (this.implements.length < 1) this.apiserv.getProgLookups();
-    this.apiserv.lookupsreadyBS.subscribe( rep => {
+    this.apiserv.lookupsreadyBS.pipe(takeUntil(this.destroy$)).subscribe( rep => {
   
      this.scopes = this.apiserv.scopes;
      this.boqs =  this.apiserv.boqs;
@@ -105,6 +106,11 @@ export class FundFinderComponent implements OnInit {
       this.pmForm.get('pmanager').setValue(this.authserv.currentUserValue.VERNA);
     }
   }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   selectAll() {
     this.selectedAll = !this.selectedAll;
   }
@@ -276,7 +282,7 @@ return ans;
     })
     this.todo =  JSON.stringify(tosave);
     let todo = { DATA: JSON.stringify(tosave) };
-    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
+    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').pipe(takeUntil(this.destroy$)).subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
       this.changelist = [];
     })

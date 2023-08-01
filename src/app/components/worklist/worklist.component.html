@@ -21,26 +21,40 @@
         <mat-divider></mat-divider> -->
     <form [formGroup]="pmForm">
         <div class="row">
-            <div class="col-1 text-right">
-                Select Region
-            </div>
+           
             <div class="col-1">
+                Select Region
                 <select name="pm" class="form-control  form-control-sm" formControlName="region">
                     <option *ngFor="let reg of apiserv.regions " [value]="reg.code"><small>{{ reg.text }}</small>
                     </option>
                 </select>
             </div>
-            <div class="col-1 text-right">Select Project Mgr
-            </div>
+            
             <div class="col-1">
+                Select Project Mgr
                 <select name="pm" class="form-control  form-control-sm" formControlName="pm">
                     <option *ngFor="let perc of pmlist" [value]="perc"><small>{{ perc }}</small></option>
                 </select>
             </div>
-
-            <div class="col-1 text-right">Search</div>
+            <div class="col-1">
+                Select Accountant
+                <select name="pm" class="form-control  form-control-sm" formControlName="acc">
+                    <option *ngFor="let perc of acclist" [value]="perc"><small>{{ perc }}</small></option>
+                </select>
+            </div>
+            <div class="col-1">
+                Select by Phase
+                <select name="pm" class="form-control  form-control-sm" formControlName="phase">
+                    <option *ngFor="let phase of phaselist" [value]="phase.code"><small>{{ phase.text }}</small></option>
+                </select>
+            </div>
+            <!-- <div class="col-1 text-right">Search</div> -->
             <div class="col-3">
-                <input class="form-control" type="text" [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                Search
+                <small>
+                    <input class="form-control" type="text" [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                </small>
+               
             </div>
             <div class="col-1">
                 <div class="form-check">
@@ -98,6 +112,7 @@
                                 <small>SAP Status</small>
                             </th>
                             <th class="text-center"><small>Phase</small></th>
+                            <th class="text-center"><small>Absa Phase</small></th>
                             <th class="text-center"><small>Initiative</small></th>
                             <th class="text-center"><small>Budget <br> Group</small></th>
                             <th class="text-center"><small>Tracker <br> Code</small></th>
@@ -115,6 +130,7 @@
                               
                                 <th class="text-center"><small>Initiate</small></th>
                                 <th class="text-center"><small>Scope</small></th>
+                                <th class="text-center"><small>OHS <br> Clearance</small></th>
                                 <th class="text-center"><small>PO <br> Approval</small></th>
                                 <th class="text-center"><small>Lead in</small></th>
                                 <th class="text-center"><small>On Site</small></th>
@@ -156,6 +172,7 @@
                                 </ng-container>
                                 <td  (click)="goTo(item)"><small>{{item.STATUS}}</small></td>
                                 <td  (click)="goTo(item)"><small>{{item.PHASE}}</small></td>
+                                <td  (click)="goTo(item)"><small>{{item.ABSAPHASE}}</small></td>
                                 <td><small>{{item.INITIATIVE}}</small></td>
                                 <td><small>{{item.BUDGETGROUP}}</small></td>
                                 <td  (click)="goTo(item)" [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
@@ -180,6 +197,9 @@
                                     <td
                                         [ngClass]="item.PROG03==100 ? 'text-center done' : item.PROG03==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG03}}</td>
+                                        <td
+                                        [ngClass]="item.PROG04==100 ? 'text-center done' : item.PROG04==0  ?'text-center todo': 'text-center busy'">
+                                        {{item.PROG04}}</td>
                                     <td
                                         [ngClass]="item.PROG05==100 ? 'text-center done' : item.PROG05==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG05}}</td>

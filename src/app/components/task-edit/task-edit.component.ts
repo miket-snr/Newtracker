@@ -12,7 +12,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   @Input() task : any
   @Input() events: Observable<any>;
   @Output() someChange = new EventEmitter<string>();
-  private eventsSubscription: Subscription;
+  private eventsSubscription: Subscription[] = [];
   pmlist = [];
   taskForm = new FormGroup({
     DATESENT: new FormControl(),
@@ -28,16 +28,19 @@ export class TaskEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pmlist = this.apiserv.pmlist;
-    this.eventsSubscription = this.events.subscribe((tasker) => {
+    this.eventsSubscription.push(this.events.subscribe((tasker) => {
       this.task = tasker;
       this.doUpdatefromParent();
   })
+    )
   this.doUpdatefromParent();
   this.formChanges();
 }
 ngOnDestroy()
 {
-this.eventsSubscription.unsubscribe();
+this.eventsSubscription.forEach(onesub=>{
+  onesub.unsubscribe();
+})
 } 
 onSave(){
   let taskout = {...this.task}
@@ -46,7 +49,7 @@ onSave(){
   taskout.DECISION = 'SENDMAIL';
   taskout.INSTRUCTION = this.apiserv.xtdbtoa(this.task.INSTRUCTION )
   taskout.LINKEDOBJNR = this.apiserv.lclstate.currentreq['ABSAREQNO']
-  this.apiserv.postGEN(taskout, 'NEW_TASKREQUEST').subscribe(reply =>{
+  this.eventsSubscription.push(this.apiserv.postGEN(taskout, 'NEW_TASKREQUEST').subscribe(reply =>{
     if (reply && reply.RESULT.TASK_STATUS ){
       this.apiserv.messagesBS.next(reply.RESULT.ACTION_REPLY)
 
@@ -58,7 +61,7 @@ onSave(){
       this.taskForm.get('COMMENT').patchValue('', { emitEvent: false });
       this.someChange.emit('close')
     }
-  }
+  })
     )
 }
 
@@ -67,7 +70,7 @@ onCancel(){
 }
 
 formChanges(){
-  this.taskForm.valueChanges.subscribe(val => {
+  this.eventsSubscription.push(this.taskForm.valueChanges.subscribe(val => {
     let lcob  = {};
    for (const key in val){
     this.task[key] = val[key]
@@ -85,6 +88,7 @@ formChanges(){
    }  
   // this.someChange.emit(this.task)
   })
+  )
 }
 doUpdatefromParent(){
   for (const field in this.taskForm.controls) { // 'field' is a string

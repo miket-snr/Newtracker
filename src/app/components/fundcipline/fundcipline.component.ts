@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { ModalService } from 'src/app/_modal';
 import * as XLSX from 'xlsx';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-fundcipline',
   templateUrl: './fundcipline.component.html',
   styleUrls: ['./fundcipline.component.css']
 })
-export class FundciplineComponent implements OnInit {
+export class FundciplineComponent implements OnInit, OnDestroy {
   pmForm = new FormGroup({
     pmanager: new FormControl(''),
     region: new FormControl('*'),
@@ -66,7 +67,7 @@ export class FundciplineComponent implements OnInit {
   changelist = [];
   comments = false;
   item = {};
-  reply:Subscription;
+  destroy$ = new Subject();
   fileName =' tracklist.xlsx';
   todo = '';
   constructor(private authserv: AuthService,
@@ -87,16 +88,16 @@ export class FundciplineComponent implements OnInit {
 
 this.resetFilters();
     
-    this.pmForm.get('region').valueChanges.subscribe(value => {
+    this.pmForm.get('region').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.searchlist = [];
      this.resetFilters();
       this.apiserv.getCIPList(' ', value);
     })
-    this.reply = this.apiserv.ciplistBS.subscribe(reply=>{
+     this.apiserv.ciplistBS.pipe(takeUntil(this.destroy$)).subscribe(reply=>{
       this.resetSearchlist()
     })
     if (this.implements.length < 1) this.apiserv.getProgLookups();
-    this.apiserv.lookupsreadyBS.subscribe( rep => {
+    this.apiserv.lookupsreadyBS.pipe(takeUntil(this.destroy$)).subscribe( rep => {
   
      this.scopes = this.apiserv.scopes;
      this.boqs =  this.apiserv.boqs;
@@ -112,14 +113,14 @@ this.resetFilters();
     if (this.authserv.currentUserValue.REGION?.length > 2 ) {
       this.pmForm.get('region').setValue(this.authserv.currentUserValue.REGION);
     }
-    this.pmForm.get('cipgroup').valueChanges.subscribe(value => {
+    this.pmForm.get('cipgroup').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.searchlistnew = this.searchlist.filter(linex=> {
         return ( ( linex.cipgroup == value || value.length < 1 )
           && ( linex.cipcode == this.pmForm.value.cipcode || this.pmForm.value.cipcode.length < 1  ) )
       });
 
     })
-    this.pmForm.get('cipcode').valueChanges.subscribe(value => {
+    this.pmForm.get('cipcode').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.searchlistnew = this.searchlist.filter(linex=> {
         return (( linex.cipcode == value || value.length < 1 )
          && ( linex.cipgroup == this.pmForm.value.cipgroup || this.pmForm.value.cipgroup.length < 1  ))
@@ -130,9 +131,10 @@ this.resetFilters();
 
 
   }
-  // selectAll() {
-  //   this.selectedAll = !this.selectedAll;
-  // }
+ ngOnDestroy(): void {
+   this.destroy$.next();
+    this.destroy$.complete();
+ }
 
   buildSearchCodes(){
 
@@ -331,7 +333,7 @@ return ans;
     })
     this.todo =  JSON.stringify(tosave);
     let todo = { DATA: JSON.stringify(tosave) };
-    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
+    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').pipe(takeUntil(this.destroy$)).subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
       this.changelist = [];
     })
@@ -342,7 +344,7 @@ return ans;
     this.openjw('areyousure');
   }
   createNew(item){
-      this.apiserv.postGEN({ABSAREQNO: item ['reference']},'COPY_CIPLINE').subscribe( rep=> {
+      this.apiserv.postGEN({ABSAREQNO: item ['reference']},'COPY_CIPLINE').pipe(takeUntil(this.destroy$)).subscribe( rep=> {
       if (rep.RESULT.TYPE == 'E'){
         // console.log('Error')
       } else {

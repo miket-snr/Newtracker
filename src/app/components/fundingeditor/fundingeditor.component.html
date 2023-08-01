@@ -44,9 +44,16 @@
             <td colspan="2">
               <div class="row">
                 <div class="col-8"><input type="text" class="form-control" formControlName="initiative"></div>
-                <div class="col-4" *ngIf="!fundingForm.value.initiative">
+                <div class="col-3" *ngIf="!fundingForm.value.initiative">
                     <button type="button" class="btn btn-sm btn-danger" (click)="fundLocator()">Fund Locator
                     </button>
+                  </div>
+                  <div class="col-1">
+                    <input class="form-check-input" type="checkbox" formControlName="reallocation"
+                   >
+                <label class="form-check-label">
+                    Reallocation
+                </label>
                   </div>
               </div>
             </td>

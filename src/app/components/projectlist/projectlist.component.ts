@@ -72,6 +72,7 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
       { name: 'Approval Info', selected: true },
       { name: 'Funding', selected: true },
       { name: 'Date Progress', selected: true },
+      { name: 'OHS Clearance', selected: true },
 
     ]
 
@@ -96,35 +97,27 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
     //   }
     // })
 
-    this.pmForm.get('region').valueChanges.subscribe(value => {
+   this.subscriptions.push(this.pmForm.get('region').valueChanges.subscribe(value => {
       this.searchlistnew = [];
       this.pmlist = ['* Show all'];
 
       //this.pmForm.get('region').setValue('', { emitEvent: false });
       // this.apiserv.getSearchList(this.pmForm.value.pm);
       this.apiserv.getBIGList(value, '');
-    })
-    //   this.pmForm.get('cipgroup').valueChanges.subscribe(value => {
-    //     this.searchlistnew = [];
-    //     this.searchlistnew = this.searchlist.filter(obj => {
-    //       return obj['CIPGROUP']== value || value  =='';
-    //     });
-    //  this.filters.cipgroups = this.filters.cipgroups.filter( li => {
-    //   return li.code == value ;
-    //  })
-    // //   })
-    // if (this.authserv.currentUserValue.VERNA?.length > 3 && this.pmForm.value.pm?.length < 2) {
+    }))
+  
       this.pmForm.get('pm').setValue('* Show all');
-    // }
+ 
     this.subscriptions.push(
       this.apiserv.biglist$.subscribe(reply => {
         this.searchlist = [];
         if (reply) {
           reply.forEach(element => {
+            let tempohs = JSON.parse(this.apiserv.xtdatob(element.FUNDING_SOURCES));
             let tempobj = { tag: '' };
             tempobj.tag = Object.values(element).join('-');
 
-            this.searchlist.push({ ...element, ...tempobj });
+            this.searchlist.push({ ...element, ...tempobj ,...tempohs});
             this.searchlistnew = this.searchlist;
             if (!this.pmlist.includes(element.PMANAGER)) {
               this.pmlist.push(element.PMANAGER)

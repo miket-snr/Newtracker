@@ -180,7 +180,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
   
-      <span>Project and Budget Tracker-{{sectionName}}</span>
+      <span>Project and Budget Tracker-{{sectionNameBS | async}}</span>
     
         <span *ngIf="authserv.loggedinBS | async" (click)="logout()" class="signature">{{sapuser}} <mat-icon >exit_to_app</mat-icon></span>
         <span *ngIf="!authserv.loggedinBS | async" (click)="login()"  >Login<mat-icon class="inout">exit_to_app</mat-icon></span>

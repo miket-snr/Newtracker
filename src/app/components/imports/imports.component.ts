@@ -16,7 +16,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
   excelRows = [];
   importlines = [];
   rejects = [];
-  sub: Subscription;
+  sub: Subscription[] = [];
   multiprogress = [];
 
   readytoimport = this.apiserv.wbs2reqmapperBS.value;
@@ -27,13 +27,15 @@ export class ImportsComponent implements OnInit, OnDestroy {
     if (!this.apiserv.wbs2reqmapperBS.value) {
       this.apiserv.getWbs2Req();
     }
-    this.sub = this.apiserv.wbs2reqmapperBS.subscribe(hint => {
+    this.sub.push( this.apiserv.wbs2reqmapperBS.subscribe(hint => {
       this.readytoimport = hint;
-    })
+    }))
   }
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+    this.sub.forEach(onesub=>{
+      onesub.unsubscribe();
+  })
+}
   handleFileInput(fileInput: any) {
     if (fileInput.target.files && fileInput.target.files[0]) {
 
@@ -102,9 +104,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
         }
         )
         if (this.importlines.length > 0) {
-          this.apiserv.postGEN({ DATA: JSON.stringify(this.importlines) }, 'PUT_APPROVALDOC').subscribe(result => {
+         this.sub.push(this.apiserv.postGEN({ DATA: JSON.stringify(this.importlines) }, 'PUT_APPROVALDOC').subscribe(result => {
             this.apiserv.messagesBS.next('Done');
           })
+         )
         }
         else {
           this.apiserv.messagesBS.next('No Valid lines');
@@ -135,9 +138,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
         }
         )
         if (this.importlines.length > 0) {
-          this.apiserv.postGEN({ DATA: JSON.stringify(this.importlines) }, 'PUT_PONUMBERDOC').subscribe(result => {
+         this.sub.push(this.apiserv.postGEN({ DATA: JSON.stringify(this.importlines) }, 'PUT_PONUMBERDOC').subscribe(result => {
             this.apiserv.messagesBS.next('Done');
           })
+         )
         }
         else {
           this.apiserv.messagesBS.next('No Valid lines');

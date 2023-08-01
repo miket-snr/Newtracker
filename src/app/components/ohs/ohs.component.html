@@ -4,7 +4,7 @@
             OHS Risk Assessment
         </div>
         <div class="col-4">
-            <select  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+            <select [disabled]="!canEdit()" class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
 <option value="">Not Assesed</option>
 <option value="0">High</option>
 <option value="1">Medium</option>
@@ -13,7 +13,7 @@
         </div>
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <input  [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
@@ -25,7 +25,7 @@
             Agreed Risk Assessment
         </div>
         <div class="col-4">
-            <select  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
                 <option value="">Not Assesed</option>
                 <option value="0">High</option>
                 <option value="1">Medium</option>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <input  [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
@@ -46,11 +46,11 @@
             Project Screening
         </div>
         <div class="col-4">
-            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE02">
+            <input  [disabled]="!canEdit()"  type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE02">
         </div>
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <input  [disabled]="!canEdit()" class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
@@ -62,7 +62,7 @@
             Vendor Vetted
         </div>
         <div class="col-4">
-            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
         </div>
         <div class="col-4">
             <div class="form-check">
@@ -78,7 +78,7 @@
             SWMS/OHS Submitted
         </div>
         <div class="col-4">
-            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
         </div>
         <div class="col-4">
             <div class="form-check">
@@ -94,11 +94,11 @@
             SWMS/OHS Approved
         </div>
         <div class="col-4">
-            <input type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
         </div>
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <input [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
@@ -110,7 +110,9 @@
         OHS Contact
     </div>
     <div class="col-4">
-        <input class="form-control smallinput" type="text"  > 
+        <select [disabled]="!canEdit()"  class="form-control" name = 'CONTACT'>
+            <option *ngFor="let pm of apiserv.pmlist$ | async" [value]="pm.C"> {{pm.D}}</option>
+          </select>
     </div>
 </div>
 <div class="row mt-2">
@@ -118,7 +120,7 @@
         Note
     </div>
     <div class="col-6">
-        <textarea class="form-control smallinput"  > 
+        <textarea  [disabled]="!canEdit()"  class="form-control smallinput"  > 
             </textarea>
     </div>
 </div>

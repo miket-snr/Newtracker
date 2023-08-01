@@ -19,8 +19,8 @@ export class JwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
 
     if (request.method === 'POST' &&  request.body.context ){
-    
-    let mytoken = JSON.parse(localStorage.getItem('BFMUser')).TOKEN
+    let checktoken = localStorage.getItem('BFMUser')
+    let mytoken = checktoken? JSON.parse(localStorage.getItem('BFMUser')).TOKEN: '';
    let mynewcontext = {... request.body.context}
    mynewcontext.TOKEN = mytoken;
   let alteredtoken = {context:mynewcontext}

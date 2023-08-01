@@ -28,7 +28,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   site = '';
   knownas = '';
   blockback = false;
-  sub: Subscription;
+  sub: Subscription[] = [];
   phase = 'PHASE01'
   fact2 = '';
   fact3 = '';
@@ -97,7 +97,7 @@ helpline = this.apiserv.getHelptexts('APPROVAL');
   ngOnInit(): void {
     this.setup()
  
-  this.sub =   this.apiserv.currentreq$.subscribe(reply => {
+  this.sub.push(this.apiserv.currentreq$.subscribe(reply => {
       if (reply) {
 this.phase = this.apiserv.lclstate.phase;
 this.datedata = this.apiserv.lclstate.dates;
@@ -105,13 +105,15 @@ this.buildDurations() ;
       }
       this.onChanges();
     })
-
+  )
     this.onChanges();
 
   }
   ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+    this.sub.forEach(onesub=>{
+      onesub.unsubscribe();
+  })
+}
   comment() {
 
   }
@@ -148,7 +150,7 @@ this.buildDurations() ;
     this.rows = [
       { target: 'Initiation with Stakeholders'},
       { target: 'Costing and DD' },
-      { target: 'Approval Preparation'},
+      { target: 'OHS Clearance'},
       { target: 'Approval Board'},
       { target: 'Lead Time'},
       { target: 'On Site ' },
@@ -276,7 +278,7 @@ updateProgress(blankdate, change){
     return Math.round(Difference_In_Time / (1000 * 3600 * 24));
   }
   onChanges() {
-    this.trackerForm.valueChanges.subscribe(val => {
+    this.sub.push(this.trackerForm.valueChanges.subscribe(val => {
       let numberans = parseInt(this.trackerForm.value.scope.slice(0, -1)) * 5 +
         parseInt(this.trackerForm.value.boq.slice(0, -1)) * 2.5 +
         parseInt(this.trackerForm.value.costs.slice(0, -1)) * 2.5 +
@@ -299,6 +301,7 @@ updateProgress(blankdate, change){
       let myanswer = numberans.toString() + '%';
       this.trackerForm.get('progress').setValue(myanswer, { emitEvent: false });
     })
+    )
   }
   onSubmit() {
     // console.log(this.trackerForm.value);
@@ -313,10 +316,11 @@ updateProgress(blankdate, change){
     this.apiserv.lclstate.dates = JSON.parse(JSON.stringify(this.newdates));
     let updater = [this.newdates];
     let todo = {DATA: JSON.stringify(updater),TRACKTYPE:'PHASE'}
-    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
+    this.sub.push(this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
       this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager, this.newdates.REFERENCE)
     })
+    )
   }
   SaveTracker() {
     let save = [];
@@ -339,9 +343,10 @@ updateProgress(blankdate, change){
     }
     save.push(lclobjinner);
     let todo = { DATA: JSON.stringify(save) };
-    this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
+    this.sub.push(this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
     })
+    )
   }
   saveTrack() {
 

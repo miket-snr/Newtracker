@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import * as XLSX from 'xlsx';
@@ -11,7 +12,7 @@ import * as XLSX from 'xlsx';
 
 })
 export class FundingmasseditComponent implements OnInit, OnDestroy {
-  subscriptions: Subscription[] = [];
+
   searchlist = [];
   searchlistnew = [];
   lockbox = [];
@@ -19,14 +20,14 @@ export class FundingmasseditComponent implements OnInit, OnDestroy {
   savelock=[];
   searchbox = '';
   tosave = false;
+  destroy$ = new Subject();
   myregion=this.authserv.currentUserValue.REGION || '* Show all';
   fileName = 'Cashflow Base.xlsx';
   constructor(public apiserv: ApidataService,private authserv:AuthService) { }
 
   ngOnInit(): void {
     this.apiserv.getFunding(this.authserv.currentUserValue.REGION || '*');
-    this.subscriptions.push(
-      this.apiserv.fundinglist$.subscribe(reply => {
+      this.apiserv.fundinglist$.pipe(takeUntil(this.destroy$)).subscribe(reply => {
         this.searchlist = [];
          if (reply) {
           let id = 0;
@@ -41,7 +42,7 @@ export class FundingmasseditComponent implements OnInit, OnDestroy {
           id++}
           });
         }
-      }));
+      });
   }
   unlock(id, reset = 'Y'){
     if (!this.lockbox[id] && reset=='Y') {
@@ -104,8 +105,8 @@ export class FundingmasseditComponent implements OnInit, OnDestroy {
 
   }
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub =>
-      sub.unsubscribe())
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
  
 }

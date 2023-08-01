@@ -117,6 +117,12 @@
                                         <th class="text-center">
                                                 <small style="font-weight: bold;">Oneview</small>
                                         </th>
+                                        <th class="text-center">
+                                                <small style="font-weight: bold;">Tracker Code</small>
+                                        </th>
+                                        <th class="text-center">
+                                                <small style="font-weight: bold;">Absa Phase</small>
+                                        </th>
                                         <ng-container *ngIf="sections[0].selected">
                                                 <th style="background-color:rgb(114, 171, 251);" class="text-center">
                                                         <small style="font-weight: bold;">Details</small>
@@ -195,6 +201,28 @@
                                                 <th class="text-center"><small
                                                                 style="font-weight: bold;">Loadtype</small></th>
                                         </ng-container>
+                                        <ng-container *ngIf="sections[4].selected ">
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Project Screened</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Assessed Risk</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Agreed Risk</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Submitted Date</small>
+                                                </th>
+
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Approved Date</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">OHS Contact</small>
+                                                </th>
+                                               
+                                        </ng-container>
                                         <ng-container *ngIf="sections[1].selected">
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
                                                         <small style="font-weight: bold;">Region</small>
@@ -255,6 +283,8 @@
                                         <ng-container *ngIf="sections[2].selected">
                                                 <th style="background-color:rgb(247, 247, 188);"
                                                  class="text-center"><small style="font-weight: bold;">Initiative</small></th>
+                                                 <th style="background-color:rgb(247, 247, 188);"
+                                                 class="text-center"><small style="font-weight: bold;">Reallocation</small></th>
                                                 <th style="background-color:rgb(247, 247, 188);"
                                                         class="text-center"><small style="font-weight: bold;">Budget
                                                                 Group</small></th>
@@ -405,6 +435,12 @@
                                         <td>
                                                 <small>{{bigview.ONEVIEW}}</small>
                                         </td>
+                                        <td>
+                                                <small>{{bigview.TRACKERCODE}}</small>
+                                        </td>
+                                        <td>
+                                                <small>{{bigview.ABSAPHASE}}</small>
+                                        </td>
                                         <ng-container *ngIf="sections[0].selected">
                                                 <td style="background-color:rgb(114, 171, 251); ">
                                                         <small>{{bigview.DETAILS.substring(0,60)}}</small>
@@ -485,6 +521,28 @@
                                                         <small>{{bigview.LOADTYPE}}</small>
                                                 </td>
                                         </ng-container>
+                                        <ng-container *ngIf="sections[4].selected">
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROJSCREENING}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.OHSRISK}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.AGREEDRISK}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.SWMS_OHS_REQ}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.SWMS_OHS_AP_DATE}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.COMPLIANCE_CONTACT}}</small>
+                                                </td>
+                                               
+                                               
+                                        </ng-container>
                                         <ng-container *ngIf="sections[1].selected">
                                                 <td style="background-color:rgb(188, 247, 190);">
                                                         <small>{{bigview.REGION}}</small>
@@ -545,6 +603,8 @@
                                         <ng-container *ngIf="sections[2].selected">
                                                 <td style="background-color:rgb(247, 247, 188);">
                                                         <small>{{bigview.INITIATIVE}}</small></td>
+                                                        <td style="background-color:rgb(247, 247, 188);">
+                                                                <small>{{bigview.REALLOCATION}}</small></td>
                                                 <td style="background-color:rgb(247, 247, 188);">
                                                         <small>{{bigview.BUDGETPROGRAM}}</small>
                                                 </td>

@@ -95,7 +95,7 @@
                                <option *ngFor="let perc of apiserv.scopes" [value]="perc.code">{{ perc.text }}</option>
                            </select></td>
                    </ng-container> </tr>
-               <tr> <td  class="text-center"><small>Approval Prep</small></td >
+               <tr> <td  class="text-center"><small>OHS Clearance</small></td >
                    <ng-container *ngIf="item.PHASE > 'PHASE03'">
                        <td style="background-color:rgb(238, 248, 248);"><select class="smallinput" name="scope"
                                (change)="newValue($event, item)" [(ngModel)]="item.PROG04"

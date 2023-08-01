@@ -18,27 +18,13 @@ export class HomeComponent implements OnInit {
     if(this.apiserv.progressBS.value.length == 0)
     {
     this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager);
-      // this.apiserv.getProgresslist('','','70000016');
+  
     }
     
     setTimeout(() => {
       this.worker();
     }, 5000);
-    // this.apiserv.testcontainerBS.subscribe( line => {
-    //   if ( line != ''){
-    //     this.counter++;
-    //     this.out += ': \n' + line;
-    //     if (this.counter < this.arrayoflines.length){
-    //     setTimeout(()=>{
-    //       this.apiserv.getone (this.arrayoflines[this.counter]),
-    //       1000
-    //     })
-    //   }
-    //   }
-      
-    // }
-
-    // )
+  
    
   }
  

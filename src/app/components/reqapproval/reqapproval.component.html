@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <div id="ApprovalPrep_Phase04" class="row mb-2 ">
+    <div id="OHS_Clearance_Phase04" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[2].target}}</div>
       <div class="col-1" >
         <input type="number" name="333" [(ngModel)]="durations[3]" class="form-control smallinput" (change)="newDuration(3)" [disabled]="true">
@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <div id="ApprovalBoard_Phase05" class="row mb-2 ">
+    <div id="Approval Board" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[3].target}}</div>
       <div class="col-1" >
         <input type="number" name="" [(ngModel)]="durations[4]" class="form-control smallinput" (change)="newDuration(4)"  [disabled]="true">
@@ -116,7 +116,7 @@
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog05" (change)="newValue(5)" 
                   [disabled]="datedata.PROG05 == '100'  &&  blockback"  name="" [(ngModel)]="datedata.PROG05">
-            <option *ngFor="let perc of codes[4].codes" [value]="perc.code">{{ perc.text }}</option>
+            <option *ngFor="let approval of apiserv.approvals" [value]="approval.code">{{ approval.text }} </option>
           </select>
         </div>
       </ng-container>

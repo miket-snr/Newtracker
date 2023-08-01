@@ -11,7 +11,7 @@ import { USER } from '../_classes/User';
 })
 export class AuthService {
   public token = '123456';
-  private blankuser:USER = {
+  private blankuser: USER = {
     EMAIL: '',
     CELLNO: '',
     SAPUSER: '',
@@ -24,13 +24,13 @@ export class AuthService {
     SUBSTITUTE: '',
     PARTNER_ID: '',
     TOKEN: '',
-    VERNR:'',
-    VERNA:'',
-    DESIGNATION:''
+    VERNR: '',
+    VERNA: '',
+    DESIGNATION: ''
   }
   public rfqtoken: string;
   loggedin = false;
-  
+
   waiting = false;
   loading = false;
   private currentUserBS = new BehaviorSubject<USER>(this.blankuser);
@@ -41,50 +41,65 @@ export class AuthService {
   devprod = '';
   constructor(private route: ActivatedRoute, private router: Router,
     private http: HttpClient) {
-
+// look for token being passed via parameter
+ // Check if new link from SAP - ignore current tokens if user defined in url
+ // Currently not functional - TOKEN set to xyz
+this.rfqtoken = this.findGetParameter('t') || '';
+let tempu = this.findGetParameter('u') || '';
+if (this.rfqtoken == 'xyz' && tempu > '') {
+  let t = this.currentUserBS.value;
+  t.SAPUSER = tempu;
+  t.TOKEN = this.rfqtoken;
+  t.NAME_FIRST = tempu;
+  this.currentUserBS.next({ ...t });
+  this.loggedin = true;
+  this.loggedinBS.next(true);
+  localStorage.setItem('BFMUser', JSON.stringify(this.currentUserBS.value));
+  this.router.navigate(['home'])
+} else {
     const cu = localStorage.getItem('BFMUser') || '';
     this.devprod = (this.doc.toUpperCase().includes('DEV') || this.doc.toUpperCase().includes('LOCAL')) ? 'DEV' : 'PROD';
-    // Check if new link from SAP - ignore current tokens if user defined
     // Prevent user typing in token in localstorage or URL by checking validity on SAP
-    if (cu.length > 5){
-    let ans = this.validateToken(JSON.parse(cu).TOKEN);
+    if (cu.length > 15) {
+      this.validateToken(JSON.parse(cu).TOKEN).subscribe(data => {
+        if (data.RESULT[0].TOKEN == JSON.parse(cu).TOKEN) {
+          this.initialise();
+        } else {
+          this.logOut();
+          this.router.navigate(['login'])
+        }
+      } )
+    } else { 
+      this.logOut();
+      this.router.navigate(['login'])
+     }
     }
-    this.rfqtoken = this.findGetParameter('t') || '';
-    let tempu = this.findGetParameter('u') || '';
-    if (this.rfqtoken == 'xyz' && tempu > '') {
-      let t = this.currentUserBS.value;
-      t.SAPUSER = tempu;
-      t.TOKEN = this.rfqtoken;
-      t.NAME_FIRST = tempu ;
-      this.currentUserBS.next({ ...t });
-      this.loggedin = true;
-      this.loggedinBS.next(true);
-      localStorage.setItem('BFMUser',JSON.stringify(this.currentUserBS.value));
-      this.router.navigate(['home']) 
-    } else {
-      if (cu.length > 15) {
+  }
+
+  initialise() {
+    const cu = localStorage.getItem('BFMUser') || '';
         const temp = JSON.parse(cu);
         if (temp.SAPUSER > '') {
           temp.EMAIL = temp.EMAIL.toUpperCase();
           this.currentUserBS.next(
             { ...this.blankuser, ...temp }
           ); this.loggedin = true; this.loggedinBS.next(true);
-          this.router.navigate(['home']) 
+          this.router.navigate(['home'])
         } else {
           this.currentUserBS.next(
             { ...this.blankuser });
           this.loggedin = false;
           this.loggedinBS.next(false);
         }
-      } else {
-        this.currentUserBS.next(
-          { ...this.blankuser });
-        this.loggedin = false;
-        this.loggedinBS.next(false);
-      }
-    }
-  }
-  logOut(){
+      } 
+      // else {
+      //   this.currentUserBS.next(
+      //     { ...this.blankuser });
+      //   this.loggedin = false;
+      //   this.loggedinBS.next(false);
+    //  }
+    
+  logOut() {
     localStorage.removeItem('BFMUser');
     this.currentUserBS.next({
       EMAIL: '',
@@ -138,15 +153,16 @@ export class AuthService {
         this.loading = false;
         this.waiting = false;
       } else {
-      this.currentUserBS.next(token.RESULT[0]);
-      if (token.RESULT[0].TOKEN.length > 3 ){
-      localStorage.setItem('BFMUser', JSON.stringify(token.RESULT[0]))
-      this.loggedin = true;
-      this.loggedinBS.next(false);
-      this.loading = false;
-      this.waiting = false;  
-      window.location.reload();
-      }}
+        this.currentUserBS.next(token.RESULT[0]);
+        if (token.RESULT[0].TOKEN.length > 3) {
+          localStorage.setItem('BFMUser', JSON.stringify(token.RESULT[0]))
+          this.loggedin = true;
+          this.loggedinBS.next(false);
+          this.loading = false;
+          this.waiting = false;
+          window.location.reload();
+        }
+      }
     })
   }
   findGetParameter(parameterName: string) {
@@ -168,11 +184,10 @@ export class AuthService {
   public get currentUserValue(): USER {
     return this.currentUserBS.value;
   }
-async validateToken(token: string){
-let data = await this.postGEN({TOKEN:token},'VALIDPSTOKEN','USER').toPromise() ;
-return (data.RESULT[0].TOKEN == token);
+  validateToken(token: string) {
+    return this.postGEN({ TOKEN: token }, 'VALIDPSTOKEN', 'USER');
 
-}
+  }
   /*******postGen******************************************************* */
   postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER") {
     const BASE_POST = 'https://io.bidvestfm.co.za/BIDVESTFM_API_GEN_PROD/genpost';
