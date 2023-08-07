@@ -14,5 +14,6 @@ export interface USER {
     PARTNER_ID?: string,
     TOKEN?:string,
     VERNR?: string,
-    VERNA?:string
+    VERNA?:string,
+    DATABAG:''
   }

@@ -4,85 +4,78 @@
             OHS Risk Assessment
         </div>
         <div class="col-4">
-            <select [disabled]="!canEdit()" class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+            <select [disabled]="!canEdit()" class="form-control smallinput" [(ngModel)]="ohsitem.OHSRISK">
 <option value="">Not Assesed</option>
 <option value="0">High</option>
 <option value="1">Medium</option>
 <option value="2">Low</option>
             </select>
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <div class="form-check">
                 <input  [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             Agreed Risk Assessment
         </div>
         <div class="col-4">
-            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.DATE00">
+            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.AGREEDRISK">
                 <option value="">Not Assesed</option>
                 <option value="0">High</option>
                 <option value="1">Medium</option>
                 <option value="2">Low</option>
                             </select>
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <div class="form-check">
                 <input  [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             Project Screening
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()"  type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE02">
+            <input  [disabled]="!canEdit()"  type="date" class="form-control smallinput" [(ngModel)]="ohsitem.PROJSCREENING">
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <div class="form-check">
                 <input  [disabled]="!canEdit()" class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             Vendor Vetted
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.VENDORVETTED">
         </div>
-        <div class="col-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
-                <label class="form-check-label">
-                    Not Applicable
-                </label>
-            </div>
-        </div>
+      
     </div>
       <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             SWMS/OHS Submitted
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_REQ">
         </div>
         <div class="col-4">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
+                <input class="form-check-input" type="checkbox"  [checked]="ohsitem.SWMS_OHS_NA">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
@@ -94,35 +87,50 @@
             SWMS/OHS Approved
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.DATE03">
+            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_AP_DATE">
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <div class="form-check">
                 <input [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
 <div class="row mt-2">
     <div class="col-4 text-right pt-2">
         OHS Contact
     </div>
     <div class="col-4">
-        <select [disabled]="!canEdit()"  class="form-control" name = 'CONTACT'>
+        <select [disabled]="!canEdit()"  class="form-control" name = 'CONTACT' [(ngModel)]="ohsitem.COMPLIANCE_CONTACT">
             <option *ngFor="let pm of apiserv.pmlist$ | async" [value]="pm.C"> {{pm.D}}</option>
           </select>
     </div>
 </div>
 <div class="row mt-2">
     <div class="col-4 text-right pt-2">
-        Note
+        OHS Progress
     </div>
-    <div class="col-6">
-        <textarea  [disabled]="!canEdit()"  class="form-control smallinput"  > 
-            </textarea>
+    <div class="col-4">
+        <select [disabled]="!canEdit()"  class="form-control" name = 'Progress' [(ngModel)]="ohsitem.PROGRESS">
+            <option *ngFor="let perc of codes[3].codes" [value]="perc.code">{{ perc.text }}</option>
+          </select>
     </div>
 </div>
 
+<div class="row mt-2">
+    <div class="col-4 text-right pt-2">
+        Note
+    </div>
+    <div class="col-6">
+        <textarea  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.COMMENTS" > 
+            </textarea>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-12 text-center">
+       <button type="button" class="btn btn-sm btn-primary" (click)="updateSAP()"  [disabled]="!canEdit()">Save to SAP</button>
+    </div>
+</div>
 </div>

@@ -21,6 +21,8 @@ export class ApidataService {
     filteropen: false,
     dates: {},
     ohs:{},
+    approval:{},
+    psfunding:{},
     sites: '',
     currentreq: {},
     phase: '',
@@ -160,6 +162,11 @@ export class ApidataService {
       
     })
   }
+  updateOHS(lclobj:any){
+    this.postGEN(lclobj, 'PUT_OHSRECORD').subscribe(reply => {
+      this.messagesBS.next('Done');
+    })
+  }
   getCipline(cipid = '') {
     this.postGEN({ INITIATIVE: cipid }, 'GET_CIPLINE_MVTS').subscribe(reply => {
       reply.RESULT.forEach(line => {
@@ -288,7 +295,7 @@ export class ApidataService {
           ele['PROGRESS'] = {};
         }
       }
-     ele['OHS'] = JSON.parse(this.xtdatob(ele.FUNDING_SOURCES))
+     ele['OHS'] = JSON.parse(this.xtdatob(ele.OHS))
       ele.FUNDING = this.xtdatob(ele.FUNDING)
       ele.APPROVAL_MOTIVATE = this.xtdatob(ele.APPROVAL_MOTIVATE)
       ele.APPROVAL_NOTE = this.xtdatob(ele.APPROVAL_NOTE)
@@ -381,7 +388,21 @@ export class ApidataService {
 
         let feedback = this.processBigview(reply.RESULT)
         this.lclstate.dates = JSON.parse(reply.RESULT[0].DATES)
-        this.lclstate.ohs = JSON.parse(this.xtdatob(reply.RESULT[0].FUNDING_SOURCES))
+        let tempohs = {
+          REFERENCE:'',
+          OHSRISK:'',
+          AGREEDRISK:'',
+          PROJSCREENING:'',
+          VENDORVETTED:'',
+          SWMS_OHS_REQ:'',
+          SWMS_OHS_AP_DATE:'',
+          COMPLIANCE_CONTACT:'',
+          SWMS_OHS_NA: false,
+          PROGRESS: 0,
+          COMMENTS:''
+        }
+        let inputohs = reply.RESULT[0].OHS
+        this.lclstate.ohs = { ...tempohs, ... inputohs }
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
         this.lclstate.dates['LAST_COMMENT'] =  this.lclstate.dates['TRACKNOTE'].substring(0,250);
         this.lclstate.phase = reply.RESULT[0].PHASE;

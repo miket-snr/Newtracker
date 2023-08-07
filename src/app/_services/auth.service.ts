@@ -26,7 +26,8 @@ export class AuthService {
     TOKEN: '',
     VERNR: '',
     VERNA: '',
-    DESIGNATION: ''
+    DESIGNATION: '',
+    DATABAG:''
   }
   public rfqtoken: string;
   loggedin = false;
@@ -81,6 +82,7 @@ if (this.rfqtoken == 'xyz' && tempu > '') {
         const temp = JSON.parse(cu);
         if (temp.SAPUSER > '') {
           temp.EMAIL = temp.EMAIL.toUpperCase();
+          temp.PASSWORD = temp.DATABAG;
           this.currentUserBS.next(
             { ...this.blankuser, ...temp }
           ); this.loggedin = true; this.loggedinBS.next(true);
@@ -113,7 +115,8 @@ if (this.rfqtoken == 'xyz' && tempu > '') {
       ABSENT_TO: '',
       SUBSTITUTE: '',
       PARTNER_ID: '',
-      TOKEN: ''
+      TOKEN: '',
+      DATABAG:''
     })
     this.loggedin = false;
     this.loggedinBS.next(false);

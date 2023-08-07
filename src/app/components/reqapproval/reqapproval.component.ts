@@ -28,6 +28,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   site = '';
   knownas = '';
   blockback = false;
+  ohsrole = this.authserv.currentUserValue.PASSWORD.includes('OHS');
   sub: Subscription[] = [];
   phase = 'PHASE01'
   fact2 = '';

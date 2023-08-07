@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Progress } from 'src/app/_classes/progress';
 import { ApidataService } from 'src/app/_services/apidata.service';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-get-progress',
@@ -12,8 +13,12 @@ export class GetProgressComponent implements OnInit {
 item = this.initdata();
 phaseprog: any;
 blockback = false;
+ohsrole =  this.authserv.currentUserValue.PASSWORD.includes('OHS')
 codes = this.apiserv.buildcodes();
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Progress, private progressDialog: MatDialogRef<GetProgressComponent>, private apiserv: ApidataService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Progress, 
+  private progressDialog: MatDialogRef<GetProgressComponent>,
+   private apiserv: ApidataService,
+   private authserv: AuthService) { }
 
   ngOnInit(): void {
     this.item = this.data;
