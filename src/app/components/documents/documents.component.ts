@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -9,6 +9,8 @@ import { FileSaverService } from 'ngx-filesaver';
   styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
+  @Input() doctype = 'DOCS';
+  @Input() reference = '';
   docToUpload: any;
   public doclist = new BehaviorSubject<any>([]);
   public currentblob = new BehaviorSubject<Blob>(null);
@@ -23,8 +25,12 @@ export class DocumentsComponent implements OnInit {
     public authaserv: AuthService,public filesaver: FileSaverService,) { }
 
   ngOnInit(): void {
+    if(this.doctype === 'DOCS'){
     this.getdoclist({APIKEY:"PSTRACKER",DOCNO:"HELPFILE"})
+  } else {
+    this.getdocuments({REFERENCE:"reference"})
   }
+}
   showHelp(){
   this.helper = !this.helper;
   this.hlptxt = this.helper? 'Hide Help' : "Show Help";
@@ -142,6 +148,11 @@ export class DocumentsComponent implements OnInit {
             })
         }
       });
+  }
+  /***************************************************** */
+  getdocuments(docref: any) {
+    this.docs = [];
+    this.apiserv.postGEN(docref,'GET_DOCUMENTS','PROJECTS')
   }
   deletedoc(docref: any) {
     let datain = '';

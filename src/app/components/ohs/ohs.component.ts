@@ -18,6 +18,7 @@ export class OhsComponent implements OnInit {
   SWMS_OHS_AP_DATE:'',
   COMPLIANCE_CONTACT:'',
   SWMS_OHS_NA: false,
+  ABSA_OHS_SUBMIT:'',
   PROGRESS: 0,
   COMMENTS:''
 }

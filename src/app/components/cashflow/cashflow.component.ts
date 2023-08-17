@@ -23,6 +23,8 @@ export class CashflowComponent implements OnInit, OnDestroy {
         this.searchlist = [];
          if (reply) {
           reply.forEach(element => {
+            element.ABSAPHASE =  element.PHASE < 'PHASE05 '? 'Planning' : element.PHASE < 'PHASE07 '? 'Implementation' : element.PHASE < 'PHASE08 '? 'Execution' :  element.PHASE < 'PHASE11 '? 'Closing': 'Closed' ;
+            element.APPROVAL_STATUS = this.apiserv.getApprovalText(element.APPROVAL_STATUS);
             let tempobj = { tag: '' };
             tempobj.tag = Object.values(element).join('-');
             this.searchlist.push({ ...element, ...tempobj });

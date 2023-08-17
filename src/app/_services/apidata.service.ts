@@ -624,7 +624,7 @@ export class ApidataService {
             DATE10: innerline[0].DATE10,
             TRACKNOTE: this.xtdatob(innerline[0].TRACKNOTE),
             PHASE: line.PHASE,
-            ABSAPHASE : line.PHASE < 'PHASE05 '? 'Planning' : line.PHASE < 'PHASE07 '? 'Implementation' : line.PHASE < 'PHASE08 '? 'Execution' : 'Closing',
+            ABSAPHASE : line.PHASE < 'PHASE05 '? 'Planning' : line.PHASE < 'PHASE07 '? 'Implementation' : line.PHASE < 'PHASE08 '? 'Execution' :  line.PHASE < 'PHASE11 '? 'Closing': 'Closed',
             BUDGET: line.BUDGET,
             COSTS: line.COSTS,
             TRAVEL: line.TRAVEL,
@@ -973,7 +973,7 @@ export class ApidataService {
     })
     this.phaseprog.push({ phase: 'OHS Clearance', codes: [{ code: 0, text: 'Not started' },
     { code: 10, text: 'Project Screening' }, { code: 20, text: 'Initial Risk' }, { code: 30, text: 'Agreed Risk' }, { code: 50, text: 'SWMS Submission' },
-     { code: 75, text: 'SWMS Approved' }, { code: 100, text: 'OHS Cleared' }] })
+     { code: 75, text: 'SWMS Approved' },  { code: 85, text: 'ABSA OHS Submission' }, { code: 100, text: 'OHS Cleared' }] })
  
     this.phaseprog.push({ phase: 'Approval Board', codes: [{ code: 0, text: 'Not Started' }, { code: 40, text: 'Submitted' }, { code: 60, text: 'Awaiting' }, { code: 100, text: 'Approved' }] })
     this.phaseprog.push({ phase: 'Lead Time', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'In Progress' }, { code: 100, text: 'Completed' }] })

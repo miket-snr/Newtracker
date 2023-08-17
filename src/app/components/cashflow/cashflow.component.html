@@ -31,12 +31,17 @@
                                     </th>
                                     <th class="text-center"><small style="font-weight: bold;">Project</small></th>
                                     <th class="text-center"><small style="font-weight: bold;">Region</small></th>
+                                    <th class="text-center"><small style="font-weight: bold;">Province</small></th>
                                     <th class="text-center"><small style="font-weight: bold;">Oneview</small></th>
 
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
-                                                    style="font-weight: bold;">Knownas</small></th>
+                                                    style="font-weight: bold;">Building Name</small></th>
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">Title</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Absa Status</small></th>
+                                    <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
+                                                    style="font-weight: bold;">Approval Status</small></th>
                                     <th style="background-color:rgb(114, 171, 251);" class="text-center"><small
                                                     style="font-weight: bold;">Budget Group</small></th>
                                     <th style="background-color:rgb(114, 251, 137);" class="text-center"><small
@@ -75,6 +80,7 @@
                                                     <th class="text-center"><small style="font-weight: bold;">Commitments</small></th>
                                                     <th class="text-center"><small style="font-weight: bold;">Revenue</small></th>
                                                     <th class="text-center"><small style="font-weight: bold;">M Fee</small></th>
+                                                    <th class="text-center"><small style="font-weight: bold;">Total Revenue</small></th>
 
                             </tr>
 
@@ -83,9 +89,12 @@
                                     <td ><small>{{budgetview.INITIATIVE}}</small></td>
                                     <td ><small>{{budgetview.LOADTYPE=='B'?'Budget':budgetview.PROJLINK}}</small></td>
                                     <td ><small>{{budgetview.REGION}}</small></td>
+                                    <td ><small>{{budgetview.PROVREGION}}</small></td>
                                     <td ><small>{{budgetview.ONEVIEW}}</small></td>
                                     <td ><small>{{budgetview.KNOWNAS.substring(0,40)}}</small></td>
                                     <td ><small>{{budgetview.TITLE}}</small></td>
+                                    <td ><small>{{budgetview.ABSAPHASE}}</small></td>
+                                    <td ><small>{{budgetview.APPROVAL_STATUS}}</small></td>
                                     <td ><small>{{budgetview.BUDGETGROUP}}</small></td>
                                     <td  [ngClass]="budgetview.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
                                         <small>{{budgetview.TRACKERCODE}}</small></td>
@@ -111,6 +120,7 @@
                                     <td class="text-right ">{{budgetview.COMMITMENT}}</td>
                                     <td class="text-right ">{{budgetview.REVENUE}}</td>
                                     <td class="text-right ">{{budgetview.M_FEE}}</td>
+                                    <td class="text-right ">{{(budgetview.REVENUE + budgetview.M_FEE).toFixed(2)}}</td>
                                     <!-- <td ><small>{{apiserv.formatString(budgetview.VALUEOF.toLocaleString())}}</small></td> 
                                     <td ><small>{{budgetview.APPROVEBY}}</small></td>
                                     <td style="background-color:rgb(114, 171, 251);">

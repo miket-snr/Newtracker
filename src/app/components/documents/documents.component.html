@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="doctype=='DOCS'" class="container">
     <div class="row banner">
         <div class="col-12 text-right pr-0">
             <button type="button" class="btn btn-sm btn-success" (click)="showHelp()">{{hlptxt}}</button>
@@ -46,4 +46,33 @@
         </div>
       </div>
       </ng-container>
+  </div>
+  <div *ngIf="doctype!=='DOCS'" class="container">
+    <h4>Under Construction </h4>
+    <table class="table">
+      <thead>
+        <th>Document Category</th>
+        <th>Project</th>
+        <th>Document Name</th>
+        <th>Loaded by </th>
+        <th>Loaded on</th>
+        <th>Downloader</th>
+      <ng-container *ngIf="authaserv.currentUserValue && authaserv.currentUserValue['DATABAG']?.includes('ADMIN')">  <th>Delete</th> </ng-container>
+  
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of docs ; let i = index" >
+          <td>{{doc.PHASE}}</td>
+          <td>{{doc.REFERENCE}}</td>
+          <td>{{doc.ORIGINALNAME}}</td>
+          <td>{{doc.LOADEDBY}}</td>
+          <td>{{doc.DATELOADED}}</td>
+          <td><button type="button" (click)="getdoc(doc)">Download</button></td>
+          <ng-container *ngIf="authaserv.currentUserValue && authaserv.currentUserValue['DATABAG']?.includes('ADMIN')"> 
+              <td><button type="button" class="btn btn-sm btn-primary"  (click)="deletedoc(doc)">Delete</button></td>
+          </ng-container>
+        </tr>
+   
+      </tbody>
+    </table>
   </div>

@@ -433,7 +433,9 @@
        <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Gantt Chart" class="tabber">
         <app-gantt></app-gantt>
       </mat-tab> 
-      
+      <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Documents" class="tabber">      
+        <app-documents [doctype]="'PROJ'" [reference]="reqno"></app-documents>
+      </mat-tab> 
     </mat-tab-group>
   </form>
 </ng-container>

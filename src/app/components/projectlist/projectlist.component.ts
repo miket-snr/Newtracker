@@ -113,7 +113,7 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
         this.searchlist = [];
         if (reply) {
           reply.forEach(element => {
-            let tempohs = JSON.parse(this.apiserv.xtdatob(element.OHS));
+            let tempohs = element.OHS;
             let tempobj = { tag: '' };
             tempobj.tag = Object.values(element).join('-');
 

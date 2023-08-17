@@ -61,6 +61,8 @@ import { CommentsModule } from './comments/comments.module';
 import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
 import { IssuesComponent } from './components/issues/issues.component';
 import { OhsComponent } from './components/ohs/ohs.component';
+import { ReqeditorComponent } from './components/reqeditor/reqeditor.component';
+
 
 @NgModule({
   declarations: [
@@ -109,7 +111,8 @@ import { OhsComponent } from './components/ohs/ohs.component';
     GetApprovalComponent,
     SapcheckComponent,
     IssuesComponent,
-    OhsComponent
+    OhsComponent,
+    ReqeditorComponent,
   ],
   imports: [
     BrowserModule,
