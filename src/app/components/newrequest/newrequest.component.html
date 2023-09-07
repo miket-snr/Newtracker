@@ -1,0 +1,352 @@
+  <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
+    <mat-spinner diameter="30">Hey</mat-spinner>
+  </div>
+
+    <form #reqForm="ngForm" (ngSubmit)="onSubmit()">
+  
+      <mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="tabindex">
+        <mat-tab label="Requirement" class="tabber">
+            <div class="d-flex justify-content-left">
+  
+            <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
+  
+  
+              <div *ngIf="sectionid[4]" style="height:100%;">
+  
+                <div class="card">
+                  <table class="table">
+  
+                    <tr>
+                      <td colspan="6" style="background-color: lightblue;">
+                        <div class="d-flex justify-content-between">
+                          <span (click)="sectionToggle(0)"><b>Requirements</b>
+                            
+                          </span>
+                          <span>{{newvm.PROJLINK?
+                            newvm.PROJLINK:newvm.REFERENCE}}</span>
+                            <span>{{newvm.STATUS}}</span>
+                          <!-- <span >
+                           
+                            <button *ngIf="checkReady('save')" type="button" class="ml-3 btn btn-sm btn-primary"
+                              (click)="onSubmit()">
+                              Save
+                            </button></span> -->
+                            <span>
+                            <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp('PSREQ')">{{hlptxt}}</button>
+                          </span>
+  
+                        </div>
+                      </td>
+                   
+                    </tr>
+                    <tr *ngIf="helper"  style="background-color: rgb(223, 236, 231);">
+                      <td colspan="6"> <app-help [edit]="false"  [helper]="helpline"></app-help>
+                      </td>  
+                   
+                    </tr>
+                    <ng-container *ngIf="sectionid[0]">
+                      <tr>
+                        <td>Project Title Short</td>
+                        <td colspan="2"><input class="form-control" placeholder="Short Title" name="title"
+                            [(ngModel)]="newvm.TITLE">
+                          <!-- <div class="text-danger" *ngIf="requestForm.controls.title.errors?.minlength">
+                            Title must be at least 10 characters long.
+                          </div>
+                          <div class="text-danger" *ngIf="requestForm.controls.title.errors?.maxlength">
+                            Title can be max 50 characters long.
+                          </div> -->
+                        </td>
+                        <td>
+                         <div class="row">
+                            <div class="col-4 text-right">
+                             Status
+                            </div>
+                            <div class="col-8">
+                              <select class="form-control" name="status" [(ngModel)]="newvm.STATUS">
+                                <option [value]="''">Select One ...</option>
+                                <option [value]="'DRAFT'">In Preparation</option>
+                                <option [value]="'PHASE00'">Approved</option>
+                                <option [value]="'ONHOLD'">On Hold</option>
+                                <option [value]="'CANCEL'">Cancelled</option>
+                              </select>
+                            </div>
+                         </div> 
+                        </td>
+                        <td><div class="row">
+                          <div class="col-4 text-right">
+                           WBS
+                          </div>
+                          <div class="col-8">
+                            <input type="text" class="form-control"  [(ngModel)]="newvm.PROJLINK" name="projlink">
+                          </div>  
+                        </div></td>
+                      </tr>
+                      <tr>
+                        <td>High Level Scope
+                          <!-- <div *ngIf="greaterThan(reqno,'0')" style="margin-top: 25px">
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="open(commentmodal)">
+                              Comments and Notes
+                            </button>
+                          </div> -->
+                        </td>
+                        <td colspan="4">
+                          <textarea rows="5" name="details" [(ngModel)]="newvm.DETAILS" class="form-control"
+                            placeholder="Detailed description of the problem/request/event..." required>
+                    </textarea>
+                        </td>
+                      </tr>
+                    <ng-container *ngIf="!greaterThan(newvm.REFERENCE,'0')">
+                      <tr>
+                        <td>Priority</td>
+                        <td>
+                          <select class="form-control" name="epriority" [(ngModel)]="newvm.EPRIORITY"
+                            placeholder="Select a Line" required>
+                            <option value="l"> Low Priority</option>
+                            <option value="m"> Medium Priority</option>
+                            <option value="h"> High Priority</option>
+                          </select>
+                        </td>
+                        <td colspan="1">
+                          <!-- <mat-checkbox class="full-width " (change)="setVarious($event.checked)" name="retrospective"
+                            [(ngModel)]="newvm.RETROSPECTIVE">
+                            Retrospective
+                          </mat-checkbox> -->
+                        </td>
+                       
+                        <td colspan="1">
+                          <mat-form-field appearance="standard">
+                            <mat-label>Planned Start Date</mat-label>
+                            <input matInput [matDatepicker]="picker" name="propstartdate" [(ngModel)]="newvm.PROPSTARTDATE">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                        <td colspan="1">
+                          <mat-form-field appearance="standard">
+                            <mat-label>Planned End Date</mat-label>
+                            <input matInput [matDatepicker]="picker1" name="propenddate" [(ngModel)]="newvm.PROPENDDATE">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                      </tr>
+                    </ng-container>
+                   
+                      <tr>
+                        <ng-container *ngIf="greaterThan(newvm.REFERENCE,'0')">
+                        <td colspan="1">
+                          Forecast Start</td>
+                          <td>
+                            <input class="form-control" type="date"  [disabled]="true" name="propstartdate2" [(ngModel)]="newvm.DATE06">
+  
+                        </td>
+                        <td colspan="1">
+                          Forecast End</td>
+                          <td>
+                            <input class="form-control" type="date"  [disabled]="true" name="propenddate2" [(ngModel)]="newvm.DATE07">
+  
+                        </td>
+                    </ng-container>
+                      </tr>
+                      <ng-container >
+                        <tr>
+                          <td colspan="5" style="background-color: lightblue;">
+                            <span (click)="sectionToggle(1)"><b>Location</b>
+                            
+                            </span>
+                          </td>
+                          <td colspan="6" style="background-color: lightblue;"  class="text-right">
+                            <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp('PSLOCATION')">{{hlptxt}}</button>
+                          </td>
+                        </tr>
+                        <tr *ngIf="helper" style="background-color: rgb(223, 236, 231);" >
+                          <td colspan="6"> <app-help [edit]="false"  [helper]="helpline"></app-help>
+                          </td>  
+                       
+                        </tr>
+                        <ng-container *ngIf="sectionid[1]">
+                          <tr>
+                            <td style="width:120px">Region</td>
+                            <td style="width:160px;">
+                              <select class="form-control" name="region" [(ngModel)]="newvm.REGION">
+                                <option [value]="''">Select One ...</option>
+                                <option *ngFor="let region of apiserv.regions" [value]="region.code"> {{region.text}}
+                                </option>
+                              </select>
+                            </td>
+                            <td>Prov-Region</td>
+                            <td colspan="1">
+                              <select class="form-control" name="provregion" [(ngModel)]="newvm.PROVREGION">
+                                <option [value]="''">Select One ...</option>
+                                <option *ngFor="let provregion of apiserv.provregions" [value]="provregion.code">
+                                  {{provregion.text}}
+                                </option>
+                              </select>
+                            </td>
+                            <td colspan="2">
+                              <div class="row">
+                                <div class="col-4">
+                                  Building ID
+                                </div>
+                                <div class="col-8">
+                                  <input type="text" class="form-control" name="buildingid" [(ngModel)]="newvm.BUILDINGID">
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>One View
+                              <div>
+                                <mat-checkbox class="full-width " (change)="setVarious($event.checked)" name="varioussites"
+                                  [(ngModel)]="newvm.VARIOUSSITES">
+                                  Various Sites
+                                </mat-checkbox>
+                              </div>
+                            </td>
+                            <td><input class="form-control" name="oneview" [(ngModel)]="newvm.ONEVIEW" (change)="onChange()">
+                            </td>
+                            <td>Known As</td>
+                            <td colspan="3"><input class="form-control" name="knownas" [(ngModel)]="newvm.KNOWNAS"></td>
+    
+                          </tr>
+                          <!-- <tr *ngIf="requestForm.value.varioussites">
+                            <td colspan="2">
+                              <button type="button" (click)="modalServicejw.open('multisite')">Manage Sites</button>
+                            </td>
+                          </tr> -->
+                          <tr>
+                            <td>Site Notes</td>
+                            <td colspan="3"><textarea rows="4" class="form-control" name="sitenotes"
+                                [(ngModel)]="newvm.SITENOTES"></textarea>
+                            </td>
+                            <td colspan="1">
+                              <div class="row">
+                                <div class="col-4">
+                                  End of Life?
+                                </div>
+                                <div class="col-8">
+                                  <select class="form-control" name="endoflife" [(ngModel)]="newvm.ENDOFLIFE"
+                                    placeholder="Select a Line" required>
+                                    <option value=""> Select type....</option>
+                                    <option value="N"> No</option>
+                                    <option value="Y"> Yes</option>
+                                    <option value="U"> Not Applicable </option>
+                                  </select>
+                                </div> 
+                              </div>
+                              <div class="row mt-1">
+                                <div class="col-4">
+                                  Leased or Freehold
+                                </div>
+                                <div class="col-8">
+                                  <select class="form-control" name="leased_free" [(ngModel)]="newvm.LEASED_FREE"
+                                    placeholder="Select a Line" required>
+                                    <option value=""> Select type....</option>
+                                    <option value="F"> Freehold</option>
+                                    <option value="L"> Leased</option>
+                                    <option value="U"> Not Applicable</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="row">
+    
+                                <div class="col-8">
+                                  <mat-form-field appearance="standard">
+                                    <mat-label>Leased End Date</mat-label>
+                                    <input matInput [matDatepicker]="picker2" name="leaseend" [(ngModel)]="newvm.LEASEEND">
+                                    <mat-hint>MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                            </td>
+    
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+
+                      <tr *ngIf="!checkReady('savenew')">
+                        <td colspan="7" style="background-color: #00ff59;">
+                          Compulsory fields- Title, Scope, Region, Planned Start and End Dates
+                        </td>
+                      </tr>
+                      <ng-container *ngIf="checkReady('savenew') && !greaterThan(newvm.REFERENCE,'0')">
+                        <tr>
+                          <td colspan="7" style="background-color: rgb(0, 238, 255);">
+                            <div class="d-flex justify-content-center">
+                              <button type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
+                                Save and continue
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+             
+                    <ng-container *ngIf="greaterThan(newvm.REFERENCE,'0')">
+                      <tr>
+                        <td colspan="7">
+                          <div class="card-footer d-flex justify-content-around">
+                            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty || this.apiserv.lclstate.closed"
+                              (click)="onSubmit()">
+                              Update SAP
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="openPDF()">
+                              Print Pdf
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </table>
+  
+                
+                </div>
+              </div>
+  
+            </div>
+          </div>
+
+  
+          <!-- <div class="d-flex justify-content-left">
+  
+            <div class="col-lg-8 col-md-10 col-sm-11 offset-lg-2 offset-md-1 offset-sm-1">
+  
+  
+              <div *ngIf="sectionid[4]" style="height:100%;">
+  
+                <div class="card">
+  
+                  <table class="table">
+                 
+  
+                  </table>
+                  <div class="card-footer text-center">
+                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="onSubmit()"
+                      [disabled]="!reqForm.dirty || apiserv.lclstate.closed">
+                      Update SAP
+                    </button>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+          </div> -->
+         
+      </mat-tab>
+         <!--   <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Gantt Chart" class="tabber">
+          <app-gantt></app-gantt>
+        </mat-tab>  -->
+        <!-- <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Documents" class="tabber">      
+          <app-documents [doctype]="'PROJ'" [reference]="reqno"></app-documents>
+        </mat-tab>  -->
+      </mat-tab-group>
+ </form>
+ 
+  
+  <jw-modal id="multisite">
+    <!-- <app-multi-sites></app-multi-sites> -->
+  </jw-modal>

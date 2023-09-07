@@ -27,6 +27,7 @@ import { MassapprovalsComponent } from './components/massapprovals/massapprovals
 import { MassprogressComponent } from './components/massprogress/massprogress.component';
 import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
 import { IssuesComponent } from './components/issues/issues.component';
+import { NewrequestComponent } from './components/newrequest/newrequest.component';
 
 
 const routes: Routes = [
@@ -44,6 +45,7 @@ const routes: Routes = [
   {path: 'massapprovals',component:MassapprovalsComponent},
   {path: 'massfund',component:FundingmasseditComponent},
   {path: 'massprogress',component:MassprogressComponent},
+  {path: 'newrequest',component:NewrequestComponent},
   { path: 'home', component: HomeComponent},
   { path: 'help', component: HelpComponent},
   { path: 'import/:importtype', component: ImportsComponent},

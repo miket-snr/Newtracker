@@ -63,12 +63,14 @@ export class GanttComponent implements  OnInit , OnDestroy{
           taskmove: this.handler.bind(this),        }
     };   
   }
+  // To be removed if not used
   ngOnDestry(){
     this.subs.forEach(li=> {
       li.unsubscribe();
     })
     this.apiserv.reqdata = [];
   }
+  // For removal
 initGantt(){
   this.phaselist = this.data
   // .filter( tline=> {
@@ -110,7 +112,7 @@ progressUpdate(sortof){
 }
 handler(task, event, cell, column) {
   let selectedData = task.getDataObject();
-  alert(selectedData.pName)
+  alert(selectedData.pID)
   this.insert = false;
   this.hide = true;
   this.taskForm.get('pID').setValue(selectedData.pID);

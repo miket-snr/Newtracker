@@ -62,6 +62,7 @@ import { SapcheckComponent } from './components/sapcheck/sapcheck.component';
 import { IssuesComponent } from './components/issues/issues.component';
 import { OhsComponent } from './components/ohs/ohs.component';
 import { ReqeditorComponent } from './components/reqeditor/reqeditor.component';
+import { NewrequestComponent } from './components/newrequest/newrequest.component';
 
 
 @NgModule({
@@ -113,6 +114,7 @@ import { ReqeditorComponent } from './components/reqeditor/reqeditor.component';
     IssuesComponent,
     OhsComponent,
     ReqeditorComponent,
+    NewrequestComponent,
   ],
   imports: [
     BrowserModule,

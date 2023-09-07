@@ -114,6 +114,13 @@ export class ProjectlistComponent implements OnInit, OnDestroy {
         if (reply) {
           reply.forEach(element => {
             let tempohs = element.OHS;
+            tempohs['OHSRISK'] =  tempohs['OHSRISK'] == '0'? 'High' : tempohs['OHSRISK'] == '1' ? 'Medium' : tempohs['OHSRISK'] == '2' ? 'Low' : 'None';
+            tempohs['AGREEDRISK'] =  tempohs['AGREEDRISK'] == '0'? 'High' : tempohs['AGREEDRISK'] == '1' ? 'Medium' : tempohs['AGREEDRISK'] == '2' ? 'Low' : 'None';
+            tempohs['PROJSCREENING_TXT'] =  tempohs['PROJSCREENING_TXT'] == ''? 'Not Assessed' : tempohs['PROJSCREENING_TXT'];
+            tempohs['VENDORVETTED_TXT'] =  tempohs['VENDORVETTED_TXT'] == ''? 'Not Assessed' : tempohs['VENDORVETTED_TXT'];
+            tempohs['SWMS_OHS_REQ_TXT'] =  tempohs['SWMS_OHS_REQ_TXT'] == ''? 'Not Assessed' : tempohs['SWMS_OHS_REQ_TXT'];
+            tempohs['SWMS_OHS_AP_DATE_TXT'] =  tempohs['SWMS_OHS_AP_DATE_TXT'] == ''? 'Not Assessed' : tempohs['SWMS_OHS_AP_DATE_TXT'];
+            tempohs['ABSA_OHS_SUBMIT_TXT'] =  tempohs['ABSA_OHS_SUBMIT_TXT'] == ''? 'Not Assessed' : tempohs['ABSA_OHS_SUBMIT_TXT'];
             let tempobj = { tag: '' };
             tempobj.tag = Object.values(element).join('-');
 

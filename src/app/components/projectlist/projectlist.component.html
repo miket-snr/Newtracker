@@ -206,17 +206,35 @@
                                                         <small style="font-weight: bold;">Project Screened</small>
                                                 </th>
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Date of <br> Screening</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Vendor Vetted</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
                                                         <small style="font-weight: bold;">Assessed Risk</small>
                                                 </th>
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
                                                         <small style="font-weight: bold;">Agreed Risk</small>
                                                 </th>
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
-                                                        <small style="font-weight: bold;">Submitted Date</small>
+                                                        <small style="font-weight: bold;">SWMS/OHS Submitted</small>
                                                 </th>
 
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
-                                                        <small style="font-weight: bold;">Approved Date</small>
+                                                        <small style="font-weight: bold;">SWMS/OHS Approved</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">ABSA OHS Approved</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Date Submit <br> to Absa</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">OHS Progress</small>
+                                                </th>
+                                                <th style="background-color:rgb(188, 247, 190);" class="text-center">
+                                                        <small style="font-weight: bold;">Last Progress Tracker Comment</small>
                                                 </th>
                                                 <th style="background-color:rgb(188, 247, 190);" class="text-center">
                                                         <small style="font-weight: bold;">OHS Contact</small>
@@ -523,7 +541,14 @@
                                         </ng-container>
                                         <ng-container *ngIf="sections[4].selected">
                                                 <td style="background-color:rgb(114, 171, 251);">
-                                                        <small>{{bigview.PROJSCREENING}}</small>
+                                                        <small>{{bigview.PROJSCREENING_TXT}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROJSCREENDATE}}</small>
+                                                </td>
+                                           
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.VENDORVETTED_TXT}}</small>
                                                 </td>
                                                 <td style="background-color:rgb(114, 171, 251);">
                                                         <small>{{bigview.OHSRISK}}</small>
@@ -532,10 +557,23 @@
                                                         <small>{{bigview.AGREEDRISK}}</small>
                                                 </td>
                                                 <td style="background-color:rgb(114, 171, 251);">
-                                                        <small>{{bigview.SWMS_OHS_REQ}}</small>
+                                                        <small>{{bigview.SWMS_OHS_REQ_TXT}}</small>
+                                                </td>
+                                               
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.SWMS_OHS_AP_DATE_TXT}}</small>
                                                 </td>
                                                 <td style="background-color:rgb(114, 171, 251);">
-                                                        <small>{{bigview.SWMS_OHS_AP_DATE}}</small>
+                                                        <small>{{bigview.ABSA_OHS_SUBMIT_TXT}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.ABSA_OHS_SUBMIT}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.PROGRESS}}</small>
+                                                </td>
+                                                <td style="background-color:rgb(114, 171, 251);">
+                                                        <small>{{bigview.COMMENTS.substring(0,80)}}</small>
                                                 </td>
                                                 <td style="background-color:rgb(114, 171, 251);">
                                                         <small>{{bigview.COMPLIANCE_CONTACT}}</small>

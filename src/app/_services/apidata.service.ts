@@ -20,9 +20,9 @@ export class ApidataService {
     filtercip: false,
     filteropen: false,
     dates: {},
-    ohs:{},
-    approval:{},
-    psfunding:{},
+    ohs: {},
+    approval: {},
+    psfunding: {},
     sites: '',
     currentreq: {},
     phase: '',
@@ -136,7 +136,7 @@ export class ApidataService {
   public wbs2reqmapperBS = new BehaviorSubject(false);
   public testcontainerBS = new BehaviorSubject('');
   constructor(private http: HttpClient, private router: Router,
-              @Inject(LOCALE_ID) public locale: string) { }
+    @Inject(LOCALE_ID) public locale: string) { }
 
   getWbs2Req() {
     this.postGEN({ A: '' }, 'GET_REQ2WBS').subscribe(reply => {
@@ -159,10 +159,10 @@ export class ApidataService {
 
   putFunding(lclobj: any) {
     this.postGEN(lclobj, 'UPDATE_MASSFUNDING').subscribe(reply => {
-      
+
     })
   }
-  updateOHS(lclobj:any){
+  updateOHS(lclobj: any) {
     this.postGEN(lclobj, 'PUT_OHSRECORD').subscribe(reply => {
       this.messagesBS.next('Done');
     })
@@ -284,9 +284,9 @@ export class ApidataService {
       ele.KNOWNAS = this.xtdatob(ele.SKNOWNAS)
       ele.TITLE = this.xtdatob(ele.STITLE)
       ele.TRACKNOTE = this.xtdatob(ele.TRACKNOTE)
-      ele.LAST_COMMENT = ele.LAST_COMMENT? this.xtdatob(ele.LAST_COMMENT): ele.TRACKNOTE.substring(0,250);
+      ele.LAST_COMMENT = ele.LAST_COMMENT ? this.xtdatob(ele.LAST_COMMENT) : ele.TRACKNOTE.substring(0, 250);
       ele.DATES = ele.DATES ? ele.DATES : ''
-      ele.ABSAPHASE = ele.PHASE < 'PHASE05 '? 'Planning' : ele.PHASE < 'PHASE07 '? 'Implementation' : ele.PHASE < 'PHASE08 '? 'Execution' : 'Closing'
+      ele.ABSAPHASE = ele.PHASE < 'PHASE05 ' ? 'Planning' : ele.PHASE < 'PHASE07 ' ? 'Implementation' : ele.PHASE < 'PHASE08 ' ? 'Execution' : 'Closing'
       if (ele.DATES.includes('PROG')) {
         try {
           let lclobj = JSON.parse(ele.DATES)
@@ -295,7 +295,7 @@ export class ApidataService {
           ele['PROGRESS'] = {};
         }
       }
-     ele['OHS'] = JSON.parse(this.xtdatob(ele.OHS))
+      ele['OHS'] = JSON.parse(this.xtdatob(ele.OHS))
       ele.FUNDING = this.xtdatob(ele.FUNDING)
       ele.APPROVAL_MOTIVATE = this.xtdatob(ele.APPROVAL_MOTIVATE)
       ele.APPROVAL_NOTE = this.xtdatob(ele.APPROVAL_NOTE)
@@ -308,7 +308,7 @@ export class ApidataService {
     datein.setHours(0, 0, 0, 0);
     let dd = ''; let mm = ''; let yyyy = 0;
     try {
-     
+
       dd = String(datein.getDate()).padStart(2, '0');
       mm = String(datein.getMonth() + 1).padStart(2, '0'); //January is 0!
       yyyy = datein.getFullYear();
@@ -389,22 +389,28 @@ export class ApidataService {
         let feedback = this.processBigview(reply.RESULT)
         this.lclstate.dates = JSON.parse(reply.RESULT[0].DATES)
         let tempohs = {
-          REFERENCE:'',
-          OHSRISK:'',
-          AGREEDRISK:'',
-          PROJSCREENING:'',
-          VENDORVETTED:'',
-          SWMS_OHS_REQ:'',
-          SWMS_OHS_AP_DATE:'',
-          COMPLIANCE_CONTACT:'',
+          REFERENCE: '',
+          OHSRISK: '',
+          AGREEDRISK: '',
+          PROJSCREENING: '',
+          VENDORVETTED: '',
+          SWMS_OHS_REQ: '',
+          SWMS_OHS_AP_DATE: '',
+          COMPLIANCE_CONTACT: '',
           SWMS_OHS_NA: false,
           PROGRESS: 0,
-          COMMENTS:''
+          COMMENTS: '',
+          PROJSCREENING_TXT: '',
+          VENDORVETTED_TXT: '',
+          SWMS_OHS_REQ_TXT: '',
+          SWMS_OHS_NA_TXT: '',
+          SWMS_OHS_AP_DATE_TXT: '',
+          ABSA_OHS_SUBMIT_TXT: '',
         }
         let inputohs = reply.RESULT[0].OHS
-        this.lclstate.ohs = { ...tempohs, ... inputohs }
+        this.lclstate.ohs = { ...tempohs, ...inputohs }
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
-        this.lclstate.dates['LAST_COMMENT'] =  this.lclstate.dates['TRACKNOTE'].substring(0,250);
+        this.lclstate.dates['LAST_COMMENT'] = this.lclstate.dates['TRACKNOTE'].substring(0, 250);
         this.lclstate.phase = reply.RESULT[0].PHASE;
         this.lclstate.closed = (this.lclstate.phase > 'PHASE' && this.lclstate.phase < 'PHASE11') ? false : true;
         this.lclstate.currentreq = reply.RESULT[0];
@@ -478,10 +484,10 @@ export class ApidataService {
   }
 
   async getone(reference) {
-    
+
     this.postGEN({ REGION: 'Region 2', MASK: '', REFERENCE: reference, ACTION: 'F' }, 'GET_PROJLIST').subscribe(list => {
       if (Array.isArray(list.RESULT) && list.RESULT.length > 0) {
-       
+
         this.testcontainerBS.next(list.RESULT[0].ABSAREQNO)
         this.counter++;
       } else {
@@ -509,51 +515,51 @@ export class ApidataService {
         pNotes: "Some Notes text",
       }];
     tasks.forEach((st, index) => {
-     if (st['NEXTSTATUS'] == 'PHASES') {
-      let today = new Date();
-      let ptarget = new Date(st.DUEDATE);
-      console.log(ptarget);
-      console.log(today)
-      //turn string 'yyyy-mm-dd' into date
+      if (st['NEXTSTATUS'] == 'PHASES') {
+        let today = new Date();
+        let ptarget = new Date(st.DUEDATE);
+        console.log(ptarget);
+        console.log(today)
+        //turn string 'yyyy-mm-dd' into date
 
 
-      let slate = st.TASK_STATUS == 100 ?  "gtaskblue" : today < ptarget?"gtaskgreen": "gtaskred";
-      let lineout = {
-        pID: st.TASKNO,
-        pName: st.SHORT_INSTRUCTION,
-        pStart: st.STARTDATE,
-        pEnd: st.DUEDATE,
-        pRes: st.DELEGATENAME,
-        pClass: slate,
-        pComp: 80 ,
-        pParent: 101,
-        pLink: "",
-        pMile: 0,
-        pGroup: 1,
-        pDepend: "",
-        pCaption: "",
-        pNotes: "Some Notes text",
-        pOpen: 0, 
-    
-     }
-    //   let linout2 = {
-    //     pID: st.TASKNO,
-    //     pName: st.SHORT_INSTRUCTION,
-    //     pStart: st.STARTDATE,
-    //     pDuration: 45,
-    //     pEnd: st.DUEDATE,
-    //     pRes: st.DELEGATENAME,
-    //     pClass: slate,
-    //     pWeight: 10,
-    //     pComp: parseInt(st.TASK_STATUS) ,
-    //     pParent: 0,
-    //     pGroup: 1,
-    //     pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, 
-    //     pReference: st.LINKEDOBJNR,
-    //     ACTIONTYPE: st.ACTIONTYPE
-   
-  temp.push(lineout)
-}
+        let slate = st.TASK_STATUS == 100 ? "gtaskblue" : today < ptarget ? "gtaskgreen" : "gtaskred";
+        let lineout = {
+          pID: st.TASKNO,
+          pName: st.SHORT_INSTRUCTION,
+          pStart: st.STARTDATE,
+          pEnd: st.DUEDATE,
+          pRes: st.DELEGATENAME,
+          pClass: slate,
+          pComp: 80,
+          pParent: 101,
+          pLink: "",
+          pMile: 0,
+          pGroup: 1,
+          pDepend: "",
+          pCaption: "",
+          pNotes: "Some Notes text",
+          pOpen: 0,
+
+        }
+        //   let linout2 = {
+        //     pID: st.TASKNO,
+        //     pName: st.SHORT_INSTRUCTION,
+        //     pStart: st.STARTDATE,
+        //     pDuration: 45,
+        //     pEnd: st.DUEDATE,
+        //     pRes: st.DELEGATENAME,
+        //     pClass: slate,
+        //     pWeight: 10,
+        //     pComp: parseInt(st.TASK_STATUS) ,
+        //     pParent: 0,
+        //     pGroup: 1,
+        //     pOpen: st.ACTIONTYPE == "PHASE01" ? 1 : 0, 
+        //     pReference: st.LINKEDOBJNR,
+        //     ACTIONTYPE: st.ACTIONTYPE
+
+        temp.push(lineout)
+      }
     })
     this.tasklinesBS.next(temp);
     this.reqdata = [...temp];
@@ -624,7 +630,7 @@ export class ApidataService {
             DATE10: innerline[0].DATE10,
             TRACKNOTE: this.xtdatob(innerline[0].TRACKNOTE),
             PHASE: line.PHASE,
-            ABSAPHASE : line.PHASE < 'PHASE05 '? 'Planning' : line.PHASE < 'PHASE07 '? 'Implementation' : line.PHASE < 'PHASE08 '? 'Execution' :  line.PHASE < 'PHASE11 '? 'Closing': 'Closed',
+            ABSAPHASE: line.PHASE < 'PHASE05 ' ? 'Planning' : line.PHASE < 'PHASE07 ' ? 'Implementation' : line.PHASE < 'PHASE08 ' ? 'Execution' : line.PHASE < 'PHASE11 ' ? 'Closing' : 'Closed',
             BUDGET: line.BUDGET,
             COSTS: line.COSTS,
             TRAVEL: line.TRAVEL,
@@ -971,10 +977,12 @@ export class ApidataService {
       { code: 100, text: 'Completed' }
       ]
     })
-    this.phaseprog.push({ phase: 'OHS Clearance', codes: [{ code: 0, text: 'Not started' },
-    { code: 10, text: 'Project Screening' }, { code: 20, text: 'Initial Risk' }, { code: 30, text: 'Agreed Risk' }, { code: 50, text: 'SWMS Submission' },
-     { code: 75, text: 'SWMS Approved' },  { code: 85, text: 'ABSA OHS Submission' }, { code: 100, text: 'OHS Cleared' }] })
- 
+    this.phaseprog.push({
+      phase: 'OHS Clearance', codes: [{ code: 0, text: 'Not started' },
+      { code: 10, text: 'Project Screening' }, { code: 20, text: 'Initial Risk' }, { code: 30, text: 'Agreed Risk' }, { code: 50, text: 'SWMS Submission' },
+      { code: 75, text: 'SWMS Approved' }, { code: 85, text: 'ABSA OHS Submission' }, { code: 100, text: 'OHS Cleared' }]
+    })
+
     this.phaseprog.push({ phase: 'Approval Board', codes: [{ code: 0, text: 'Not Started' }, { code: 40, text: 'Submitted' }, { code: 60, text: 'Awaiting' }, { code: 100, text: 'Approved' }] })
     this.phaseprog.push({ phase: 'Lead Time', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'In Progress' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({
@@ -986,9 +994,9 @@ export class ApidataService {
         { code: 80, text: 'Advanced Progress' },
         { code: 100, text: 'Completed' }]
     })
-    this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' },{ code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
-  this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-  this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' },{ code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' }, { code: 100, text: 'Completed' }] })
     return this.phaseprog;
   }
   formatString(strin = '') {

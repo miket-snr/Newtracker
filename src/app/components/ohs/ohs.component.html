@@ -46,8 +46,21 @@
             Project Screening
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()"  type="date" class="form-control smallinput" [(ngModel)]="ohsitem.PROJSCREENING">
+            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.PROJSCREENING_TXT">
+                <option value="">Not Assesed</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                </select>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right pt-2">
+           Project Screen Date
+        </div>
+        <div class="col-4">
+           
+                <input  [disabled]="!canEdit()" id="PROJSCREENDATE" class="form-control" type="date" [(ngModel)]="ohsitem.PROJSCREENDATE">         
+        </div> 
         <!-- <div class="col-4">
             <div class="form-check">
                 <input  [disabled]="!canEdit()" class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
@@ -62,7 +75,11 @@
             Vendor Vetted
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.VENDORVETTED">
+            <select  [disabled]="!canEdit()" class="form-control smallinput" [(ngModel)]="ohsitem.VENDORVETTED_TXT">
+                <option value="">Not Assesed</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
         </div>
       
     </div>
@@ -71,23 +88,31 @@
             SWMS/OHS Submitted
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_REQ">
+            <select  [disabled]="!canEdit()" class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_REQ_TXT">
+                <option value="">Not Assesed</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox"  [checked]="ohsitem.SWMS_OHS_NA">
                 <label class="form-check-label">
                     Not Applicable
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             SWMS/OHS Approved
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_AP_DATE">
+            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.SWMS_OHS_AP_DATE_TXT">
+                <option value="">Not Assesed</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+            </select>
         </div>
         <!-- <div class="col-4">
             <div class="form-check">
@@ -103,16 +128,22 @@
             ABSA OHS Submission
         </div>
         <div class="col-4">
-            <input  [disabled]="!canEdit()" type="date" class="form-control smallinput" [(ngModel)]="ohsitem.ABSA_OHS_SUBMIT">
+            <select  [disabled]="!canEdit()"  class="form-control smallinput" [(ngModel)]="ohsitem.ABSA_OHS_SUBMIT_TXT">
+                <option value="">Not Assesed</option>
+                <option value="Submitted">Submitted</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Applicable">Not Applicable</option>
+            </select>
         </div>
-        <!-- <div class="col-4">
-            <div class="form-check">
-                <input [disabled]="!canEdit()"  class="form-check-input" type="checkbox"  [checked]="ohsitem.notapp">
-                <label class="form-check-label">
-                    Not Applicable
-                </label>
-            </div>
-        </div> -->
+    </div>
+    <div class="row">
+        <div class="col-4 text-right pt-2">
+            ABSA OHS Submission Date
+        </div>
+        <div class="col-4">
+       
+                <input  [disabled]="!canEdit()" id="ABSAOHS" class="form-control" type="date" [(ngModel)]="ohsitem.ABSA_OHS_SUBMIT">         
+        </div> 
     </div>
 <div class="row mt-2">
     <div class="col-4 text-right pt-2">

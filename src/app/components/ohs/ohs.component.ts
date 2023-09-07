@@ -20,7 +20,14 @@ export class OhsComponent implements OnInit {
   SWMS_OHS_NA: false,
   ABSA_OHS_SUBMIT:'',
   PROGRESS: 0,
-  COMMENTS:''
+  COMMENTS:'',
+  PROJSCREENING_TXT: '',
+  PROJSCREENDATE: '',
+  VENDORVETTED_TXT: '',
+  SWMS_OHS_REQ_TXT: '',
+  SWMS_OHS_NA_TXT: '',
+  SWMS_OHS_AP_DATE_TXT: '',
+  ABSA_OHS_SUBMIT_TXT: '',
 }
 codes = this.apiserv.buildcodes();
 ohscontacts = this.apiserv.pmlist.filter(line=>{
