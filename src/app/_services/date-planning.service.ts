@@ -11,7 +11,7 @@ export class DatePlanningService {
 
     let durations = blankdate.DATABAG.length > 10? blankdate.DATABAG.split(':') : [];
     while (durations.length < 9){
-      durations.push('7');
+      durations.push('45');
     }
    blankdate.DATE05 = this.datediff(blankdate.DATE06, durations[4], 0)
    blankdate.DATE04 = this.datediff(blankdate.DATE05, durations[3], 0)
@@ -20,6 +20,8 @@ export class DatePlanningService {
    blankdate.DATE01 = this.datediff(blankdate.DATE02, durations[0], 0)
    blankdate.DATE08 = this.datediff(blankdate.DATE07, durations[5], 1)
    blankdate.DATE09 = this.datediff(blankdate.DATE08, durations[6], 1)
+   blankdate.DATE11 = this.datediff(blankdate.DATE08, durations[6], 1)
+   blankdate.DATE12 = this.datediff(blankdate.DATE08, durations[6], 1)
    blankdate.DATE09 = this.lastdayofmonth(blankdate.DATE09);
    durations[7] = this.datecount(blankdate.DATE06,blankdate.DATE07).toString();
    durations[8] = this.datecount(blankdate.DATE01,blankdate.DATE09).toString();

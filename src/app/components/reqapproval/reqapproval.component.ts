@@ -26,6 +26,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   @Input() vm: absareq;
   @Input() edit = true;
   site = '';
+  
   knownas = '';
   blockback = false;
   ohsrole = this.authserv.currentUserValue.PASSWORD.includes('OHS');
@@ -38,6 +39,7 @@ export class ReqapprovalComponent implements OnInit, OnDestroy {
   overdue = false;
   hlptxt = 'Show help';
 helper=false;
+sundryfields = { CONTINGENCYLEFT: 0, CONTINGENCYUSED: 0, POC_DATESENT: '', POC_DATEREC: ''}
 helpline = this.apiserv.getHelptexts('APPROVAL');
   boqs = [];
   costs = [];
@@ -97,10 +99,11 @@ helpline = this.apiserv.getHelptexts('APPROVAL');
 
   ngOnInit(): void {
     this.setup()
- 
+
   this.sub.push(this.apiserv.currentreq$.subscribe(reply => {
       if (reply) {
 this.phase = this.apiserv.lclstate.phase;
+this.sundryfields = this.apiserv.lclstate.sundryfields ; 
 this.datedata = this.apiserv.lclstate.dates;
 this.buildDurations() ;
       }
@@ -158,6 +161,8 @@ this.buildDurations() ;
       // {target:'End on Site',datefrom:targetd },
       { target: 'Expected POC Date' },
       { target: 'Billing Process' },
+      { target: 'Asset Sheet' },
+      { target: 'Final Accounts' },
       { target: 'Expected Cash Flow Date'}
     ]
   }
@@ -172,6 +177,8 @@ this.buildDurations() ;
     this.durations.push(this.datecount(this.datedata['DATE06'], this.datedata['DATE07']).toString())
     this.durations.push(this.datecount(this.datedata['DATE07'], this.datedata['DATE08']).toString())
     this.durations.push(this.datecount(this.datedata['DATE08'], this.datedata['DATE09']).toString())
+    this.durations.push(this.datecount(this.datedata['DATE08'], this.datedata['DATE11']).toString())
+    this.durations.push(this.datecount(this.datedata['DATE08'], this.datedata['DATE12']).toString())
     this.durations.push(this.datecount(this.datedata['DATE09'], this.datedata['DATE10']).toString())
   }
 
@@ -184,9 +191,9 @@ this.buildDurations() ;
     let lcldate = {
       REFERENCE: '00000000', DATESET: datetype, DATE01: '', DATE02: '', DATE03: '', DATE04: '', DATE05: '',
       DATE06: this.formatDate(datestart),
-      DATE07: this.formatDate(dateend), DATE08: '', DATE09: '', DATE10: '',
-      PROG01: '', PROG02: '', PROG03: '', PROG04: '', PROG05: '', PROG06: '', PROG07: '', PROG08: '', PROG09: '', PROG10: '',
-      DATABAG: '7:21:7:21:14:21:45'
+      DATE07: this.formatDate(dateend), DATE08: '', DATE09: '', DATE10: '', DATE11: '', DATE12: '',
+      PROG01: '', PROG02: '', PROG03: '', PROG04: '', PROG05: '', PROG06: '', PROG07: '', PROG08: '', PROG09: '', PROG10: '', PROG11: '', PROG12: '',
+      DATABAG: '7:21:7:21:14:21:45;45;45'
     }
     return this.updatePlans(lcldate);
 
@@ -203,6 +210,8 @@ this.buildDurations() ;
     blankdate.DATE07 = this.datediff(blankdate.DATE06, durations[6], 1)
     blankdate.DATE08 = this.datediff(blankdate.DATE07, durations[7], 1)
     blankdate.DATE09 = this.datediff(blankdate.DATE08, durations[8], 1)
+    blankdate.DATE11 = this.datediff(blankdate.DATE08, durations[8], 1)
+    blankdate.DATE12 = this.datediff(blankdate.DATE08, durations[8], 1)
     blankdate.DATE10 = this.lastdayofmonth(blankdate.DATE09);
     // durations[7] = this.datecount(blankdate.DATE06, blankdate.DATE07).toString();
     // durations[8] = this.datecount(blankdate.DATE01, blankdate.DATE09).toString();
@@ -315,8 +324,10 @@ updateProgress(blankdate, change){
     this.newdates = { ...this.apiserv.lclstate.dates, ...this.datedata} ;
     this.newdates.TRACKNOTE = this.apiserv.xtdbtoa(this.newdates.TRACKNOTE);
     this.apiserv.lclstate.dates = JSON.parse(JSON.stringify(this.newdates));
+  
     let updater = [this.newdates];
-    let todo = {DATA: JSON.stringify(updater),TRACKTYPE:'PHASE'}
+    let sundryupdater = { REFERENCE:this.apiserv.lclstate.dates['REFERENCE'], ...this.apiserv.lclstate.sundryfields}
+    let todo = {DATA: JSON.stringify(updater),TRACKTYPE:'PHASE', SUNDRY:JSON.stringify(sundryupdater)}
     this.sub.push(this.apiserv.postGEN(todo, 'UPDATE_PSTRACKER').subscribe(item => {
       this.apiserv.messagesBS.next('All Done')
       this.apiserv.getProgresslist(this.apiserv.lclstate.region, this.apiserv.lclstate.pmanager, this.newdates.REFERENCE)

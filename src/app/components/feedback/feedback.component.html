@@ -1,21 +1,21 @@
 <div class="card">
-  <div class="card-header">
-    <div class="row">
-        <div class="col-2">
-            <h3>Project Level Feedback</h3>
+    <div class="card-header">
+        <div class="row">
+            <div class="col-2">
+                <h3>Project Level Feedback</h3>
+            </div>
+            <div class="col-2">
+                Last Comment
+            </div>
+            <div class="col-7">
+                <textarea [disabled]="true" [ngModel]="feedback.LAST_COMMENT" id="" cols="60" rows="4"></textarea>
+            </div>
         </div>
-        <div class="col-2">
-            Last Comment
-        </div>
-        <div class="col-7">
-            <textarea [disabled]="true" [ngModel]="feedback.LAST_COMMENT" id="" cols="60" rows="4"></textarea>
-        </div>
+
     </div>
-    
-  </div>
-  <div class="card-body">
-<table class="table">
-<!-- <tr>
+    <div class="card-body">
+        <table class="table">
+            <!-- <tr>
     <td>
 Estimated Budget
     </td>
@@ -39,20 +39,53 @@ Forecast End
         <input type="date" [(ngModel)]="feedback.FORECAST_END">
     </td>
 </tr> -->
-<tr>
-    <td>
-Risk
-    </td>
-    <td>
-        <select  [(ngModel)]="feedback.RATING">
-          <option >Low</option>
-          <option >Medium</option>
-          <option >High</option>
-        </select>
-    </td>
-    <td colspan="1">Feedback Note</td>
-    <td colspan="3"><textarea class="form-control" [(ngModel)]="feedback.TRACKNOTE" id="" cols="60" rows="10"></textarea></td>
-</tr>
-</table>
-  </div>
+            <tr>
+                <td>
+                    Risk
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-12">
+                            <select [(ngModel)]="feedback.RATING">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Contingency Used</div>
+                        <div class="col-6">
+                            <input type="number" class="form-control" name="continused" [(ngModel)]="vm.CONTINGENCYUSED">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Contingency Remaining</div>
+                        <div class="col-6">
+                            <input type="number" class="form-control" name="continleft" [(ngModel)]="vm.CONTINGENCYLEFT">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                           POC Date Sent</div>
+                        <div class="col-6">
+                            <input type="date" class="form-control" name="pocdatesent" [(ngModel)]="vm.POC_DATESENT">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            POC Date Rec</div>
+                        <div class="col-6">
+                            <input type="date" class="form-control" name="POCDATEREC" [(ngModel)]="vm.POC_DATEREC">
+                        </div>
+                    </div>
+                </td>
+                <td colspan="1">Feedback Note</td>
+                <td colspan="3"><textarea class="form-control" [(ngModel)]="feedback.TRACKNOTE" id="" cols="60"
+                        rows="10"></textarea></td>
+            </tr>
+        </table>
+    </div>
 </div>

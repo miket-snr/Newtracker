@@ -82,6 +82,30 @@
             </select></div>
         <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE09"></div>
     </div>
+
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE08'">
+        <div class="col-2 text-right"><small>Asset Sheet</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG11"
+                [disabled]="item.multisite>='PHASE09'  &&  blockback">
+                <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE11"></div>
+    </div>
+
+    <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE08'">
+        <div class="col-2 text-right"><small>Final Accounts</small></div>
+
+        <div class="col-5" style="background-color:rgb(238, 248, 248);"><select class="form-control smallinput"
+                name="scope" (change)="newValue($event, item)" [(ngModel)]="item.PROG12"
+                [disabled]="item.multisite>='PHASE09'  &&  blockback">
+                <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+            </select></div>
+        <div class="col-5"><input type="date" class="form-control smallinput" [(ngModel)]="item.DATE12"></div>
+    </div>
+
+    
     <div class="row  mb-2" *ngIf="item.multisite <= 'PHASE09'">
         <div class="col-2 text-right"><small>CashFlow</small></div>
 

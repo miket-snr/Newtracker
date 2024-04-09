@@ -20,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy,  AfterViewInit{
   opened = true;
   showpanel= "0";
   showtext='';
+  titleBS = new BehaviorSubject<string>('Project and Budget Tracker');
   sectionNameBS = new BehaviorSubject<any>('home');
 public sectionName$ = this.sectionNameBS.asObservable();
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -50,12 +51,21 @@ public sectionName$ = this.sectionNameBS.asObservable();
             str1 = str1.replace(/\//g, ' ');
            let temp = ' ' + str1.charAt(0).toUpperCase() + str1.slice(1);
             this.sectionNameBS.next(temp.split('?')[0]);
+            if (this.sectionNameBS.value == 'WorkList'){
+              this.titleBS.next('Project and Budget Tracker');
+            }
           } else {
             this.sectionNameBS.next('Home');
           }
          
         }
       });
+      this.apiserv.currentproj$.subscribe(proj=>{
+        if(this.apiserv.currentprojBS.value['TITLE']){
+          this.titleBS.next(this.apiserv.currentprojBS.value['TITLE'])
+        } else {
+        this.titleBS.next('PS Tracker')
+      }})
       this.apiserv.getProgLookups();
       this.apiserv.getHelptexts();
     // this.apiserv.getSearchList(); // THis will download Projects and then Absa Requests

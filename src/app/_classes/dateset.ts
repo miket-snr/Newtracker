@@ -12,6 +12,8 @@ export interface dateset {
     DATE08? : string,
     DATE09? : string,
     DATE10? : string,
+    DATE11? : string,
+    DATE12? : string,
     PROG01? : string,
     PROG02? : string,
     PROG03? : string,
@@ -22,6 +24,8 @@ export interface dateset {
     PROG08? : string,
     PROG09? : string,
     PROG10? : string,
+    PROG11? : string,
+    PROG12? : string,
     DATABAG?: string;
     CHANGEDBY?:string,
     CHANGEDON?:string,
@@ -30,7 +34,8 @@ export interface dateset {
     TRACKNOTE?: string,
     LAST_COMMENT?:string,
     BUDGETAMT?: number,
-    RATING?: string
+    RATING?: string,
+
   }
   export const MY_DATE_FORMATS = {
     parse: {

@@ -1,7 +1,7 @@
 <!-- <ng-container *ngIf="isHandset$ | async">
     <app-progress></app-progress>
 </ng-container> -->
-<ng-container>
+
 <div class="mytopcontainer">
 
 
@@ -21,7 +21,7 @@
         <mat-divider></mat-divider> -->
     <form [formGroup]="pmForm">
         <div class="row">
-           
+
             <div class="col-1">
                 Select Region
                 <select name="pm" class="form-control  form-control-sm" formControlName="region">
@@ -29,7 +29,7 @@
                     </option>
                 </select>
             </div>
-            
+
             <div class="col-1">
                 Select Project Mgr
                 <select name="pm" class="form-control  form-control-sm" formControlName="pm">
@@ -45,16 +45,18 @@
             <div class="col-1">
                 Select by Phase
                 <select name="pm" class="form-control  form-control-sm" formControlName="phase">
-                    <option *ngFor="let phase of phaselist" [value]="phase.code"><small>{{ phase.text }}</small></option>
+                    <option *ngFor="let phase of phaselist" [value]="phase.code"><small>{{ phase.text }}</small>
+                    </option>
                 </select>
             </div>
             <!-- <div class="col-1 text-right">Search</div> -->
             <div class="col-3">
                 Search
                 <small>
-                    <input class="form-control" type="text" [(ngModel)]="searchbox" [ngModelOptions]="{standalone: true}">
+                    <input class="form-control" type="text" [(ngModel)]="searchbox"
+                        [ngModelOptions]="{standalone: true}">
                 </small>
-               
+
             </div>
             <div class="col-1">
                 <div class="form-check">
@@ -83,7 +85,7 @@
                         No Ciplines
                     </label>
                 </div>
-                
+
 
             </div>
             <div class="col-2 d-flex justify-content-around">
@@ -102,12 +104,14 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="background-color:azure;"><small>Project_WBS</small></th>
-                            <th class="text-left" style="width:65px;background-color:azure;"><small>Oneview</small></th>
-                            <ng-container *ngIf="!narrow">   
-                            <th class="text-left" style="background-color:azure;"><small>Known As</small>
-                            </th>
-                            <th class="text-left" style="background-color:azure;"><small>Title</small></th>
+                            <ng-container *ngIf="!narrow">
+                                <th class="second-col" style="background-color:azure;"><small>Known As</small>
+                                </th>
+                                <th class="third-col" style="background-color:azure;"><small>Title</small></th>
                             </ng-container>
+                            <th class="text-center"><small>Region</small></th>
+                            <th class="text-left" style="width:65px;background-color:azure;"><small>Oneview</small></th>
+
                             <th class="text-center" style="width:50px;background-color:azure;">
                                 <small>SAP Status</small>
                             </th>
@@ -127,7 +131,7 @@
                             <th class="text-center"><small>Cashflow <br>End</small></th>
                             <th class="text-center"><small>Progress</small></th>
                             <ng-container *ngIf="!sections">
-                              
+
                                 <th class="text-center"><small>Initiate</small></th>
                                 <th class="text-center"><small>Scope</small></th>
                                 <th class="text-center"><small>OHS <br> Clearance</small></th>
@@ -136,25 +140,38 @@
                                 <th class="text-center"><small>On Site</small></th>
                                 <th class="text-center"><small>PoC</small></th>
                                 <th class="text-center"><small>Bill</small></th>
+                                <th class="text-center"><small>Asset</small></th>
+                                <th class="text-center"><small>FinAcc</small></th>
                                 <th class="text-center"><small>CashFlow</small></th>
                             </ng-container>
                             <ng-container *ngIf="sections">
                                 <th class="text-center"><small>Cipline <br> Value</small></th>
                                 <th class="text-center"><small>Approved <br>Amt Incl</small></th>
-                                <th class="text-center"><small>PO Value <br> Incl</small></th>
+                                <th class="text-center"><small>SAP PO CY <br>Amt Incl</small></th>
+                                <th class="text-center"><small>SAP PO PY <br>Amt Incl</small></th>
+                                <th class="text-center"><small>SAP PO Total <br> Incl</small></th>
                                 <th class="text-center"><small>SAP Incl<br> Budget</small></th>
                                 <th class="text-center"><small>Contingency<br>Vat Incl</small></th>
+                                <th class="text-center"><small>Commitments <br> Incl</small></th>
+                                <th class="text-center"><small>Costs PY<br> Incl</small></th>
+                                <th class="text-center"><small>Travel PY <br> Incl</small></th>
+                                <th class="text-center"><small>Revenue PY <br> Incl</small></th>
+                                <th class="text-center"><small>M-Fee PY <br> Incl</small></th>
+                                <th class="text-center"><small>Total Revenue PY</small></th>
+                                <th class="text-center"><small>Costs CY <br> Incl</small></th>
+                                <th class="text-center"><small>Travel CY <br> Incl</small></th>
+                                <th class="text-center"><small>Revenue CY <br> Incl</small></th>
+                                <th class="text-center"><small>M-Fee CY<br> Incl</small></th>
+                                <th class="text-center"><small>Total Revenue CY </small></th>
                                 <th class="text-center"><small>Costs <br> Incl</small></th>
                                 <th class="text-center"><small>Travel <br> Incl</small></th>
-                                <th class="text-center"><small>Commitments <br> Incl</small></th>
                                 <th class="text-center"><small>Revenue <br> Incl</small></th>
                                 <th class="text-center"><small>M-Fee <br> Incl</small></th>
-                                <th class="text-center"><small>Total Revenue
-                                     <br> Incl</small></th>
+                                <th class="text-center"><small>Total Revenue <br> Incl</small></th>
                             </ng-container>
-                            <th class="text-center"><small>Region</small></th>
-                                <th class="text-center"><small>PM</small></th>  
-                                <th class="text-center"><small>Last Progress Tracker Comment</small></th>  
+                            
+                            <th class="text-center"><small>PM</small></th>
+                            <th class="text-left"><small>Last Progress Tracker Comment</small></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,20 +182,25 @@
                                 <td [ngClass]="item.multisite  ? 'multisite' : 'readonly'" (click)="goTo(item)">
                                     <small>{{item.PROJLINK > 'A' ? item.PROJLINK:item.ABSAREQNO}}</small>
                                 </td>
-                                <td><small  (click)="goTo(item)">{{item.ONEVIEW}}</small></td>
-                                <ng-container *ngIf="!narrow">  
-                                <td  (click)="goTo(item)" style="background-color:azure;"><small>{{item.KNOWNAS.substring(0,60)}}</small></td>
-                                <td  (click)="goTo(item)"><small>{{item.TITLE}}</small></td>
+                                <ng-container *ngIf="!narrow">
+                                    <td (click)="goTo(item)" style="background-color:azure;" class="second-col">
+                                        <small>{{item.KNOWNAS.substring(0,60)}}</small></td>
+                                    <td (click)="goTo(item)"  class="third-col"><small>{{item.TITLE.substring(0,60)}}</small></td>
                                 </ng-container>
-                                <td  (click)="goTo(item)"><small>{{item.STATUS}}</small></td>
-                                <td  (click)="goTo(item)"><small>{{item.PHASE}}</small></td>
-                                <td  (click)="goTo(item)"><small>{{item.ABSAPHASE}}</small></td>
+                                <td class="text-center"><small>{{item.REGION}}</small></td>
+                                <td ><small (click)="goTo(item)">{{item.ONEVIEW}}</small></td>
+                               
+                                <td (click)="goTo(item)"><small>{{item.STATUS}}</small></td>
+                                <td (click)="goTo(item)"><small>{{item.PHASE}}</small></td>
+                                <td (click)="goTo(item)"><small>{{item.ABSAPHASE}}</small></td>
                                 <td><small>{{item.INITIATIVE}}</small></td>
                                 <td><small>{{item.BUDGETGROUP}}</small></td>
-                                <td  (click)="goTo(item)" [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
-                                    <small>{{item.TRACKERCODE}}</small></td>
+                                <td (click)="goTo(item)"
+                                    [ngClass]="item.TRACKERCODE < 'A'? 'text-center ':'text-center focus'">
+                                    <small>{{item.TRACKERCODE}}</small>
+                                </td>
                                 <td><small>{{item.CIPCODE}}</small></td>
-                                <td><small  (click)="showApproval(item)">{{item.APPROVAL_STATUS}}</small></td>
+                                <td><small (click)="showApproval(item)">{{item.APPROVAL_STATUS}}</small></td>
                                 <td>{{item.DATE06}}</td>
                                 <td>{{item.DATE07}}</td>
                                 <ng-container *ngIf="sections">
@@ -188,8 +210,9 @@
                                 <td [ngClass]="item.PHASE < 'PHASE11'&& item.DATE10 < todaydate? 'text-center late':
                                  item.PHASE > 'PHASE10'? 'text-center done' : 'text-center todo'"> {{item.DATE10}}
                                 </td>
-                                <td> <button class="btn btn-sm btn-primary btn-block" type="button" (click)="showProgress(item)">
-                                    <small>{{progressCalc(item)+ '%'}}</small></button></td>
+                                <td> <button class="btn btn-sm btn-primary btn-block" type="button"
+                                        (click)="showProgress(item)">
+                                        <small>{{progressCalc(item)+ '%'}}</small></button></td>
                                 <ng-container *ngIf="!sections">
                                     <td
                                         [ngClass]="item.PROG02==100 ? 'text-center done' : item.PROG02==0  ?'text-center todo': 'text-center busy'">
@@ -197,7 +220,7 @@
                                     <td
                                         [ngClass]="item.PROG03==100 ? 'text-center done' : item.PROG03==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG03}}</td>
-                                        <td
+                                    <td
                                         [ngClass]="item.PROG04==100 ? 'text-center done' : item.PROG04==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG04}}</td>
                                     <td
@@ -216,21 +239,39 @@
                                         [ngClass]="item.PROG09==100 ? 'text-center done' : item.PROG09==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG09}}</td>
                                     <td
+                                        [ngClass]="item.PROG11==100 ? 'text-center done' : item.PROG11==0  ?'text-center todo': 'text-center busy'">
+                                        {{item.PROG09}}</td>
+                                    <td
+                                        [ngClass]="item.PROG12==100 ? 'text-center done' : item.PROG12==0  ?'text-center todo': 'text-center busy'">
+                                        {{item.PROG09}}</td>
+                                    <td
                                         [ngClass]="item.PROG10==100 ? 'text-center done' : item.PROG10==0  ?'text-center todo': 'text-center busy'">
                                         {{item.PROG10}}</td>
                                 </ng-container>
                                 <ng-container *ngIf="sections">
-                                    <td class="text-right odd">{{formatNumber(item.CIPBUDGET)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.BASELINEBUDGET)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.POVALUE)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.BUDGET)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.CONTINGENCY)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.COSTS)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.TRAVEL )}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.COMMITMENT )}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.REVENUE)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.M_FEE)}}</td>
-                                    <td class="text-right odd">{{formatNumber(item.REVENUE + item.M_FEE)}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CIPBUDGET,'CIPBUDGET')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.BASELINEBUDGET,'BASELINEBUDGET')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.POVALUE,'POVALUE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.BUDGET - item.POVALUE,'BUDGET-POVAL')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.POVALUETOT,'POVALUETOT')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.BUDGET,'BUDGET')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CONTINGENCY,'CONTINGENCY')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.COMMITMENT ,'COMMITMENT')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.PYCOSTS,'PYCOSTS')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.PYTRAVEL ,'PYTRAVEL')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.PYREVENUE,'PYREVENUE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.PYM_FEE,'PYM_FEE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.PYREVENUE + item.PYM_FEE,'PYREVENUEFEE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CYCOSTS,'CYCOSTS')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CYTRAVEL ,'CYTRAVEL')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CYREVENUE,'CYREVENUE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CYM_FEE,'CYM_FEE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CYREVENUE + item.CYM_FEE,'CYREVENUEFEE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.COSTS,'COSTS')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.TRAVEL ,'TRAVEL')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.REVENUE,'REVENUE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.M_FEE,'M_FEE')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.REVENUE + item.M_FEE,'REVENUEMFEE')}}</td>
                                 </ng-container>
 
                                 <!-- <ng-container *ngIf="item.PHASE > 'PHASE02'">
@@ -312,9 +353,9 @@
                                         </select></td>
                                 </ng-container> -->
                             </ng-container>
-                            <td class="text-center"><small>{{item.REGION}}</small></td>
-                            <td class="text-center"><small>{{item.PMANAGER}}</small></td>  
-                            <td class="text-center"><small>{{item.TRACKNOTE.substring(0,60)}}</small></td>  
+                          
+                            <td class="text-center"><small>{{item.PMANAGER}}</small></td>
+                            <td class="text-left"><small>{{item.TRACKNOTE.substring(0,60)}}</small></td>
                         </tr>
                     </tbody>
                 </table>
@@ -322,4 +363,3 @@
         </div>
     </div>
 </div>
-</ng-container>

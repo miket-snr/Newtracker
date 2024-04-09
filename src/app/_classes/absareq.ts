@@ -71,5 +71,15 @@ export interface absareq {
     APPBYBFMLEGAL: string,
     PODATE: string,
     POVALUE: number,
+    CONTINGENCYUSED: number,
+CONTINGENCYLEFT: number,
+POC_DATESENT: string,
+POC_DATEREC: string,
+ORIGINALPO: string,
+ORIGINALPOVALUE: number,
+ROLLOVERPO: string,
+ORIGINALPODT: string,
+ROLLOVERPODT: string,
+ROLLOVERPOVAL: number,
 
 }

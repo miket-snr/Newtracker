@@ -121,6 +121,22 @@
                     <td>Purchase Order</td>
                     <td ><input class="form-control" name="PONUMBER" [(ngModel)]="vm.PONUMBER"></td>
                   </tr>
+                  <tr >
+                    <td>Rollover PO 1</td>
+                    <td ><input type="date" class="form-control" name="PO_ORIG" [(ngModel)]="vm.ORIGINALPODT"></td>
+                    <td>Rollover PO 1 Value <br> (incl VAT) </td>
+                    <td ><input class="form-control" name="ORIGINALPOVALUE" [(ngModel)]="vm.ORIGINALPOVALUE"></td>
+                    <td>Purchase Order</td>
+                    <td ><input class="form-control" name="ORIGINALPO" [(ngModel)]="vm.ORIGINALPO"></td>
+                  </tr>
+                  <tr style="background-color:rgb(240,240,240)">
+                    <td>Rollover PO 2</td>
+                    <td ><input type="date" class="form-control" name="ROLLOVERPODT" [(ngModel)]="vm.ROLLOVERPODT"></td>
+                    <td>Rollover PO 2 Value <br> (incl VAT) </td>
+                    <td ><input class="form-control" name="ROPOVALUE" [(ngModel)]="vm.ROLLOVERPOVAL"></td>
+                    <td>Purchase Order</td>
+                    <td ><input class="form-control" name="ROLLOVERPO" [(ngModel)]="vm.ROLLOVERPO"></td>
+                  </tr>
                   <tr>
                       <td>Approval Status </td>
                       <td colspan="2">

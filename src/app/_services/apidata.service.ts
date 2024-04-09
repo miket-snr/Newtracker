@@ -19,7 +19,7 @@ export class ApidataService {
     accountant: '',
     filtercip: false,
     filteropen: false,
-    dates: {},
+    dates:  { }, 
     ohs: {},
     approval: {},
     psfunding: {},
@@ -38,6 +38,12 @@ export class ApidataService {
       LAST_COMMENT: '',
       TRACKNOTE: '',
       ONEVIEW: '',
+    },
+    sundryfields: {
+      CONTINGENCYUSED:0,
+      CONTINGENCYLEFT:0,
+      POC_DATESENT:'',
+      POC_DATEREC:''
     }
   }
   regions = [];
@@ -66,12 +72,8 @@ export class ApidataService {
   currentpspid = '00000000';
   currentcipline: any;
   helptexts = []
-  budgetgroups = ['* All', 'CIP2023',
-    'OPEX',
-    'ROL2022',
-    'RXL2022',
-    'UNKNOWN',
-  ]
+  budgetgroups = ['* All', 'CIP2023','CIP2024','INSOG2024','INSURNCE2204','OPEX','OUTOFCYCLE','ROL2022','ROL2023','RXL2022','UNKNOWN']
+
   public loadingBS = new BehaviorSubject<boolean>(false)
   public approvalBS = new BehaviorSubject<Approval>(new ApprovalClass().approval)
   public approval$ = this.approvalBS.asObservable();
@@ -407,6 +409,22 @@ export class ApidataService {
           SWMS_OHS_AP_DATE_TXT: '',
           ABSA_OHS_SUBMIT_TXT: '',
         }
+        this.lclstate.sundryfields =  (( {CONTINGENCYUSED,
+          CONTINGENCYLEFT,
+          ORIGINALPO,
+          ORIGINALPOVALUE,
+          ROLLOVERPO,
+          ROLLOVERPOVAL,
+          POC_DATESENT,
+          POC_DATEREC}) => ({CONTINGENCYUSED,
+            CONTINGENCYLEFT,
+            ORIGINALPO,
+            ORIGINALPOVALUE,
+            ROLLOVERPO,
+            ROLLOVERPOVAL,
+            POC_DATESENT,
+            POC_DATEREC}))( reply.RESULT[0])
+       
         let inputohs = reply.RESULT[0].OHS
         this.lclstate.ohs = { ...tempohs, ...inputohs }
         this.lclstate.dates['TRACKNOTE'] = this.xtdatob(this.lclstate.dates['TRACKNOTE'])
@@ -607,6 +625,14 @@ export class ApidataService {
             DUEDATE: line.DUEDATE,
             PMANAGER: line.PMANAGER,
             ACCOUNTANT: line.ACCOUNTANT,
+            CYCOSTS:  line.CYCOSTS,
+            CYM_FEE: line.CYM_FEE,
+            CYREVENUE:  line.CYREVENUE,
+            CYTRAVEL:  line.CYTRAVEL,
+            PYCOSTS:  line.PYCOSTS,
+            PYM_FEE: line.PYM_FEE,
+            PYREVENUE:  line.PYREVENUE,
+            PYTRAVEL:  line.PYTRAVEL,
             PROG01: innerline[0].PROG01,
             PROG02: innerline[0].PROG02,
             PROG03: innerline[0].PROG03,
@@ -668,7 +694,7 @@ export class ApidataService {
     this.loadingBS.next(true);
     let sys = "PROD";
 
-    if (classname !== 'USER' && sys != 'PROD') {
+    if (classname !== 'USER' && sys == 'PROD') {
       const httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -996,6 +1022,8 @@ export class ApidataService {
     })
     this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Asset Sheet', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: ' Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Final Accounts', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' }, { code: 100, text: 'Completed' }] })
     return this.phaseprog;
   }

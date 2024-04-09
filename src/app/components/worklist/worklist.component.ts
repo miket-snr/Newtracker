@@ -211,6 +211,13 @@ export class WorklistComponent implements OnInit, OnDestroy {
       LAST_COMMENT: '',
       TRACKNOTE:''
     }
+    this.apiserv.lclstate.sundryfields = 
+    { CONTINGENCYUSED:0,
+      CONTINGENCYLEFT:0,
+      POC_DATESENT:'',
+      POC_DATEREC:''
+    }
+
     // if (!localStorage.getItem('BFMUser') || JSON.parse(localStorage.getItem('BFMUser')).TOKEN.length < 6) {
     //   return }
     this.apiserv.getReqView(item.ABSAREQNO);
@@ -400,8 +407,9 @@ export class WorklistComponent implements OnInit, OnDestroy {
   }
 }
 
-  formatNumber(numberin){
-   return this.formatString((Math.round((numberin + Number.EPSILON) * 100) / 100).toLocaleString())
+  formatNumber(numberin, fieldname=''){
+if (numberin == undefined) { numberin = 0; }
+   return this.formatString((Math.round((numberin + Number.EPSILON) * 100) / 100).toLocaleString('en-GB'))
   }
   formatString(strin = '') {
     if (strin.substring(strin.length - 2).includes('.')) {
@@ -417,10 +425,10 @@ export class WorklistComponent implements OnInit, OnDestroy {
   showProgress(item) {  
     this.progress2.progressopen({PROG01:item.PROG01,PROG02:item.PROG02,PROG03:item.PROG03,
                                  PROG04:item.PROG04,PROG05:item.PROG05,PROG06:item.PROG06,
-                                 PROG07:item.PROG07,PROG08:item.PROG08,PROG09:item.PROG09,PROG10:item.PROG10,
+                                 PROG07:item.PROG07,PROG08:item.PROG08,PROG09:item.PROG09,PROG10:item.PROG10,PROG11:item.PROG10,PROG12:item.PROG10,
                                  DATE01:item.DATE01,DATE02:item.DATE02,DATE03:item.DATE03,
                                  DATE04:item.DATE04,DATE05:item.DATE05,DATE06:item.DATE06,
-                                 DATE07:item.DATE07,DATE08:item.DATE08,DATE09:item.DATE09,DATE10:item.DATE10,
+                                 DATE07:item.DATE07,DATE08:item.DATE08,DATE09:item.DATE09,DATE10:item.DATE10,DATE11:item.DATE11,DATE12:item.DATE12,
                                  multisite:'NO',REFERENCE:item.ABSAREQNO,TRACKNOTE:item.TRACKNOTE })
 
   }

@@ -102,3 +102,27 @@ th small {
     padding: 1px 1px 1px 1px;
     font-size: 0.8rem;
   }
+  .fixed {
+    position: absolute;
+    width:100px;
+    left: 0;
+    background: #aaa;
+}
+th:first-child, td:first-child
+{
+  position:sticky;
+  left:0px;
+ background-color: whitesmoke;
+}
+.second-col
+{
+  position:sticky;
+  left:60px;
+ background-color: whitesmoke;
+}
+.third-col
+{
+  position:sticky;
+  left:160px;
+ background-color: whitesmoke;
+}

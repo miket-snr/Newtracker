@@ -70,6 +70,15 @@
             </div>
         </div> -->
     </div>
+    <div class="row">
+        <div class="col-4 text-right pt-2">
+           Contractor
+        </div>
+        <div class="col-4">
+           
+                <input  [disabled]="!canEdit()" id="Contractor" placeholder="Supplier/Contractor" class="form-control" type="text" [(ngModel)]="ohsitem.SUPPLIER">         
+        </div> 
+    </div>
     <div class="row mt-2">
         <div class="col-4 text-right pt-2">
             Vendor Vetted
@@ -82,6 +91,15 @@
             </select>
         </div>
       
+    </div>
+    <div class="row">
+        <div class="col-4 text-right pt-2">
+          Absa/BFM Direct
+        </div>
+        <div class="col-4">
+           
+                <input  [disabled]="!canEdit()" id="Contractor" placeholder="ABSA / BFM Direct?" class="form-control" type="text" [(ngModel)]="ohsitem.DIRECT">         
+        </div> 
     </div>
       <div class="row mt-2">
         <div class="col-4 text-right pt-2">

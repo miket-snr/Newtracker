@@ -204,8 +204,50 @@
         <input type="date" name="99" [(ngModel)]="datedata.DATE09" class="form-control" (change)="newDate(9)" [disabled]="datedata.PROG09 == '100'  &&  blockback">
       </div>
     </div>
-    <div id="CashFlow_Phase10" class="row mb-2 ">
+
+    <div id="AssetPrep_Phase09" class="row mb-2 ">
       <div class="col-3 form-control">{{rows[8].target}}</div>
+      <div class="col-1" >
+        <input type="number" name="888" [(ngModel)]="durations[8]" class="form-control smallinput" (change)="newDuration(8)"  [disabled]="true">
+      </div>
+      <div  [ngClass]="(overdue)? 'badnews col-2 form-control text-center' : 'okay col-2 form-control text-center'">{{datedata.DATE08}}</div>
+      <ng-container *ngIf="planner == 'progress'">
+        <div  [ngClass]="(overdue)? 'badnews col-2 form-control text-center' : 'okay col-2 form-control text-center'">{{datedata.DATE11}}</div>
+        <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
+          <select class="smallinput form-control " name="prog011" (change)="newValue(9)" 
+            [disabled]="datedata.PROG09 == '100'  &&  blockback" name="119" [(ngModel)]="datedata.PROG11">
+            <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
+        <input type="date" name="9911" [(ngModel)]="datedata.DATE11" class="form-control" (change)="newDate(9)" [disabled]="datedata.PROG11 == '100'  &&  blockback">
+      </div>
+    </div>
+
+    <div id="FinalAccPrep_Phase09" class="row mb-2 ">
+      <div class="col-3 form-control">{{rows[9].target}}</div>
+      <div class="col-1" >
+        <input type="number" name="888" [(ngModel)]="durations[8]" class="form-control smallinput" (change)="newDuration(8)"  [disabled]="true">
+      </div>
+      <div  [ngClass]="(overdue)? 'badnews col-2 form-control text-center' : 'okay col-2 form-control text-center'">{{datedata.DATE08}}</div>
+      <ng-container *ngIf="planner == 'progress'">
+        <div  [ngClass]="(overdue)? 'badnews col-2 form-control text-center' : 'okay col-2 form-control text-center'">{{datedata.DATE12}}</div>
+        <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
+          <select class="smallinput form-control " name="prog011" (change)="newValue(9)" 
+            [disabled]="datedata.PROG12 == '100'  &&  blockback" name="129" [(ngModel)]="datedata.PROG12">
+            <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="col-2 smallinput" [ngClass]="(overdue)? 'badnews' : 'okay'">
+        <input type="date" name="9911" [(ngModel)]="datedata.DATE12" class="form-control" (change)="newDate(9)" [disabled]="datedata.PROG12 == '100'  &&  blockback">
+      </div>
+    </div>
+
+
+    <div id="CashFlow_Phase10" class="row mb-2 ">
+      <div class="col-3 form-control">{{rows[10].target}}</div>
       <div class="col-1" >
         <input type="number" name="" [(ngModel)]="durations[9]" class="form-control smallinput" (change)="newDuration(2)"  [disabled]="true">
       </div>
@@ -273,15 +315,48 @@
     </tr> -->
     <tr>
         <td>
-    Risk
-        </td>
-        <td>
-            <select  name="rating" [(ngModel)]="datedata.RATING">
-              <option >Low</option>
-              <option >Medium</option>
-              <option >High</option>
-            </select>
-        </td>
+          <table class="table">
+            <tr>
+              <td >  Risk
+            </td>
+            <td>
+                <select  name="rating" [(ngModel)]="datedata.RATING">
+                  <option >Low</option>
+                  <option >Medium</option>
+                  <option >High</option>
+                </select>
+            </td>
+            </tr>
+            <tr>
+              <td>
+                  Contingency Used</td>
+              <td>
+                  <input type="number" class="form-control" name="continused" [(ngModel)]="sundryfields.CONTINGENCYUSED">
+              </td>
+            </tr>
+          <tr>
+              <td>
+                  Contingency Remaining</td>
+              <td>
+                  <input type="number" class="form-control" name="continleft" [(ngModel)]="sundryfields.CONTINGENCYLEFT">
+              </td>
+          </tr>
+          <tr>
+              <td>
+                 POC Date Sent (ABSA)</td>
+              <td>
+                  <input type="date" class="form-control" name="pocdatesent" [(ngModel)]="sundryfields.POC_DATESENT">
+              </td>
+            </tr>
+          <tr>
+              <td>
+                  POC Date Rec (ABSA)</td>
+              <td>
+                  <input type="date" class="form-control" name="POCDATEREC" [(ngModel)]="sundryfields.POC_DATEREC">
+              </td>
+            </tr>
+          </table>
+  
         <td colspan="1">Feedback Note</td>
         <td colspan="3"><textarea class="form-control" name="TRACKNOTE" [(ngModel)]="datedata.TRACKNOTE" id="" cols="60" rows="10"></textarea></td>
     </tr>

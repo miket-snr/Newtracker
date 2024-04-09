@@ -274,7 +274,8 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     this.apiserv.currentreq$.pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe(creq => {
   
       if (creq['ABSAREQNO'] >= '60000000' && creq['PROJLINK'].length > 0) {
-        this.vm = { ...creq };
+        this.vm = { ...creq  };
+       
        
         this.apiserv.currentprojBS.next(creq);
         // if (this.request.request['DATES'].length > 20) {
@@ -556,6 +557,12 @@ savePhases() {
       POVALUE:0,
       PODATE:'',
       TRACKERCODE: '',
+      ORIGINALPO: '',
+      ORIGINALPODT: '',
+      ORIGINALPOVALUE: 0,
+      ROLLOVERPO: '',
+      ROLLOVERPODT: '',
+      ROLLOVERPOVAL: 0,
     }
   }
   lessThan(a, b) {
