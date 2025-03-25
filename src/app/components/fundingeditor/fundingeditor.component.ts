@@ -23,6 +23,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   helptext = "Show Help";
   eventsSubject: Subject<void> = new Subject<void>();
   task = {};
+  currentyear = new Date().getFullYear();
   sectionid = [true, true, true, true, true];
   grouplines = [];
   resource = '';
@@ -52,12 +53,15 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     fund_comment: '',
     initiative: '',
     budgetgroup: '',
+    budgetyear: '',
+    absalead: '',
     budgetprogram: '',
     reallocation: false,
     funding: this.fb.array([])
   })
+  budgetyear = '';
   destroy$ = new Subject();
-	helpline = this.apiserv.getHelptexts('PSFUNDING');
+  helpline = this.apiserv.getHelptexts('PSFUNDING');
   mytext = ` <p>Simply fill the <strong>Initiative</strong> (Cipline) number into the Initiative field, </p>
   <p> the other fields will get populated when you save as they are read off the Cipline table.</p>
   <h4><strong>What is a Cipline number?</strong></h4>
@@ -79,37 +83,79 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   <ul><li>If no obvious Initiative number is found then you must provide information in the other Fields</li>
   <li>Select the relevant Cip-Group, Cipcode(*important), Workstream, and Amount(*important)</li>
   <li>Contact the Regional Manager or the Central Fund manager for assistance, as a new line may have to be created from other lines via savings, surrenders, or Reallocations.</li></ul>`;
-
+  thisyear = new Date().getFullYear();
+  showyear = new Date().getFullYear();
+  prevyear = {
+    REFERENCE: '', CIPNAME: '', CIPCODE: '', CIPGROUP: '', WORKSTREAM: '', IM_POSITION: '', APPREQLINK: '',
+    PROJLINK: '', ESTIMATEDBUDGET: '', BASELINEBUDGET: '', QUOTATION: '', TRACKERCODE: '', QUOTEAMT: '', APPROVEDAMT: '', INVOICEDAMT: '', ABSALEAD: '',
+    AUTHORIZER: '', PRIORITY: '', DISCRETIONARY: '', CAPEX_OPEX: '', FUNDINGYEAR: '', BUDGETDIF: '', FUND_COMMENT: '', INITIATIVE: '', BUDGETGROUP: '', BUDGETPROGRAM: '', REALLOCATION: ''
+  }
+  fundingyears: any[] = [];
   constructor(public apiserv: ApidataService, public fb: FormBuilder,
     private rootFormGroup: FormGroupDirective,
     public modalServicejw: ModalService,
-    private authserv: AuthService, 
+    private authserv: AuthService,
     private helper2: DialogService) { }
 
   ngOnInit(): void {
-    //this.parentForm = this.rootFormGroup.control as FormGroup
-   this.apiserv.postGEN({ REFERENCE: this.vm.ABSAREQNO }, 'GET_FUNDING').pipe(takeUntil(this.destroy$)).subscribe(line => {
-      for (let prop in this.fundingForm.value) {
-        if (this.vm[prop.toUpperCase()]) {
-          this.fundingForm.get(prop).setValue(this.vm[prop.toUpperCase()], { emitEvent: false })
+    //this will get the original value from SAP (Prev Year)
+    this.apiserv.postGEN2({ REFERENCE: this.vm.ABSAREQNO }, 'GET_SINGLEFUNDING').pipe(takeUntil(this.destroy$))
+      .subscribe(line => {
+        // try {
+        // this.prevyear = JSON.parse(line.RESULT);
+        // } catch (error) {
+
+        // }
+
+        this.fundingyears = JSON.parse(line['RESULT']);
+        this.fundingyears.sort((a, b) => a.REFYEAR - b.REFYEAR);
+        this.prevyear = this.fundingyears[0];
+        let temp = this.fundingyears.find(fund => { fund.REFYEAR == new Date().getFullYear() })
+        for (let prop in this.fundingForm.value) {
+          if (this.vm[prop.toUpperCase()]) {
+            this.fundingForm.get(prop).setValue(this.vm[prop.toUpperCase()], { emitEvent: false })
+          }
         }
-      }
-      this.fundingForm.get('reallocation').setValue(this.vm['REALLOCATION'] =='X'? true: false, { emitEvent: false })
-      this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
-    })
+        this.fundingForm.get('reallocation').setValue(this.vm['REALLOCATION'] == 'X' ? true : false, { emitEvent: false })
+        this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
+      })
     this.onChanges();
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  getFundingForYear(year: number) {
+    if (year >= new Date().getFullYear()) {
+      let temp: any = {}
+      let tempa = this.fundingyears.filter(fund => { return fund.REFYEAR == year })
+      if (tempa.length > 0) { temp = tempa[0] } else {
+        temp = {
+          REFERENCE: this.vm.ABSAREQNO, REFYEAR: year, CIPNAME: '', CIPCODE: '', CIPGROUP: '', WORKSTREAM: '', IM_POSITION: '', APPREQLINK: '',
+          PROJLINK: '', ESTIMATEDBUDGET: '', BASELINEBUDGET: '', QUOTATION: '', TRACKERCODE: '', QUOTEAMT: '', APPROVEDAMT: '', INVOICEDAMT: '', ABSALEAD: '',
+          AUTHORIZER: '', PRIORITY: '', DISCRETIONARY: '', CAPEX_OPEX: '', FUNDINGYEAR: '', BUDGETDIF: '', FUND_COMMENT: '', INITIATIVE: '', BUDGETGROUP: '', BUDGETPROGRAM: '', REALLOCATION: ''
+        }
+      }
+      for (let prop in this.fundingForm.value) {
+        if (temp.hasOwnProperty(prop.toUpperCase())) {
+          this.fundingForm.get(prop).setValue(temp[prop.toUpperCase()], { emitEvent: false })
+        }
+      }
+      this.fundingForm.get('reallocation').setValue(temp['REALLOCATION'] == 'X' ? true : false, { emitEvent: false })
+      // this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
+    }
+  }
   onChanges(): void {
     this.fundingForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(val => {
       this.onCodeSelect();
     });
   }
+  showYear(cnt: string) {
+    this.showyear = parseInt(cnt);
+    this.getFundingForYear(this.showyear);
+  }
   onSubmit() {
-    let tobj = {};
+    let tobj: any = {};
     for (const key in this.fundingForm.value) {
       tobj[key.toUpperCase()] = (key == 'funding') ? JSON.stringify(this.fundingForm.value[key]) : this.fundingForm.value[key];
     }
@@ -117,12 +163,22 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     tobj['FUND_COMMENT'] = this.apiserv.xtdbtoa(tobj['FUND_COMMENT']);
     tobj['FUNDING_SOURCES'] = this.apiserv.xtdbtoa(tobj['FUNDING_SOURCES']);
     tobj['REFERENCE'] = this.vm.ABSAREQNO;
+    tobj['REFYEAR'] = this.showyear;
     tobj['REALLOCATION'] = tobj['REALLOCATION'] ? 'X' : '';
+
     this.apiserv.postGEN(tobj, 'UPDATE_FUNDING').subscribe(ans => {
       this.apiserv.messagesBS.next(ans.RESULT.MESSAGE);
+      this.updateFunding()
     })
 
     this.resource = JSON.stringify(tobj);
+  }
+  updateFunding() {
+    this.apiserv.postGEN2({ REFERENCE: this.vm.ABSAREQNO }, 'GET_SINGLEFUNDING').pipe(takeUntil(this.destroy$))
+    .subscribe(line => {
+      this.fundingyears = JSON.parse(line['RESULT']);
+      this.fundingyears.sort((a, b) => a.REFYEAR - b.REFYEAR);
+    })
   }
   fundLocator() {
     if (this.vm['region'] && this.fundingForm.value['cipgroup'] && !this.fundingForm.value['initiative']) {
@@ -166,11 +222,11 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     let txt = (line && line.RESULT && line.RESULT.text) ? line.RESULT.text : this.fundingForm.value.cipcode;
     this.fundingForm.get('cipname').setValue(txt, { emitEvent: false });
   }
-  showHelp(){
-    this.helper2.helpopen({title:'Funding', helptext:this.helpline.LINE1}) 
+  showHelp() {
+    this.helper2.helpopen({ title: 'Funding', helptext: this.helpline.LINE1 })
     // = !this.helper;
     // this.hlptxt = this.helper? 'Hide Help' : "Show Help";
-    }
+  }
 
   sendTask() {
     let lclobj = {
@@ -192,5 +248,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   emitEventToChild() {
     this.eventsSubject.next();
   }
+  onChange(budgetyear = '') {
 
+  }
 }

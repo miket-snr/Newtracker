@@ -1,6 +1,13 @@
 <div *ngIf="doctype=='DOCS'" class="container">
-    <div class="row banner">
-        <div class="col-12 text-right pr-0">
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-around">
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('ALL','Show All Documents')">All Documents</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('PLAN','Documents in Planning Phase')">Planning</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('EXE', 'Documents in Execution Phase')">Execution</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('CLOSE','Documents in Closure Phase')">Closing</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('FINVIEW','Documents during Billing Phase')">Finance</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="getdocs('OTHER', 'Other Documents' )">Others</button>
+  
             <button type="button" class="btn btn-sm btn-success" (click)="showHelp()">{{hlptxt}}</button>
         </div>
         
@@ -8,6 +15,12 @@
     <ng-container *ngIf="helper">
       <app-help [edit]="false"  [content]="PSDOCS"></app-help>
     </ng-container>
+
+    <div class="row mt-4 bg-dark">
+    <div class="col-12 text-center text-white">
+      {{categoryname}}
+    </div>
+    </div>
     <table class="table">
       <thead>
         <th>Document Name</th>
@@ -40,7 +53,7 @@
                  <small>Click here to load a File </small>
                  </label> 
               </div>
-              <input type="file" id="file-upload" (change)="handleFileInput($event)">
+              <input type="file" id="file-upload" (change)="handleFileInput1($event)">
             </div>
           </div>
         </div>

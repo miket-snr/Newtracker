@@ -271,7 +271,7 @@ export class AbsarequestComponent implements OnInit, OnDestroy {
     }
   }
   existingReq(reqno) {
-    this.apiserv.currentreq$.pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe(creq => {
+    this.apiserv.currentreq$.pipe(takeUntil(this.destroy$)).subscribe(creq => {
   
       if (creq['ABSAREQNO'] >= '60000000' && creq['PROJLINK'].length > 0) {
         this.vm = { ...creq  };

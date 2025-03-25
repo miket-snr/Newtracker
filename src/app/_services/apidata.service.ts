@@ -19,6 +19,7 @@ export class ApidataService {
     accountant: '',
     filtercip: false,
     filteropen: false,
+    filterexec: false,
     dates:  { }, 
     ohs: {},
     approval: {},
@@ -72,8 +73,18 @@ export class ApidataService {
   currentpspid = '00000000';
   currentcipline: any;
   helptexts = []
-  budgetgroups = ['* All', 'CIP2023','CIP2024','INSOG2024','INSURNCE2204','OPEX','OUTOFCYCLE','ROL2022','ROL2023','RXL2022','UNKNOWN']
-
+  budgetgroups:any[] = [];
+  trackercodes :any[] = [];
+  budgetyears = [ '2023','2024','2025','2026','2027','2028','2029','2030']
+  leaders = [
+'Judith Bardien',
+'FM Regional Managers',
+'Leko Ntshangase',
+'Robert Ladbury',
+'Seipati Pule',
+'Tshamano Nemirini',
+'Winston Pandaram', 'Marachel Bessenger','Kobus van Rensburg'
+  ]
   public loadingBS = new BehaviorSubject<boolean>(false)
   public approvalBS = new BehaviorSubject<Approval>(new ApprovalClass().approval)
   public approval$ = this.approvalBS.asObservable();
@@ -617,6 +628,7 @@ export class ApidataService {
             CIPBUDGET: line.CIPBUDGET,
             APPROVAL_STATUS: this.getApprovalText(line.APPROVAL_STATUS),
             CONTINGENCY: line.CONTINGENCY,
+            CONTINGREM: line.CONTINGREM,
             INITIATIVE: line.INITIATIVE,
             CIPCODE: line.CIPCODE,
             BUDGETGROUP: line.CIPGROUP,
@@ -686,15 +698,15 @@ export class ApidataService {
 
 
   }
-
+/************************* */
   /*******postGen******************************************************* */
-  postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER") {
+  postGEN2(lclobj: any, methodname: string, classname: string = "PSTRACKER", sys='prod') {
     // // console.log(lclobj);
     this.loading = true;
     this.loadingBS.next(true);
-    let sys = "PROD";
+   
 
-    if (classname !== 'USER' && sys == 'PROD') {
+    if (classname !== 'USER' ) {
       const httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -710,7 +722,35 @@ export class ApidataService {
         data: lclobj
 
       };
-      let mypost = this.http.post('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=prod',
+      let mypost = this.http.post('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=' + sys,
+        call2, httpOptions);
+        return mypost
+      }
+    }
+  /*******postGen******************************************************* */
+  postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER", sys='prod') {
+    // // console.log(lclobj);
+    this.loading = true;
+    this.loadingBS.next(true);
+   
+
+    if (classname !== 'USER' ) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          token: 'BK175mqMN0',
+        })
+      };
+      const call2 = {
+        context: {
+          CLASS: classname,
+          TOKEN: 'BK175mqMN0',
+          METHOD: methodname
+        },
+        data: lclobj
+
+      };
+      let mypost = this.http.post('https://io.bidvestfm.co.za/BIDVESTFM_API_ZRFC3/request?sys=' + sys,
         call2, httpOptions);
 
       return mypost.pipe(
@@ -845,6 +885,8 @@ export class ApidataService {
     this.cipcodes = [];
     this.workstreams = [];
     this.cipgroups = [];
+    this.budgetgroups = [];
+    this.trackercodes = [];
     this.boqs = [];
     this.approvals = [];
     this.scopes = [];
@@ -914,6 +956,15 @@ export class ApidataService {
           this.cipgroups.push({ code: progline.B, text: progline.B + '-' + progline.C, filter: progline.D })
           break;
         }
+        case 'BUDGROUP': {
+          this.budgetgroups.push( progline.B)
+          break;
+        }
+        case 'TRACKER': {
+          this.trackercodes.push( progline.B)
+          break;
+        }
+
       }
 
       if (this.cipgroups.length > 0) {
@@ -1022,7 +1073,7 @@ export class ApidataService {
     })
     this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-    this.phaseprog.push({ phase: 'Asset Sheet', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: ' Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Asset Sheet', codes: [{ code: 0, text: 'Not Applicable' }, { code: 30, text: 'Not Started' }, { code: 60, text: ' Submitted' }, { code: 100, text: 'Completed (On SAP)' }] })
     this.phaseprog.push({ phase: 'Final Accounts', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' }, { code: 100, text: 'Completed' }] })
     return this.phaseprog;

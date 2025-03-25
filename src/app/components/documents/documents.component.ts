@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ApidataService } from 'src/app/_services/apidata.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { FileSaverService } from 'ngx-filesaver';
+
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
@@ -11,6 +12,8 @@ import { FileSaverService } from 'ngx-filesaver';
 export class DocumentsComponent implements OnInit {
   @Input() doctype = 'DOCS';
   @Input() reference = '';
+  @Input() category = '';
+  @Input() subcategory = '';
   docToUpload: any;
   public doclist = new BehaviorSubject<any>([]);
   public currentblob = new BehaviorSubject<Blob>(null);
@@ -19,22 +22,71 @@ export class DocumentsComponent implements OnInit {
   dataURL: any;
   helper=false;
   hlptxt = 'Show Help';
+  categoryname = '';
   docs = [];
   SP1: any;
   constructor(private apiserv: ApidataService,
     public authaserv: AuthService,public filesaver: FileSaverService,) { }
 
   ngOnInit(): void {
-    if(this.doctype === 'DOCS'){
+    console.log('DocType-init:',this.doctype)
+    if(this.doctype != 'DOCS'){
     this.getdoclist({APIKEY:"PSTRACKER",DOCNO:"HELPFILE"})
   } else {
-    this.getdocuments({REFERENCE:"reference"})
+   this.docs = [];
   }
 }
   showHelp(){
   this.helper = !this.helper;
   this.hlptxt = this.helper? 'Hide Help' : "Show Help";
   }
+getdocs(categoryof='', displaytext='') {
+this.category = categoryof;
+this.categoryname = displaytext;
+this.getdocuments(this.reference, this.category);
+}
+  handleFileInput1(fileInput: any) {
+    if (fileInput.target.files && fileInput.target.files[0]) {
+
+      this.docToUpload = fileInput.target.files[0];
+      const reader = new FileReader();
+      // const preview = document.querySelector('#myImageSrc');
+      reader.onloadend = () => {
+        this.dataURL = reader.result;
+        let thedocbod = this.dataURL.toString().substring(this.dataURL.toString().indexOf(',') + 1);
+        let thedoc = (this.dataURL.toString())
+        //.substring(0 ,this.dataURL.toString().indexOf(',') ) + ',' + btoa(thedocbod);
+        let contenthash = ''
+        let line2load = {}
+      
+        line2load['REFERENCE'] = this.reference;
+        line2load['CATEGORY']  = this.category;
+        line2load['SUB_CATEGORY'] = this.subcategory; 
+        line2load['APIKEY']  = 'PSTRACKER';
+        line2load['DOCNO']   = '0';
+        line2load['ORIGINALNAME']  = this.docToUpload.name;
+        line2load['FILESIZE']  = this.docToUpload.size;
+        line2load['CONTENTHASH']  = '';
+        line2load['LOADEDBY']  = this.authaserv.currentUserValue.EMAIL;
+        line2load['DONEBY']  = this.authaserv.currentUserValue.NAME_FIRST;
+        line2load['DOCTEXT']  = thedoc;
+    
+        this.putDocument(line2load);
+        // doctype = this.serviceid === '0' ? 'HEAD' : 'SERVITEM';
+      }
+
+      if (this.docToUpload) {
+        //  reader.readAsArrayBuffer(this.docToUpload); // reads the data as a URL
+        reader.readAsDataURL(this.docToUpload);
+      } else {
+
+      }
+
+    }
+  }
+
+
+
   handleFileInput(fileInput: any) {
     if (fileInput.target.files && fileInput.target.files[0]) {
 
@@ -150,10 +202,38 @@ export class DocumentsComponent implements OnInit {
       });
   }
   /***************************************************** */
-  getdocuments(docref: any) {
+  getdocuments(docref = '', category = 'OTHER') {
     this.docs = [];
-    this.apiserv.postGEN(docref,'GET_DOCUMENTS','PROJECTS')
+    let lclref = {
+      REFERENCE: docref,
+      CATEGORY: category,
+      SUB_CATEGORY:'',
+      APIKEY:"PSTRACKER",
+    }
+    this.apiserv.postGEN(lclref,'DOWNLOAD_DOCUMENTS','PSTRACKER', 'dev').subscribe(data => {
+        if (data.RESULT instanceof Array) {
+            data.RESULT.forEach(dataline=>{
+              let tobj = {...dataline}
+              this.docs.push(tobj);
+            })
+        }
+      });
   }
+/*********************************************** */
+putDocument(docref: any) {
+
+  this.apiserv.postGEN(docref,'UPLOAD_DOCUMENTS','PSTRACKER','dev').subscribe(data => {
+      if (data.RESULT instanceof Array) {
+          data.RESULT.forEach(dataline=>{
+            let tobj = {...dataline}
+            this.docs.push(tobj);
+          })
+      }
+    });
+}
+
+
+/********************************************** */
   deletedoc(docref: any) {
     let datain = '';
     this.apiserv.postGEN(docref,'DELETE_DOCUMENT','PROJECTS')

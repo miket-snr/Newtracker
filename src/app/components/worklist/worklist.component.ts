@@ -27,6 +27,7 @@ export class WorklistComponent implements OnInit, OnDestroy {
   sections = false;
   filtercip = false;
   filteropen = false;
+  filterexec = false;
   btntitle = 'Show Finview';
   searchbox = '';
   narrow = false;
@@ -362,20 +363,34 @@ export class WorklistComponent implements OnInit, OnDestroy {
     //this.apiserv.lclstate.filtercip = this.filtercip;
     this.filterList();
   }
-  selectOpen() {
+  selectOpen(ft = 0) {
+    if (ft==1) {
+      this.filterexec = !this.filterexec;
+    } else {
     this.filteropen = !this.filteropen;
     this.apiserv.lclstate.filteropen = this.filteropen;
+    }
     this.filterList();
   }
   filterList(){
     this.searchlistnew = [];
     if (this.filteropen) {
       this.searchlistnew = this.searchlist.filter(lt => {
-        let tfilt = (lt.STATUS.includes('CLSD') ||  lt.STATUS.includes('DLFL') || lt.STATUS.includes('CNCL') || lt.STATUS.includes('REJT')) ;
+        let tfilt = (lt.PHASE =='PHASE12' || lt.STATUS.includes('CLSD') ||  lt.STATUS.includes('DLFL') || lt.STATUS.includes('CNCL') || lt.STATUS.includes('REJT')) ;
+        if (lt.ABSAPHASE.includes('Closed') || lt.PHASE =='PHASE12' ){
+          tfilt = true;
+        }
         return !tfilt;
       } ) } else {
         this.searchlistnew = [...this.searchlist];
       } 
+      if (this.filterexec) {
+        this.searchlistnew = this.searchlistnew.filter(lt => {
+          let tfilt = (lt.ABSAPHASE.includes('Closing')) ;
+          return !tfilt;
+        } ) } else {
+          this.searchlistnew = [...this.searchlistnew];
+        } 
     if (this.tracked) {
       this.searchlistnew = this.searchlistnew.filter(lt => {
         return lt.TRACKERCODE > 'A' } ) } else {

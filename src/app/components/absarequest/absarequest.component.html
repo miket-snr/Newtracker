@@ -197,7 +197,8 @@
                     <tr>
                       <td colspan="7">
                         <div class="card-footer d-flex justify-content-around">
-                          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty || this.apiserv.lclstate.closed"
+                          <!--[disabled]="!reqForm.dirty" || this.apiserv.lclstate.closed -->
+                          <button type="button" class="btn btn-sm btn-outline-primary" 
                             (click)="onSubmit()">
                             Update SAP
                           </button>
@@ -434,7 +435,7 @@
         <app-gantt></app-gantt>
       </mat-tab> 
       <mat-tab *ngIf="greaterThan(reqno,'0') &&stable" label="Documents" class="tabber">      
-        <app-documents [doctype]="'PROJ'" [reference]="reqno"></app-documents>
+        <app-documents [doctype]="'DOCS'" [reference]="reqno"></app-documents>
       </mat-tab> 
     </mat-tab-group>
   </form>

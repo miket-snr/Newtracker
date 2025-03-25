@@ -196,8 +196,9 @@
                     <ng-container *ngIf="greaterThan(reqno,'0')">
                       <tr>
                         <td colspan="7">
+                          <!-- [disabled]="!reqForm.dirty " || this.apiserv.lclstate.closed -->
                           <div class="card-footer d-flex justify-content-around">
-                            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="!reqForm.dirty || this.apiserv.lclstate.closed"
+                            <button type="button" class="btn btn-sm btn-outline-primary" 
                               (click)="onSubmit()">
                               Update SAP
                             </button>
@@ -349,8 +350,9 @@
   
                   </table>
                   <div class="card-footer text-center">
+                    <!-- [disabled]="!reqForm.dirty || apiserv.lclstate.closed" -->
                     <button type="button" class="btn btn-sm btn-outline-primary" (click)="onSubmit()"
-                      [disabled]="!reqForm.dirty || apiserv.lclstate.closed">
+                     >
                       Update SAP
                     </button>
                   </div>

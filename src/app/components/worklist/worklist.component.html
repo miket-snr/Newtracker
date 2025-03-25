@@ -66,6 +66,12 @@
                     </label>
                 </div>
                 <div class="form-check">
+                    <input class="form-check-input" type="checkbox" (change)="selectOpen(1)" [checked]="filterexec">
+                    <label class="form-check-label">
+                        Hide Closing
+                    </label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" (change)="narrowDisplay()" [checked]="narrow">
                     <label class="form-check-label">
                         Narrow Display
@@ -152,6 +158,7 @@
                                 <th class="text-center"><small>SAP PO Total <br> Incl</small></th>
                                 <th class="text-center"><small>SAP Incl<br> Budget</small></th>
                                 <th class="text-center"><small>Contingency<br>Vat Incl</small></th>
+                                <th class="text-center"><small>Cont-Remain<br>Vat Incl</small></th>
                                 <th class="text-center"><small>Commitments <br> Incl</small></th>
                                 <th class="text-center"><small>Costs PY<br> Incl</small></th>
                                 <th class="text-center"><small>Travel PY <br> Incl</small></th>
@@ -206,6 +213,8 @@
                                 <ng-container *ngIf="sections">
                                     <td>{{item.DATE08}}</td>
                                     <td>{{item.DATE09}}</td>
+                   
+                               
                                 </ng-container>
                                 <td [ngClass]="item.PHASE < 'PHASE11'&& item.DATE10 < todaydate? 'text-center late':
                                  item.PHASE > 'PHASE10'? 'text-center done' : 'text-center todo'"> {{item.DATE10}}
@@ -256,6 +265,7 @@
                                     <td class="text-right odd">{{formatNumber(item.POVALUETOT,'POVALUETOT')}}</td>
                                     <td class="text-right odd">{{formatNumber(item.BUDGET,'BUDGET')}}</td>
                                     <td class="text-right odd">{{formatNumber(item.CONTINGENCY,'CONTINGENCY')}}</td>
+                                    <td class="text-right odd">{{formatNumber(item.CONTINGREM,'CONTINGREM')}}</td>
                                     <td class="text-right odd">{{formatNumber(item.COMMITMENT ,'COMMITMENT')}}</td>
                                     <td class="text-right odd">{{formatNumber(item.PYCOSTS,'PYCOSTS')}}</td>
                                     <td class="text-right odd">{{formatNumber(item.PYTRAVEL ,'PYTRAVEL')}}</td>

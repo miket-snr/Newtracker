@@ -2,17 +2,129 @@
   <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
     <mat-spinner>Hey</mat-spinner>
   </div>
+
   <div class="card">
-      <div class="row">
-        <div class="col-6">
-          <h2>Fund Planner</h2>
-        </div>
-        <div class="col-4 offset-1">
-          <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button>
+    <div class="row">
+      <div class="col-6">
+        <h2>Fund Planner</h2>
+      </div>
+      <div class="col-4 offset-1">
+        <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button>
+      </div>
+    </div>
+    <div class="mycontainer">
+    <div class="row">
+      <div class="col-12 offset-1">
+        <div class="list-group list-group-horizontal mb-0">
+         <div *ngFor="let grouper of apiserv.budgetyears" [value]="grouper">
+          <div [ngClass]="(showyear==(grouper) )? 'bg-info list-group-item text-left': 'ml-1  list-group-item text-left'  "
+            (click)="showYear(grouper)"><b>{{grouper}}</b>
+          </div>
+         </div>
+          <!-- <div [ngClass]="(showyear ===1 )? 'bg-info list-group-item text-left': 'ml-1  list-group-item text-left'  "
+            (click)="showYear('1')"><b>Prev Year </b>
+          </div> -->
         </div>
       </div>
+      <!-- <div class="mt-1 col-5">
+       <div class="d-flex justify-content-center">
+        <span>Budget Year</span>
+        <select class="form-control" [ngModel]="budgetyear" (change)="onChange()">
+          <option *ngFor="let grouper of apiserv.budgetyears" [value]="grouper">{{grouper}}</option>
+        </select>
+      </div>
+      </div> -->
+    </div>
+<ng-container *ngIf="showyear < 2020">
+  <table class="table">
+    <!-- <tr>
+        <td>
+          Current or Deferred
+        </td>
+        <td colspan="2">
+          <select class="form-control" formControlName="defer">
+            <option [ngValue]="'C'"> Current</option>
+            <option [ngValue]="'D'"> Deferred</option>
+            <option [ngValue]="'U'"> Unsure</option>
+          </select>
+        </td>
 
-    <div class="mycontainer">
+        <td *ngIf="true">
+          Deferred year
+        </td>
+        <td colspan="2"> <select class="form-control" formControlName="deferyear">
+            <option [ngValue]="'2020'"> 2020</option>
+            <option [ngValue]="'2021'"> 2021</option>
+            <option ngValue="2022"> 2022</option>
+          </select>
+        </td>
+      </tr> -->
+      <tr>
+      <td>
+       Reference year
+      </td>
+      <td colspan="2" class=" form-control  bglight">{{prevyear.REFYEAR}}
+      </td>
+      </tr>
+    <tr>
+      <td>
+        Funding Initiative
+      </td>
+      <td colspan="2" class=" form-control  bglight">{{prevyear.INITIATIVE}}
+      </td>
+      <td>
+        Budget Group
+      </td>
+      <td colspan="2" class=" form-control  bglight">
+       
+            {{prevyear.BUDGETPROGRAM}}
+
+      </td>
+      <!-- <td colspan="2"> <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button></td> -->
+    </tr>
+    <tr>
+      <td>Cip Group</td>
+      <td colspan="2" class=" form-control  bglight">{{prevyear.CIPGROUP}}
+      </td>
+      <td>Cip Code</td>
+      <td colspan="2" class=" form-control  bglight">
+        {{prevyear.CIPCODE}}
+      </td>
+    </tr>
+    <!-- <tr>
+        <td colspan="1">Cip Description</td>
+        <td colspan="5" style="background-color: aliceblue;">
+        <input type="text" class="form-control" formControlName="cipname" [disabled]="true"> </td>
+      </tr> -->
+    <tr>
+
+      <td>
+        Opex Capex
+      </td>
+      <td colspan="2" class=" form-control  bglight"> {{prevyear.CAPEX_OPEX}}
+      </td>
+      <td>Workstream</td>
+      <td colspan="2" class=" form-control  bglight">
+        {{prevyear.WORKSTREAM}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Pre-Approval Budget
+      </td>
+      <td colspan="2"class=" form-control  bglight">{{prevyear.ESTIMATEDBUDGET}}</td>
+
+      <td>
+        Tracker Code
+      </td>
+      <td colspan="2" class="form-control  bglight">
+        {{prevyear.TRACKERCODE}}
+        <!-- <input type="number" class="form-control" formControlName="trackercode"></td> -->
+    </tr>
+
+  </table>
+</ng-container>
+<ng-container *ngIf="showyear>=2020">
       <form [formGroup]="fundingForm" (ngSubmit)="onSubmit()">
         <table class="table">
           <!-- <tr>
@@ -45,31 +157,50 @@
               <div class="row">
                 <div class="col-8"><input type="text" class="form-control" formControlName="initiative"></div>
                 <div class="col-3" *ngIf="!fundingForm.value.initiative">
-                    <button type="button" class="btn btn-sm btn-danger" (click)="fundLocator()">Fund Locator
-                    </button>
-                  </div>
-                  <div class="col-1">
-                    <input class="form-check-input" type="checkbox" formControlName="reallocation"
-                   >
-                <label class="form-check-label">
+                  <button type="button" class="btn btn-sm btn-danger" (click)="fundLocator()">Fund Locator
+                  </button>
+                </div>
+                <div class="col-1">
+                  <input class="form-check-input" type="checkbox" formControlName="reallocation">
+                  <label class="form-check-label">
                     Reallocation
-                </label>
-                  </div>
+                  </label>
+                </div>
               </div>
             </td>
+            <td colspan="4">
+              <div class="row">
+                <div class="col-7 text-right pr-4">
+                  Reference Year:<b>{{showyear}}</b>
+                </div>
+              </div> </td>
+          </tr>
+          <tr>
             <td>
               Budget Group
             </td>
             <td colspan="2">
               <div class="row">
                 <div class="col-8">
-                <select class="form-control" formControlName="budgetprogram">
-                  <option *ngFor="let grouper of apiserv.budgetgroups" [value]="grouper">{{grouper}}</option>
-                </select>
+                  <select class="form-control" formControlName="budgetprogram">
+                    <option *ngFor="let grouper of apiserv.budgetgroups" [value]="grouper">{{grouper}}</option>
+                  </select>
                 </div>
               </div>
             </td>
-            <!-- <td colspan="2"> <button type="button" class="btn btn-sm btn-outline-success" (click)="showHelp()">{{helptext}}</button></td> -->
+            <td>
+             Absa Lead
+            </td>
+            <td colspan="2">
+              <div class="row">
+                <div class="col-8">
+                  <select class="form-control" formControlName="absalead">
+                    <option *ngFor="let leader of apiserv.leaders" [value]="leader">{{leader}}</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+
           </tr>
           <tr>
             <td>Cip Group</td>
@@ -115,7 +246,7 @@
                 <option *ngFor="let groupline of apiserv.workstreams" [value]="groupline.code">
                   {{groupline.text }}
                 </option>
-              </select> 
+              </select>
             </td>
           </tr>
           <tr>
@@ -130,10 +261,9 @@
             <td colspan="2">
               <select formControlName="trackercode" placeholder="Select a Line" class="form-control">
                 <option [value]="''">Not Tracked</option>
-                <option  value="CIP2023XP">
-                  CIP2023XP
-                </option>
-              </select> 
+                <option *ngFor="let trackgroup of apiserv.trackercodes" [value]="trackgroup">{{trackgroup}}</option>
+               
+              </select>
               <!-- <input type="number" class="form-control" formControlName="trackercode"></td> -->
           </tr>
 
@@ -152,28 +282,29 @@
             <span class="remove" (click)="removeFunder(i)"><b>X</b></span>
           </div>
         </div>
-        <div  class="row d-flex justify-content-around">
-          <button [disabled]="false" type="button" class="btn btn-sm btn-success" (click)="sendTask()">Send Task</button>
-          <button [disabled]="true" type="button" class="btn btn-sm btn-danger" >Generate new initiative</button>
+        <div class="row d-flex justify-content-around">
+          <button [disabled]="false" type="button" class="btn btn-sm btn-success" (click)="sendTask()">Send
+            Task</button>
+          <button [disabled]="true" type="button" class="btn btn-sm btn-danger">Generate new initiative</button>
         </div>
-        
+
       </form>
       <ng-container *ngIf="help">
-      <div style="padding:15px;">
-        <quill-view [content]="mytext" format="text" theme="snow"></quill-view>
-      </div>
-    </ng-container>
-    </div>
+        <div style="padding:15px;">
+          <quill-view [content]="mytext" format="text" theme="snow"></quill-view>
+        </div>
+      </ng-container>
 
     <div class="card-footer text-center">
-      <button *ngIf="checkReady('save')" type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
+    <button *ngIf="checkReady('save')" type="button" class="btn btn-sm btn-primary" (click)="onSubmit()">
         Save
       </button>
     </div>
-<!-- <app-fundcipline></app-fundcipline> -->
+  </ng-container>
+
   </div>
   <div>
-
+  </div>
   </div>
 
 </div>
@@ -181,7 +312,7 @@
 <jw-modal id="taskedit">
   <div class="row" style="height:600px">
     <div class="col-10 offset-1">
-     <app-task-edit [events]="eventsSubject.asObservable()" [task]="task"  (someChange)="taskClose()"></app-task-edit>
+      <app-task-edit [events]="eventsSubject.asObservable()" [task]="task" (someChange)="taskClose()"></app-task-edit>
     </div>
 
   </div>

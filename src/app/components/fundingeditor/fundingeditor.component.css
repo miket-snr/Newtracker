@@ -7,6 +7,12 @@ margin: 20px;
       }
 .mycontainer {
     max-width:900px;
+    min-width:800px;
+    min-height:500px;
     margin: auto;
     border:1px solid lightblue;
+}
+
+.bglight{
+    background-color: lightgray;
 }
