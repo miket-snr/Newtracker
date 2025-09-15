@@ -14,7 +14,7 @@ item = this.initdata();
 phaseprog: any;
 blockback = false;
 ohsrole =  this.authserv.currentUserValue.PASSWORD.includes('OHS')
-codes = this.apiserv.buildcodes();
+codes = [];
   constructor(@Inject(MAT_DIALOG_DATA) public data: Progress, 
   private progressDialog: MatDialogRef<GetProgressComponent>,
    private apiserv: ApidataService,
@@ -22,6 +22,7 @@ codes = this.apiserv.buildcodes();
 
   ngOnInit(): void {
     this.item = this.data;
+    this.apiserv.buildcodes()
   }
 public close(){
   this.progressDialog.close();
@@ -82,11 +83,12 @@ buildcodes() {
   })
   this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' },{ code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
   this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-  this.phaseprog.push({ phase: 'Asset Sheet', codes: [{ code: 0, text: 'Not Applicable' }, { code: 30, text: 'Not Started' },  { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed(Created in SAP)' }] })
-  this.phaseprog.push({ phase: 'Asset Sheet Completion', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially ' }, { code: 60, text: 'Asset Sheet Submitted' }, { code: 100, text: 'Completed (Created in SAP)' }] })
-  this.phaseprog.push({ phase: 'Final Account Submitted', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: 'Final Account Submitted' }, { code: 100, text: 'Completed' }] })
+  this.phaseprog.push({ phase: 'Asset Structure Build', codes: [{ code: 0, text: 'Not Applicable' }, { code: 30, text: 'Not Started' },  { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed(Created in SAP)' }] })
+ // this.phaseprog.push({ phase: 'Asset Sheet Completion', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially ' }, { code: 60, text: 'Asset Sheet Submitted' }, { code: 100, text: 'Completed (Created in SAP)' }] })
+  this.phaseprog.push({ phase: 'Final Account Submitted',  codes: [{ code: 0, text: 'Not started' },  { code: 30, text: 'Not Started' },{ code: 40, text: 'Partially Submitted' }, { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed (Uploaded in Box)' }] })
   this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' },{ code: 100, text: 'Completed' }] })
   return this.phaseprog;
+
 }
 savePhases() {
   this.data['TRACKNOTE'] = this.apiserv.xtdbtoa(this.data['TRACKNOTE']);

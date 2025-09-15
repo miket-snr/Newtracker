@@ -1,5 +1,5 @@
 <div style="height:100%;">
-  <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
+  <div *ngIf="apiserv.loadingBS | async" class="d-flex justify-content-center">
     <mat-spinner>Hey</mat-spinner>
   </div>
 

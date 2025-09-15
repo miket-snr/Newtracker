@@ -32,7 +32,7 @@
     </div>
   </ng-template>
   
-  <div *ngIf="apiserv.loading" class="d-flex justify-content-center">
+  <div *ngIf="apiserv.loadingBS | async" class="d-flex justify-content-center">
     <mat-spinner diameter="30">Hey</mat-spinner>
   </div>
   <ng-container >

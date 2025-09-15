@@ -23,6 +23,7 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   helptext = "Show Help";
   eventsSubject: Subject<void> = new Subject<void>();
   task = {};
+  loading = false;
   currentyear = new Date().getFullYear();
   sectionid = [true, true, true, true, true];
   grouplines = [];
@@ -120,6 +121,9 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
         this.fundingForm.get('fund_comment').setValue(atob(this.fundingForm.value.fund_comment))
       })
     this.onChanges();
+    // this.apiserv.loadingBS.subscribe(loading => {
+    //   this.loading = loading;
+    // this.apiserv.loading = this.loading })
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -147,7 +151,10 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
   }
   onChanges(): void {
     this.fundingForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(val => {
+      this.loading = false;
+      this.apiserv.loadingBS.next(this.loading);
       this.onCodeSelect();
+      this.apiserv.loadingBS.subscribe(value => console.log('Loading:on changes', value));
     });
   }
   showYear(cnt: string) {
@@ -167,7 +174,10 @@ export class FundingeditorComponent implements OnInit, OnDestroy {
     tobj['REALLOCATION'] = tobj['REALLOCATION'] ? 'X' : '';
 
     this.apiserv.postGEN(tobj, 'UPDATE_FUNDING').subscribe(ans => {
+      this.loading = false;
+      this.apiserv.loadingBS.next(false);
       this.apiserv.messagesBS.next(ans.RESULT.MESSAGE);
+      this.apiserv.loadingBS.subscribe(value => console.log('Loading:on upsubmit', value));
       this.updateFunding()
     })
 

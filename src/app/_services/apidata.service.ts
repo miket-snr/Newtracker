@@ -702,8 +702,8 @@ export class ApidataService {
   /*******postGen******************************************************* */
   postGEN2(lclobj: any, methodname: string, classname: string = "PSTRACKER", sys='prod') {
     // // console.log(lclobj);
-    this.loading = true;
-    this.loadingBS.next(true);
+    // this.loading = true;
+    // this.loadingBS.next(true);
    
 
     if (classname !== 'USER' ) {
@@ -728,11 +728,11 @@ export class ApidataService {
       }
     }
   /*******postGen******************************************************* */
-  postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER", sys='prod') {
+  postGEN(lclobj: any, methodname: string, classname: string = "PSTRACKER", sys='prod', loader = true) {
     // // console.log(lclobj);
-    this.loading = true;
-    this.loadingBS.next(true);
-   
+  //  if (methodname != 'UPDATE_FUNDING') {this.loading = true;
+  //   this.loadingBS.next(true);
+  //  }
 
     if (classname !== 'USER' ) {
       const httpOptions = {
@@ -1073,8 +1073,8 @@ export class ApidataService {
     })
     this.phaseprog.push({ phase: 'Proof of Completion', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial POC Submitted' }, { code: 100, text: 'Completed' }] })
     this.phaseprog.push({ phase: 'Billing Process', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially Invoiced' }, { code: 60, text: 'Invoices Submitted' }, { code: 100, text: 'Completed' }] })
-    this.phaseprog.push({ phase: 'Asset Sheet', codes: [{ code: 0, text: 'Not Applicable' }, { code: 30, text: 'Not Started' }, { code: 60, text: ' Submitted' }, { code: 100, text: 'Completed (On SAP)' }] })
-    this.phaseprog.push({ phase: 'Final Accounts', codes: [{ code: 0, text: 'Not started' }, { code: 30, text: 'Partially' }, { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed' }] })
+    this.phaseprog.push({ phase: 'Asset Structure Build', codes: [{ code: 0, text: 'Not Applicable' }, { code: 30, text: 'Not Started' }, { code: 60, text: ' Submitted' }, { code: 100, text: 'Completed (On SAP)' }] })
+    this.phaseprog.push({ phase: 'Final Accounts', codes: [{ code: 0, text: 'Not started' }, { code: 10, text: 'Not Applicable' }, { code: 30, text: 'Partially Submitted' }, { code: 60, text: 'Submitted' }, { code: 100, text: 'Completed (Uploaded in Box)' }] })
     this.phaseprog.push({ phase: 'Expected Cash Flow Date', codes: [{ code: 0, text: 'Not started' }, { code: 50, text: 'Partial Cash Flow' }, { code: 100, text: 'Completed' }] })
     return this.phaseprog;
   }

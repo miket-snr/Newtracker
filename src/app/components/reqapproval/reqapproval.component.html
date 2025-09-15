@@ -236,7 +236,7 @@
         <div class="col-2" [ngClass]="(overdue)? 'badnews ' : 'okay  '">
           <select class="smallinput form-control " name="prog011" (change)="newValue(9)" 
             [disabled]="datedata.PROG12 == '100'  &&  blockback" name="129" [(ngModel)]="datedata.PROG12">
-            <option *ngFor="let perc of codes[8].codes" [value]="perc.code">{{ perc.text }}</option>
+            <option *ngFor="let perc of codes[10].codes" [value]="perc.code">{{ perc.text }}</option>
           </select>
         </div>
       </ng-container>

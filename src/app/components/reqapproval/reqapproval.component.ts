@@ -161,7 +161,7 @@ this.buildDurations() ;
       // {target:'End on Site',datefrom:targetd },
       { target: 'Expected POC Date' },
       { target: 'Billing Process' },
-      { target: 'Asset Sheet' },
+      { target: 'Asset Structure Build' },
       { target: 'Final Accounts' },
       { target: 'Expected Cash Flow Date'}
     ]
